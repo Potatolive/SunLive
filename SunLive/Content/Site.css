@@ -1,0 +1,41 @@
+﻿.margin20p{
+    margin: 20px;
+}
+
+.marginleft15p{
+    margin-left: 15px;
+}
+html {
+  position: relative;
+  min-height: 100%;
+}
+body {
+  padding-top: 50px;
+  margin-bottom: 60px;
+}
+
+.mainContent {
+  padding: 40px 15px;
+  text-align: center;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 60px;
+  background-color: #f5f5f5;
+}
+
+.footer .text-muted {
+  margin: 20px 0;
+}
+.imageTile{
+    height: 200px; width: 100%; display: block;
+    max-height: 200px;
+}
+
+.newsSummary{
+    max-height: 165px; overflow:hidden; text-overflow:ellipsis;
+}
