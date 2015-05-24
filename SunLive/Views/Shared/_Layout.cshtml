@@ -2,11 +2,13 @@
 <html lang="en">
     <head>
         <meta charset="utf-8" />
-        <title>Sun Live</title>
-        <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+        <title>PotatoLive - Aditya TV</title>
+        <link rel="icon" href="https://plive.azurewebsites.net/img/pliveicon.png" sizes="50x50">
         <meta name="viewport" content="width=device-width" />
         @Styles.Render("~/Content/css")
         @Scripts.Render("~/bundles/modernizr")
+        <link href="@Url.Content("~/Content/themes/base/jquery-ui.css")"
+              rel="stylesheet" type="text/css" />
     </head>
     <body>
         @*<header>
@@ -29,7 +31,7 @@
             </div>
         </header>*@
 
-        <nav class="navbar navbar-inverse navbar-fixed-top">
+        <nav class="navbar navbar-inverse navbar-fixed-top" style="min-height: 70px">
             <div class="container">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -38,7 +40,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="#">Potato Live</a>
+                    <a class="navbar-brand" href="#"><img src="https://plive.azurewebsites.net/img/logo.png" alt="PotatoLive" style="height: 50px;" /></a>
                 </div>
                 <div id="navbar" class="collapse navbar-collapse">
                     @*<ul class="nav navbar-nav">
@@ -62,8 +64,18 @@
         </footer>
 
         @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/jqueryui")
         @Scripts.Render("~/bundles/angular")
         @Scripts.Render("~/Resources")
         @RenderSection("scripts", required: false)
+
+        <script type="text/javascript">
+        $(document).ready(function () {
+            $("#tabs").tabs();
+        });
+        </script>
+
+        <script src="http://code.jquery.com/jquery-migrate-1.2.1.js"></script>
+
     </body>
 </html>

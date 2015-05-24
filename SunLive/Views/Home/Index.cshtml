@@ -5,11 +5,11 @@
 
 
 <div class="pull-right">
-    <form class="form-inline">
+    <form class="form-inline" action="~/Home/Search" method="post">
        
         <div class="form-group">
             <label for="search"></label>
-            <input type="email" class="form-control" id="search" placeholder="Enter a Hashtag here">
+            <input type="text" class="form-control" id="TextContent" name="TextContent" placeholder="Enter a text to search">
         </div>
         <button type="submit" class="btn btn-default">Search</button>
     </form>
@@ -18,40 +18,153 @@
 <br />
 <br />
 <br />
-<div class="clear-fix clearfix"></div>
 
+<div id="tabs" class="clear-fix clearfix">
+    <ul>
+        <li><a href="#New">New</a></li>
+        <li><a href="#Approved">Approved</a></li>
+        <li><a href="#Rejected">Rejected</a></li>
+    </ul>
+    <div class="row" id="New">
+        @foreach (var item in Model)
+        {
+            if (!string.IsNullOrEmpty(item.ImageURL) && item.Status == "New")
+            {
 
-<div class="row">
-    @foreach (var item in Model)
-    {
+                item.PublishedOn = item.PublishedOn.ToLocalTime();
+
         <div class="col-sm-6 col-md-4">
             <div class="thumbnail">
                 <img src="@item.ImageURL"
-                     alt="100%x200" class="imageTile"
+                     alt="No image..." class="imageTile"
                      data-holder-rendered="true">
                 <div class="caption">
                     <p class="pull-left">
                         <small>@Html.DisplayFor(modelItem => item.HashTag)</small>
                         <br />
                         <small>@Html.DisplayFor(modelItem => item.PublishedOn)</small>
+                        <small>@Html.Raw(item.PublishedOn.ToShortTimeString())</small>
                     </p>
-                <p class="pull-right">
-                    <br />
-                    -@Html.DisplayFor(modelItem => item.PublishedBy)
-                </p>
-                <p class="clearfix"></p>
+                    <p class="pull-right">
+                        <br />
+                        -@Html.Raw(item.PublishedBy.Split(' ')[0])
+                    </p>
+                    <p class="clearfix"></p>
 
-                <div class="newsSummary">
-                    @Html.Raw(item.TextContent)
-                </div>
+                    <div class="newsSummary">
+                        @if (item.TextContent.Length > 140)
+                                {
+                                @Html.Raw(item.TextContent.Substring(0, 140) + " ...")
+                                }
+                                else
+                                {
+                                @Html.Raw(item.TextContent)
+                                }
+                    </div>
                     <br />
-                <p>
-                    @Html.ActionLink("Approve", "Details", new { id = item.PostId }, new { @class = "btn btn-primary" }) *
-                    @Html.ActionLink("Edit", "Edit", new { id = item.PostId }, new { @class = "btn btn-warning " }) *
-                    @Html.ActionLink("Delete", "Delete", new { id = item.PostId }, new { @class = "btn btn-danger " })
-                </p>
+                    <p>
+                        @Html.ActionLink("Approve", "Details", new { id = item.PostId }, new { @class = "btn btn-primary" }) *
+                        @Html.ActionLink("Edit", "Edit", new { id = item.PostId }, new { @class = "btn btn-warning disabled" }) *
+                        @Html.ActionLink("Reject", "Reject", new { id = item.PostId }, new { @class = "btn btn-danger " })
+                    </p>
+                </div>
             </div>
         </div>
+            }
+        }
     </div>
-    }
+
+    <div class="row" id="Approved">
+        @foreach (var item in Model)
+        {
+            if (!string.IsNullOrEmpty(item.ImageURL) && item.Status == "Approved")
+            {
+
+                item.PublishedOn = item.PublishedOn.ToLocalTime();
+
+                <div class="col-sm-6 col-md-4">
+                    <div class="thumbnail">
+                        <img src="@item.ImageURL"
+                             alt="No image..." class="imageTile"
+                             data-holder-rendered="true">
+                        <div class="caption">
+                            <p class="pull-left">
+                                <small>@Html.DisplayFor(modelItem => item.HashTag)</small>
+                                <br />
+                                <small>@Html.DisplayFor(modelItem => item.PublishedOn)</small>
+                                <small>@Html.Raw(item.PublishedOn.ToShortTimeString())</small>
+                            </p>
+                            <p class="pull-right">
+                                <br />
+                                -@Html.Raw(item.PublishedBy.Split(' ')[0])
+                            </p>
+                            <p class="clearfix"></p>
+
+                            <div class="newsSummary">
+                                @if (item.TextContent.Length > 140)
+                                {
+                                    @Html.Raw(item.TextContent.Substring(0, 140) + " ...")
+                                }
+                                else
+                                {
+                                    @Html.Raw(item.TextContent)
+                                }
+                            </div>
+                            <br />
+                            <p>
+                                @Html.ActionLink("Approve", "Details", new { id = item.PostId }, new { @class = "btn btn-primary" }) *
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+
+    <div class="row" id="Rejected">
+        @foreach (var item in Model)
+        {
+            if (!string.IsNullOrEmpty(item.ImageURL) && item.Status == "Rejected")
+            {
+
+                item.PublishedOn = item.PublishedOn.ToLocalTime();
+
+                <div class="col-sm-6 col-md-4">
+                    <div class="thumbnail">
+                        <img src="@item.ImageURL"
+                             alt="No image..." class="imageTile"
+                             data-holder-rendered="true">
+                        <div class="caption">
+                            <p class="pull-left">
+                                <small>@Html.DisplayFor(modelItem => item.HashTag)</small>
+                                <br />
+                                <small>@Html.DisplayFor(modelItem => item.PublishedOn)</small>
+                                <small>@Html.Raw(item.PublishedOn.ToShortTimeString())</small>
+                            </p>
+                            <p class="pull-right">
+                                <br />
+                                -@Html.Raw(item.PublishedBy.Split(' ')[0])
+                            </p>
+                            <p class="clearfix"></p>
+
+                            <div class="newsSummary">
+                                @if (item.TextContent.Length > 140)
+                                {
+                                    @Html.Raw(item.TextContent.Substring(0, 140) + " ...")
+                                }
+                                else
+                                {
+                                    @Html.Raw(item.TextContent)
+                                }
+                            </div>
+                            <br />
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
 </div>
+
+
+
