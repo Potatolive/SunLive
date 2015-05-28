@@ -16,55 +16,13 @@ using System.Net;
 
 namespace SunLive.Controllers
 {
+    //[Authorize]
     public class HomeController : Controller
     {
         string connectionString = ConfigurationManager.AppSettings["connectionString"].ToString();
 
         public ActionResult Index()
         {
-            ViewBag.Message = "Modify this template to jump-start your ASP.NET MVC application.";
-
-            //var posts = new List<FanPost>()
-            //{
-            //    new FanPost() { PublishedBy = "Jabez", HashTag = "#Chutty TV", PublishedOn = DateTime.Now,
-            //        ImageURL = "https://scontent-hkg3-1.xx.fbcdn.net/hphotos-prn2/v/t1.0-9/534026_390622481012854_988468111_n.png?oh=1eb29eadefbabbcee5f07db1eebcbea0&oe=55F9538B",
-            //     TextContent = "இந்த இணைய தளத்தின் உள்ளடக்கங்கள் அனைத்தும் தமிழ்நாடு அரசாங்கத்தின் பள்ளிக்கல்வித்துறை"},
-            //     new FanPost() { PublishedBy = "Jabez", HashTag = "#Chutty TV", PublishedOn = DateTime.Now,
-            //        ImageURL = "https://scontent-hkg3-1.xx.fbcdn.net/hphotos-xpf1/v/t1.0-9/11018331_548036515335257_3977028581894298148_n.jpg?oh=e4c06fa46911dccf7ba7522a707cec7c&oe=56092CF5",
-            //     TextContent = "இந்த இணைய தளத்தின் உள்ளடக்கங்கள் அனைத்தும் தமிழ்நாடு அரசாங்கத்தின் பள்ளிக்கல்வித்துறை"},
-            //     new FanPost() { PublishedBy = "Jabez", HashTag = "#Chutty TV", PublishedOn = DateTime.Now,
-            //        ImageURL = "https://scontent-hkg3-1.xx.fbcdn.net/hphotos-prn2/v/t1.0-9/534026_390622481012854_988468111_n.png?oh=1eb29eadefbabbcee5f07db1eebcbea0&oe=55F9538B",
-            //     TextContent = "இந்த இணைய தளத்தின் உள்ளடக்கங்கள் அனைத்தும் தமிழ்நாடு அரசாங்கத்தின் பள்ளிக்கல்வித்துறை"},
-            //     new FanPost() { PublishedBy = "Jabez", HashTag = "#Chutty TV", PublishedOn = DateTime.Now,
-            //        ImageURL = "https://scontent-hkg3-1.xx.fbcdn.net/hphotos-prn2/v/t1.0-9/534026_390622481012854_988468111_n.png?oh=1eb29eadefbabbcee5f07db1eebcbea0&oe=55F9538B",
-            //     TextContent = "இந்த இணைய தளத்தின் உள்ளடக்கங்கள் அனைத்தும் தமிழ்நாடு அரசாங்கத்தின் பள்ளிக்கல்வித்துறை"},
-            //     new FanPost() { PublishedBy = "Jabez", HashTag = "#Chutty TV", PublishedOn = DateTime.Now,
-            //        ImageURL = "https://scontent-hkg3-1.xx.fbcdn.net/hphotos-prn2/v/t1.0-9/534026_390622481012854_988468111_n.png?oh=1eb29eadefbabbcee5f07db1eebcbea0&oe=55F9538B",
-            //     TextContent = "இந்த இணைய தளத்தின் உள்ளடக்கங்கள் அனைத்தும் தமிழ்நாடு அரசாங்கத்தின் பள்ளிக்கல்வித்துறை"}
-            //};
-
-            
-            //StringWriter sww = new StringWriter();
-            //XmlWriter writer = XmlWriter.Create(sww);
-            //serializer.Serialize(writer, posts);
-            //var xml = sww.ToString();
-
-            /*XmlSerializer serializer = new XmlSerializer(typeof(List<FanPost>));
-            var directoryPath = Server.MapPath("App_Data");
-            var filename = Path.Combine(directoryPath, "input.xml");
-
-            FileStream fs = new FileStream(filename, FileMode.Open);
-            XmlReader reader = XmlReader.Create(fs);
-            var posts = (List<FanPost>)serializer.Deserialize(reader);
-            fs.Close();*/
-
-            //var client = new MongoClient(connectionString);
-            //MongoServer server = client.GetServer(); //MongoServer.Create(ConfigurationManager.AppSettings["connectionString"]);
-            //MongoDatabase myDB = server.GetDatabase("SunLive");
-            //MongoCollection<FanPost> postCollection = myDB.GetCollection<FanPost>("fanposts");
-            //return View(postCollection.FindAll().AsEnumerable());
-
-
             var client = new MongoClient(connectionString);
             var myDB = client.GetDatabase("SunLive");
             var collection = myDB.GetCollection<FanPost>("fanposts");
@@ -76,6 +34,8 @@ namespace SunLive.Controllers
             var sort = Builders<FanPost>.Sort.Descending("PublishedOn");
 
             var posts = collection.Find<FanPost>(filter).Sort(sort).ToListAsync();
+
+            
 
             return View(posts.Result.ToList());
         }
@@ -109,12 +69,15 @@ namespace SunLive.Controllers
                 textcontent = result.Result.TextContent;
             }
 
-            System.IO.File.WriteAllText(@"C:\TextContent.txt", textcontent + "-" + result.Result.PublishedBy.Split(' ')[0]);
+            var directoryPath = Server.MapPath("~");
+            var textContentFilename = Path.Combine(directoryPath, "Output/TextContent.txt");
+            var imageFilename = Path.Combine(directoryPath, "Output/ImageContent.jpg");
 
-            string localFilename = @"c:\ImageContent.jpg";
+            System.IO.File.WriteAllText(textContentFilename, textcontent + " -" + result.Result.PublishedBy.Split(' ')[0]);
+
             using (WebClient webClient = new WebClient())
             {
-                webClient.DownloadFile(result.Result.ImageURL, localFilename);
+                webClient.DownloadFile(result.Result.ImageURL, imageFilename);
             }
 
             return RedirectToAction("Index");

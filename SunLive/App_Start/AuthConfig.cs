@@ -27,6 +27,10 @@ namespace SunLive
             //    appSecret: "");
 
             //OAuthWebSecurity.RegisterGoogleClient();
+
+            OAuthWebSecurity.RegisterFacebookClient(
+                appId: AppConstants.AppSettings.FBAppId,
+                appSecret: AppConstants.AppSettings.FBAppSecret);
         }
     }
 }
