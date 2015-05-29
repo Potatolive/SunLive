@@ -230,7 +230,6 @@
     </Compile>
     <Compile Include="Hubs\MessageHub.cs" />
     <Compile Include="Models\AccountModels.cs" />
-    <Compile Include="Models\FanPost.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -1163,6 +1162,12 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Model\Model.csproj">
+      <Project>{535aa202-715e-4ad0-ad41-fab08b82bd03}</Project>
+      <Name>Model</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

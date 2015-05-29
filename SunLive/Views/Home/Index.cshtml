@@ -1,4 +1,4 @@
-﻿@model IEnumerable<SunLive.Models.FanPost>
+﻿@model IEnumerable<Sunlive.Entities.FanPost>
 @{
 }
 
@@ -77,7 +77,7 @@
     <div class="row" id="Approved">
         @foreach (var item in Model)
         {
-            if (!string.IsNullOrEmpty(item.ImageURL) && item.Status == "Approved")
+            if (!string.IsNullOrEmpty(item.ImageURL) && (item.Status == "Approved" || item.Status == "Downloaded"))
             {
 
                 item.PublishedOn = item.PublishedOn.ToLocalTime();
@@ -112,7 +112,7 @@
                             </div>
                             <br />
                             <p>
-                                @Html.ActionLink("Approve", "Details", new { id = item.PostId }, new { @class = "btn btn-primary" })
+                                @Html.ActionLink("Delete", "Delete", new { id = item.PostId }, new { @class = "btn btn-primary" })
                             </p>
                         </div>
                     </div>

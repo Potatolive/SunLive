@@ -13,6 +13,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using System.Text.RegularExpressions;
 using System.Net;
+using Sunlive.Entities;
 
 namespace SunLive.Controllers
 {
@@ -29,13 +30,11 @@ namespace SunLive.Controllers
 
             FieldDefinition<FanPost> field = "FanPost";
 
-            var filter = Builders<FanPost>.Filter.In("Status", new List<String>() { "New", "Approved", "Rejected" });
+            var filter = Builders<FanPost>.Filter.In("Status", new List<String>() { "New", "Approved", "Rejected", "Downloaded", "Delete", "Deleted" });
 
             var sort = Builders<FanPost>.Sort.Descending("PublishedOn");
 
             var posts = collection.Find<FanPost>(filter).Sort(sort).ToListAsync();
-
-            
 
             return View(posts.Result.ToList());
         }
@@ -58,7 +57,7 @@ namespace SunLive.Controllers
 
             var result = collection.FindOneAndUpdateAsync<FanPost>(filter, update);
 
-            string textcontent = string.Empty;
+            /*string textcontent = string.Empty;
 
             if (result.Result.TextContent.Length > 140)
             {
@@ -78,7 +77,7 @@ namespace SunLive.Controllers
             using (WebClient webClient = new WebClient())
             {
                 webClient.DownloadFile(result.Result.ImageURL, imageFilename);
-            }
+            }*/
 
             return RedirectToAction("Index");
         }
@@ -91,6 +90,20 @@ namespace SunLive.Controllers
 
             var filter = Builders<FanPost>.Filter.Eq("_id", id);
             var update = Builders<FanPost>.Update.Set("Status", "Rejected");
+
+            var result = collection.FindOneAndUpdateAsync<FanPost>(filter, update);
+
+            return RedirectToAction("Index");
+        }
+
+        public RedirectToRouteResult Delete(string id)
+        {
+            var client = new MongoClient(connectionString);
+            var myDB = client.GetDatabase("SunLive");
+            var collection = myDB.GetCollection<FanPost>("fanposts");
+
+            var filter = Builders<FanPost>.Filter.Eq("_id", id);
+            var update = Builders<FanPost>.Update.Set("Status", "Delete");
 
             var result = collection.FindOneAndUpdateAsync<FanPost>(filter, update);
 

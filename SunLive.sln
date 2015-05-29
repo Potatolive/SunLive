@@ -1,9 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30501.0
+VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SunLive", "SunLive\SunLive.csproj", "{9800458B-9CC3-43E7-BB6C-673AE49DEC78}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Model", "Model\Model.csproj", "{535AA202-715E-4AD0-AD41-FAB08B82BD03}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Download", "Download\Download.csproj", "{AA7CF053-5EFB-4AEE-863F-1D51B37CBC1A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{9800458B-9CC3-43E7-BB6C-673AE49DEC78}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9800458B-9CC3-43E7-BB6C-673AE49DEC78}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9800458B-9CC3-43E7-BB6C-673AE49DEC78}.Release|Any CPU.Build.0 = Release|Any CPU
+		{535AA202-715E-4AD0-AD41-FAB08B82BD03}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{535AA202-715E-4AD0-AD41-FAB08B82BD03}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{535AA202-715E-4AD0-AD41-FAB08B82BD03}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{535AA202-715E-4AD0-AD41-FAB08B82BD03}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA7CF053-5EFB-4AEE-863F-1D51B37CBC1A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA7CF053-5EFB-4AEE-863F-1D51B37CBC1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA7CF053-5EFB-4AEE-863F-1D51B37CBC1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA7CF053-5EFB-4AEE-863F-1D51B37CBC1A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

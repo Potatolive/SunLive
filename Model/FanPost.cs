@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
-namespace SunLive.Models
+namespace Sunlive.Entities
 {
     [Serializable]
     public class FanPost
@@ -20,5 +20,7 @@ namespace SunLive.Models
         public string PublishedBy { get; set; }
 
         public string Status { get; set; }
+
+        public string FileName { get; set; }
     }
 }
