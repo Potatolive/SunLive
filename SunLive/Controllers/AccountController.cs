@@ -10,6 +10,10 @@ using Microsoft.Web.WebPages.OAuth;
 using WebMatrix.WebData;
 using SunLive.Filters;
 using SunLive.Models;
+using System.Data.SqlClient;
+using MongoDB.Driver;
+using Sunlive.Entities;
+using System.Configuration;
 
 namespace SunLive.Controllers
 {
@@ -218,13 +222,46 @@ namespace SunLive.Controllers
         public ActionResult ExternalLoginCallback(string returnUrl)
         {
             AuthenticationResult result = OAuthWebSecurity.VerifyAuthentication(Url.Action("ExternalLoginCallback", new { ReturnUrl = returnUrl }));
+            string accessToken = result.ExtraData["accesstoken"];
+
             if (!result.IsSuccessful)
             {
                 return RedirectToAction("ExternalLoginFailure");
             }
 
+            if (!CheckAuthorizedUser(result.UserName))
+            {
+                ViewBag.Reason = "Not authorized to view the web page.";
+                return View("ExternalLoginFailure");
+            }
+
             if (OAuthWebSecurity.Login(result.Provider, result.ProviderUserId, createPersistentCookie: false))
             {
+                if (!string.IsNullOrEmpty(accessToken))
+                {
+                    // Update access token on new login.
+                    using (UsersContext db = new UsersContext())
+                    {
+
+                        var userid = db.Database.SqlQuery(typeof(int), "select userid from [dbo].[webpages_OAuthMembership] where ProviderUserId = @ProviderId", new SqlParameter("ProviderId", result.ProviderUserId)).ToListAsync();
+
+                        if (userid.Result != null && userid.Result.Count > 0)
+                        {
+                            int userIdResult = (int)userid.Result[0];
+
+                            UserProfile user = db.UserProfiles.FirstOrDefault(u => u.UserId == userIdResult);
+
+                            if (user != null)
+                            {
+                                user.AccessToken = accessToken;
+                                db.SaveChanges();
+
+                                UpdateAccessToken(user);
+                            }
+                        }
+                    }   
+                }
+                
                 return RedirectToLocal(returnUrl);
             }
 
@@ -240,7 +277,63 @@ namespace SunLive.Controllers
                 string loginData = OAuthWebSecurity.SerializeProviderUserId(result.Provider, result.ProviderUserId);
                 ViewBag.ProviderDisplayName = OAuthWebSecurity.GetOAuthClientData(result.Provider).DisplayName;
                 ViewBag.ReturnUrl = returnUrl;
-                return View("ExternalLoginConfirmation", new RegisterExternalLoginModel { UserName = result.UserName, ExternalLoginData = loginData });
+                return View("ExternalLoginConfirmation", new RegisterExternalLoginModel { UserName = result.UserName, ExternalLoginData = loginData, AccessToken = accessToken });
+            }
+        }
+
+        private bool CheckAuthorizedUser(string userProviderName)
+        {
+            try
+            {
+                string connectionString = ConfigurationManager.AppSettings["connectionString"].ToString();
+
+                var client = new MongoClient(connectionString);
+                var myDB = client.GetDatabase("config");
+                var collection = myDB.GetCollection<AccessToken>("accesstoken");
+
+                var filter = Builders<AccessToken>.Filter.Eq("_id", 1);
+
+                var result = collection.FindAsync<AccessToken>(filter);
+
+                if (result != null && result.Result != null)
+                {
+                    List<AccessToken> accessTokens = result.Result.ToListAsync().Result;
+
+                    if (accessTokens != null && accessTokens.Count > 0)
+                    {
+                        if (accessTokens[0].userlist.Contains(userProviderName))
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+            return false;
+        }
+
+        private void UpdateAccessToken(UserProfile userProfile)
+        {
+            try
+            {
+                string connectionString = ConfigurationManager.AppSettings["connectionString"].ToString();
+
+                var client = new MongoClient(connectionString);
+                var myDB = client.GetDatabase("config");
+                var collection = myDB.GetCollection<AccessToken>("accesstoken");
+
+                var filter = Builders<AccessToken>.Filter.Eq("_id", 1);
+                var update = Builders<AccessToken>.Update.Set("token", userProfile.AccessToken);
+
+                var result = collection.FindOneAndUpdateAsync<AccessToken>(filter, update);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("Access Token", "Unable to update access token.");
             }
         }
 
@@ -270,8 +363,11 @@ namespace SunLive.Controllers
                     if (user == null)
                     {
                         // Insert name into the profile table
-                        db.UserProfiles.Add(new UserProfile { UserName = model.UserName });
+                        UserProfile newUserProfile = new UserProfile { UserName = model.UserName, AccessToken = model.AccessToken };
+                        db.UserProfiles.Add(newUserProfile);
                         db.SaveChanges();
+
+                        UpdateAccessToken(newUserProfile);
 
                         OAuthWebSecurity.CreateOrUpdateAccount(provider, providerUserId, model.UserName);
                         OAuthWebSecurity.Login(provider, providerUserId, createPersistentCookie: false);

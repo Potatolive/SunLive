@@ -1,8 +1,9 @@
 ﻿@model IEnumerable<Sunlive.Entities.FanPost>
-@{
+
+@section AdditionalMetaData
+{
+    <meta http-equiv="refresh" content="60" />
 }
-
-
 
 <div class="pull-right">
     <form class="form-inline" action="~/Home/Search" method="post">
@@ -35,9 +36,11 @@
 
         <div class="col-sm-6 col-md-4">
             <div class="thumbnail">
+                
                 <img src="@item.ImageURL"
-                     alt="No image..." class="imageTile"
-                     data-holder-rendered="true">
+                    alt="No image..." class="imageTile"
+                    data-holder-rendered="true">
+
                 <div class="caption">
                     <p class="pull-left">
                         <small>@Html.DisplayFor(modelItem => item.HashTag)</small>
@@ -53,18 +56,19 @@
 
                     <div class="newsSummary">
                         @if (item.TextContent.Length > 140)
-                                {
-                                @Html.Raw(item.TextContent.Substring(0, 140) + " ...")
-                                }
-                                else
-                                {
-                                @Html.Raw(item.TextContent)
-                                }
+                        {
+                            @Html.Raw(item.TextContent.Substring(0, 140) + " ...")
+                        }
+                        else
+                        {
+                            @Html.Raw(item.TextContent)
+                        }
                     </div>
                     <br />
                     <p>
                         @Html.ActionLink("Approve", "Details", new { id = item.PostId }, new { @class = "btn btn-primary" }) *
-                        @Html.ActionLink("Edit", "Edit", new { id = item.PostId }, new { @class = "btn btn-warning disabled" }) *
+                        @Html.ActionLink("Edit", "Contact", null,
+                                         new { @class = "dialog" })
                         @Html.ActionLink("Reject", "Reject", new { id = item.PostId }, new { @class = "btn btn-danger " })
                     </p>
                 </div>
