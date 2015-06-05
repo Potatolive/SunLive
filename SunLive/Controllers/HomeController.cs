@@ -17,7 +17,7 @@ using Sunlive.Entities;
 
 namespace SunLive.Controllers
 {
-    [Authorize]
+    [Authorize]   
     public class HomeController : Controller
     {
         string connectionString = ConfigurationManager.AppSettings["connectionString"].ToString();

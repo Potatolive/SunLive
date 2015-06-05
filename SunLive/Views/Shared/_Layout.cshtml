@@ -1,87 +1,86 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <title>PotatoLive - Aditya TV</title>
-        <link rel="icon" href="https://plive.azurewebsites.net/img/pliveicon.png" sizes="50x50">
-        <meta name="viewport" content="width=device-width" />
+<head>
+    <meta charset="utf-8" />
+    <title>PotatoLive - Aditya TV</title>
+    <link rel="icon" href="https://plive.azurewebsites.net/img/pliveicon.png" sizes="50x50">
+    <meta name="viewport" content="width=device-width" />
 
-        <script src=@Url.Content("~/Scripts/croppic/croppic.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/Scripts/croppic/croppic.js") type="text/javascript"></script>
 
-        <link href="@Url.Content("~/Content/croppic.css")"
-              rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/croppic.css")"
+          rel="stylesheet" type="text/css" />
 
-        @RenderSection("AdditionalMetaData", false)
+    @RenderSection("AdditionalMetaData", false)
 
-        @Styles.Render("~/Content/css")
-        @Scripts.Render("~/bundles/modernizr")
-        <link href="@Url.Content("~/Content/themes/base/jquery-ui.css")"
-              rel="stylesheet" type="text/css" />
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <link href="@Url.Content("~/Content/themes/base/jquery-ui.css")"
+          rel="stylesheet" type="text/css" />
 
-    </head>
-    <body>
-        <nav class="navbar navbar-inverse navbar-fixed-top" style="min-height: 70px">
-            <div class="container">
-                <div class="navbar-header">
-                    <a class="navbar-brand" href="#"><img src="https://plive.azurewebsites.net/img/logo.png" alt="PotatoLive" style="height: 50px;" /></a>
-                </div>
-
-                <div id="navbar" class="navbar-header" style="vertical-align: middle; text-align: center; float: right; margin-top: 25px;">
-                    @Html.Partial("_LoginPartial")
-                </div><!--/.nav-collapse -->
-                
-            </div>
-        </nav>
+</head>
+<body>
+    <nav class="navbar navbar-inverse navbar-fixed-top" style="min-height: 70px">
         <div class="container">
-            <section class="mainContent">
-                @RenderBody()
-            </section>
-        </div>
-        
-        <footer class="footer">
-            <div class="container">
-                <p class="text-muted">&copy; @DateTime.Now.Year - Potatolive </p>
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#"><img src="https://plive.azurewebsites.net/img/logo.png" alt="PotatoLive" style="height: 50px;" /></a>
             </div>
-        </footer>
 
-        @Scripts.Render("~/bundles/jquery")
-        @Scripts.Render("~/bundles/jqueryui")
-        @Scripts.Render("~/bundles/angular")
-        @Scripts.Render("~/Resources")
-        @RenderSection("scripts", required: true)
+            <div id="navbar" class="navbar-header" style="vertical-align: middle; text-align: center; float: right; margin-top: 25px;">
+                @Html.Partial("_LoginPartial")
+            </div><!--/.nav-collapse -->
 
-        
-        <script src="http://code.jquery.com/jquery-migrate-1.2.1.js"></script>
+        </div>
+    </nav>
+    <div class="container">
+        <section class="mainContent">
+            @RenderBody()
+        </section>
+    </div>
 
-        <script type="text/javascript">
-    $(document).ready(function () {
-        $("#tabs").tabs();
+    <footer class="footer">
+        <div class="container">
+            <p class="text-muted">&copy; @DateTime.Now.Year - Potatolive </p>
+        </div>
+    </footer>
 
-        var cropperOptions = {
-            uploadUrl: 'path_to_your_image_proccessing_file.php'
-        }
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryui")
+    @Scripts.Render("~/bundles/angular")
+    @Scripts.Render("~/Resources")
+    @Scripts.Render("~/bundles/jqueryval")
 
-        var cropperHeader = new Croppic('yourId', cropperOptions);
+    <script src="http://code.jquery.com/jquery-migrate-1.2.1.js"></script>
 
-        $('a.dialog').click(function () {
-            var url = $(this).attr('href');
-            var dialog = $('<div style="display:none"></div>').appendTo('body');
-            dialog.load(url, {},
-                function (responseText, textStatus, XMLHttpRequest) {
-                    dialog.dialog({
-                        close: function (event, ui) {
-                            dialog.remove();
-                        }
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#tabs").tabs();
+
+            var cropperOptions = {
+                uploadUrl: 'path_to_your_image_proccessing_file.php'
+            }
+
+            var cropperHeader = new Croppic('yourId', cropperOptions);
+
+            $('a.dialog').click(function () {
+                var url = $(this).attr('href');
+                var dialog = $('<div style="display:none"></div>').appendTo('body');
+                dialog.load(url, {},
+                    function (responseText, textStatus, XMLHttpRequest) {
+                        dialog.dialog({
+                            close: function (event, ui) {
+                                dialog.remove();
+                            }
+                        });
                     });
-                });
-            return false;
+                return false;
+            });
+
         });
 
-    });
-
-        </script>
+    </script>
 
 
 
-    </body>
+</body>
 </html>

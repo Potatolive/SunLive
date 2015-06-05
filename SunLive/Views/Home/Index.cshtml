@@ -65,10 +65,11 @@
                         }
                     </div>
                     <br />
+                    
                     <p>
                         @Html.ActionLink("Approve", "Details", new { id = item.PostId }, new { @class = "btn btn-primary" }) *
                         @Html.ActionLink("Edit", "Contact", null,
-                                         new { @class = "dialog" })
+                                         new { @class = "dialog" }) *
                         @Html.ActionLink("Reject", "Reject", new { id = item.PostId }, new { @class = "btn btn-danger " })
                     </p>
                 </div>
@@ -169,6 +170,3 @@
         }
     </div>
 </div>
-
-
-
