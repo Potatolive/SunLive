@@ -291,13 +291,13 @@ namespace SunLive.Controllers
                 var myDB = client.GetDatabase("config");
                 var collection = myDB.GetCollection<AccessToken>("accesstoken");
 
-                var filter = Builders<AccessToken>.Filter.Eq("_id", 1);
+                var filter = Builders<AccessToken>.Filter.Eq("_id", "1");
 
-                var result = collection.FindAsync<AccessToken>(filter);
+                var result = collection.Find<AccessToken>(filter);
 
-                if (result != null && result.Result != null)
+                if (result != null)
                 {
-                    List<AccessToken> accessTokens = result.Result.ToListAsync().Result;
+                    List<AccessToken> accessTokens = result.ToListAsync().Result;
 
                     if (accessTokens != null && accessTokens.Count > 0)
                     {

@@ -13,6 +13,7 @@ namespace Sunlive.Entities
         public string _id { get; set; }
         public string PostId { get; set; }
         public string ImageURL { get; set; }
+        public string CroppedImageURL { get; set; }
         public string TextContent { get; set; }
         public string HashTag { get; set; }
         [DisplayFormat(DataFormatString = "{0:ddd, MMM d, yyyy}")]

@@ -14,10 +14,12 @@ using System.Xml.Serialization;
 using System.Text.RegularExpressions;
 using System.Net;
 using Sunlive.Entities;
+using System.Drawing;
+using System.Drawing.Drawing2D;
 
 namespace SunLive.Controllers
 {
-    [Authorize]   
+    //[Authorize]
     public class HomeController : Controller
     {
         string connectionString = ConfigurationManager.AppSettings["connectionString"].ToString();
@@ -141,6 +143,137 @@ namespace SunLive.Controllers
             ViewBag.Message = "Your contact page.";
 
             return View();
+        }
+
+        [HttpPost]
+        public string Crop(CropData data)
+        {
+
+            string ImgId = data.ImgId;
+
+            string connectionString = ConfigurationManager.AppSettings["connectionString"].ToString();
+            MongoClient client = new MongoClient(connectionString);
+            IMongoDatabase myDB = client.GetDatabase("SunLive");
+
+            string fileName = Guid.NewGuid().ToString();
+
+            try
+            {
+                var collection = myDB.GetCollection<FanPost>("fanposts");
+                FieldDefinition<FanPost> field = "FanPost";
+                var filter = Builders<FanPost>.Filter.Eq("_id", ImgId);
+                var update = Builders<FanPost>.Update.Set("CroppedImageURL", "Output/" + fileName + ".jpg");
+
+                var posts = collection.FindOneAndUpdateAsync<FanPost>(filter, update);
+
+                if (posts != null && posts.Result != null)
+                {
+                    FanPost post = posts.Result;
+                    {
+                        if (!string.IsNullOrEmpty(post.ImageURL))
+                        {
+                            using (WebClient webClient = new WebClient())
+                            {
+                                byte[] image = null;
+                                Image OriginalImage = null;
+
+                                if (!string.IsNullOrEmpty(post.CroppedImageURL))
+                                {
+                                    var directoryPath = Server.MapPath("~");
+                                    var imageFilename = Path.Combine(directoryPath, post.CroppedImageURL);
+
+                                    OriginalImage = Image.FromFile(imageFilename);
+                                }
+                                else
+                                {
+                                    image = webClient.DownloadData(post.ImageURL);
+                                    using (MemoryStream ms = new MemoryStream(image))
+                                    {
+                                        OriginalImage = Image.FromStream(ms);
+                                        ms.Close();
+                                    }
+                                }
+
+                                float scaledHeight = (float)OriginalImage.Height / (float) data.imageHeight;
+                                float scaledWidth = (float)OriginalImage.Width / (float) data.imageWidth;
+
+                                float Width = (float)data.W * (float) scaledWidth;
+                                float Height = (float)data.H * (float) scaledHeight;
+                                float X = (float)data.X * (float) scaledWidth;
+                                float Y = (float)data.Y * (float) scaledHeight;
+
+
+                                using (Bitmap bmp = new Bitmap((int)Width, (int)Height))
+                                {
+                                    bmp.SetResolution(OriginalImage.HorizontalResolution, OriginalImage.VerticalResolution);
+                                    using (Graphics Graphic = Graphics.FromImage(bmp))
+                                    {
+                                        Graphic.SmoothingMode = SmoothingMode.AntiAlias;
+                                        Graphic.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                                        Graphic.PixelOffsetMode = PixelOffsetMode.HighQuality;
+                                        Graphic.DrawImage(OriginalImage, new Rectangle(0, 0, (int)Width, (int)Height), 
+                                            new Rectangle((int)X, (int)Y, (int)Width, (int)Height), GraphicsUnit.Pixel);
+                                        using (MemoryStream outputMs = new MemoryStream())
+                                        {
+                                            bmp.Save(outputMs, OriginalImage.RawFormat);
+
+                                            var directoryPath = Server.MapPath("~");
+                                            var imageFilename = Path.Combine(directoryPath, "Output/" + fileName + ".jpg");
+
+                                            using (FileStream file = new FileStream(imageFilename, FileMode.Create, FileAccess.Write))
+                                            {
+                                                outputMs.WriteTo(file);
+                                                file.Close();
+                                            }
+
+                                            outputMs.Close();
+                                            OriginalImage.Dispose();
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Image could not be cropped. Internal error. Please try again!");
+            }
+
+            return "Output/" + fileName + ".jpg";
+        }
+
+        [HttpPost]
+        public string RevertCrop(CropData data)
+        {
+            string connectionString = ConfigurationManager.AppSettings["connectionString"].ToString();
+            MongoClient client = new MongoClient(connectionString);
+            IMongoDatabase myDB = client.GetDatabase("SunLive");
+
+            string fileName = Guid.NewGuid().ToString();
+
+            try
+            {
+                var collection = myDB.GetCollection<FanPost>("fanposts");
+                FieldDefinition<FanPost> field = "FanPost";
+                var filter = Builders<FanPost>.Filter.Eq("_id", data.ImgId);
+                var update = Builders<FanPost>.Update.Set("CroppedImageURL", "");
+
+                var posts = collection.FindOneAndUpdateAsync<FanPost>(filter, update);
+
+                if (posts != null && posts.Result != null)
+                {
+                    FanPost post = posts.Result;
+                    return post.ImageURL;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Could not revert to original image!");
+            }
+
+            return string.Empty;
         }
     }
 }

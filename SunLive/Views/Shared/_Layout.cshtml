@@ -11,6 +11,10 @@
     <link href="@Url.Content("~/Content/croppic.css")"
           rel="stylesheet" type="text/css" />
 
+    <link href="@Url.Content("~/Content/jquery.Jcrop.css")"
+          rel="stylesheet" type="text/css" />
+
+
     @RenderSection("AdditionalMetaData", false)
 
     @Styles.Render("~/Content/css")
@@ -51,32 +55,71 @@
     @Scripts.Render("~/bundles/jqueryval")
 
     <script src="http://code.jquery.com/jquery-migrate-1.2.1.js"></script>
+    <script src=@Url.Content("~/Scripts/jcrop/jquery.Jcrop.js") type="text/javascript"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
             $("#tabs").tabs();
 
-            var cropperOptions = {
-                uploadUrl: 'path_to_your_image_proccessing_file.php'
-            }
-
-            var cropperHeader = new Croppic('yourId', cropperOptions);
-
-            $('a.dialog').click(function () {
-                var url = $(this).attr('href');
-                var dialog = $('<div style="display:none"></div>').appendTo('body');
-                dialog.load(url, {},
-                    function (responseText, textStatus, XMLHttpRequest) {
-                        dialog.dialog({
-                            close: function (event, ui) {
-                                dialog.remove();
-                            }
-                        });
-                    });
-                return false;
-            });
-
         });
+
+        function revertCrop(e, id) {
+            $.ajax({
+                type: "POST",
+                url: "Home/RevertCrop",
+                data: $('#form_crop_image_' + id).serialize(),
+                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                success: function (msg) {
+                    $('#img_' + id).find('img').attr('src', msg);
+                    $('#revert_' + id).addClass('hidden');
+                    $('#submit_' + id).addClass('hidden');
+                    console.log(msg);
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    console.log(errorThrown);
+                }
+            });
+        }
+
+        function cropImage(id) {
+
+            var jcrop_api;
+
+            $('#img_' + id).find('.imgforapproval').Jcrop({
+                onSelect: function (c) {
+                    $('#X_' + id).val(c.x);
+                    $('#Y_' + id).val(c.y);
+                    $('#W_' + id).val(c.w);
+                    $('#H_' + id).val(c.h);
+                    $('#submit_' + id).removeClass('hidden');
+                },
+                onChange: function (c) {
+                    
+                }
+            }, function () { jcrop_api = this; });
+
+            $('#submit_' + id).click(function () {
+                $('#imageWidth_' + id).val($('#img_' + id).width());
+                $('#imageHeight_' + id).val($('#img_' + id).height());
+
+                $.ajax({
+                    type: "POST",
+                    url: "Home/Crop",
+                    data: $('#form_crop_image_' + id).serialize(),
+                    contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                    success: function (msg) {
+                        if (jcrop_api) jcrop_api.release();
+                        $('#img_' + id).find('img').attr('src', msg + '?' + Math.random());
+                        $('#revert_' + id).removeClass('hidden');
+                        $('#submit_' + id).addClass('hidden');
+                        console.log("success");
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        console.log(errorThrown);
+                    }
+                });
+            })
+        }
 
     </script>
 
