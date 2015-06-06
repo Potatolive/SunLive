@@ -130,30 +130,32 @@
                         <div id="img_@approvedItem._id">
                             <img src="@imgUrl"
                                  alt="No image..." class="imageTile imgforapproval"
-                                 data-holder-rendered="true" onmouseover="javascript:cropImage('@approvedItem._id'); return true;" />
+                                 data-holder-rendered="true"/> 
+                            <!-- onmouseover="javascript:cropImage('@approvedItem._id'); return true;" /> -->
                         </div>
 
                         <!--<canvas id="preview_@approvedItem._id"></canvas>-->
+                        @*
+    <form id="form_crop_image_@approvedItem._id">
+        <input hidden id="crop_image_id_@approvedItem._id" name="ImgId" value="@approvedItem._id"/>
+        <input hidden id="X_@approvedItem._id" name="X"/>
+        <input hidden id="Y_@approvedItem._id" name="Y"/>
+        <input hidden id="W_@approvedItem._id" name="W"/>
+        <input hidden id="H_@approvedItem._id" name="H"/>
+        <input hidden id="imageWidth_@approvedItem._id" name="imageWidth" value="0"/>
+        <input hidden id="imageHeight_@approvedItem._id" name="imageHeight" value="0"/>
+        <input id="submit_@approvedItem._id" class="hidden" type="button" value="Crop"/>
+    </form>
 
-                        <form id="form_crop_image_@approvedItem._id">
-                            <input hidden id="crop_image_id_@approvedItem._id" name="ImgId" value="@approvedItem._id"/>
-                            <input hidden id="X_@approvedItem._id" name="X"/>
-                            <input hidden id="Y_@approvedItem._id" name="Y"/>
-                            <input hidden id="W_@approvedItem._id" name="W"/>
-                            <input hidden id="H_@approvedItem._id" name="H"/>
-                            <input hidden id="imageWidth_@approvedItem._id" name="imageWidth" value="0"/>
-                            <input hidden id="imageHeight_@approvedItem._id" name="imageHeight" value="0"/>
-                            <input id="submit_@approvedItem._id" class="hidden" type="button" value="Crop"/>
-                        </form>
+    @if(!string.IsNullOrEmpty(approvedItem.CroppedImageURL)) {
+        <input id="revert_@approvedItem._id" class="revertcrop" type="button" value="Revert" onclick="revertCrop(this, '@approvedItem._id');"/>
+    }
+    else
+    {
+        <input id="revert_@approvedItem._id" class="revertcrop hidden" type="button" value="Revert" onclick="revertCrop(this, '@approvedItem._id');" />
+    }
+                        *@
 
-                        @if(!string.IsNullOrEmpty(approvedItem.CroppedImageURL)) {
-                            <input id="revert_@approvedItem._id" class="revertcrop" type="button" value="Revert" onclick="revertCrop(this, '@approvedItem._id');"/>
-                        }
-                        else
-                        {
-                            <input id="revert_@approvedItem._id" class="revertcrop hidden" type="button" value="Revert" onclick="revertCrop(this, '@approvedItem._id');" />
-                        }
-                        
                         <div class="caption">
                             <p class="pull-left">
                                 <small>@Html.DisplayFor(modelItem => approvedItem.HashTag)</small>

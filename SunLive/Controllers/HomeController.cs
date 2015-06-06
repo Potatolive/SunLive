@@ -19,7 +19,7 @@ using System.Drawing.Drawing2D;
 
 namespace SunLive.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public class HomeController : Controller
     {
         string connectionString = ConfigurationManager.AppSettings["connectionString"].ToString();
@@ -162,36 +162,40 @@ namespace SunLive.Controllers
                 var collection = myDB.GetCollection<FanPost>("fanposts");
                 FieldDefinition<FanPost> field = "FanPost";
                 var filter = Builders<FanPost>.Filter.Eq("_id", ImgId);
-                var update = Builders<FanPost>.Update.Set("CroppedImageURL", "Output/" + fileName + ".jpg");
 
-                var posts = collection.FindOneAndUpdateAsync<FanPost>(filter, update);
+                var posts = collection.Find<FanPost>(filter).ToListAsync(); ;
 
-                if (posts != null && posts.Result != null)
+                if (posts != null && posts.Result.Count > 0)
                 {
-                    FanPost post = posts.Result;
+                    FanPost post = posts.Result.FirstOrDefault();
+
+                    if(post != null)
                     {
                         if (!string.IsNullOrEmpty(post.ImageURL))
                         {
                             using (WebClient webClient = new WebClient())
                             {
-                                byte[] image = null;
                                 Image OriginalImage = null;
 
-                                if (!string.IsNullOrEmpty(post.CroppedImageURL))
-                                {
-                                    var directoryPath = Server.MapPath("~");
-                                    var imageFilename = Path.Combine(directoryPath, post.CroppedImageURL);
+                                var directoryPath = Server.MapPath("~");
+                                var imageFilename = Path.Combine(directoryPath, "Output/" + fileName + ".jpg");
 
-                                    OriginalImage = Image.FromFile(imageFilename);
+                                string OriginalImageFileName = null;
+
+                                if(string.IsNullOrEmpty(post.CroppedImageURL))
+                                {
+                                    byte[] image = webClient.DownloadData(post.ImageURL);
+
+                                    using(MemoryStream originalFile = new MemoryStream(image))
+                                    {
+                                        OriginalImage = Image.FromStream(originalFile);
+                                        originalFile.Close();
+                                    }
                                 }
                                 else
                                 {
-                                    image = webClient.DownloadData(post.ImageURL);
-                                    using (MemoryStream ms = new MemoryStream(image))
-                                    {
-                                        OriginalImage = Image.FromStream(ms);
-                                        ms.Close();
-                                    }
+                                    OriginalImageFileName = Path.Combine(Server.MapPath("~"), post.CroppedImageURL);
+                                    OriginalImage = Image.FromFile(OriginalImageFileName);
                                 }
 
                                 float scaledHeight = (float)OriginalImage.Height / (float) data.imageHeight;
@@ -217,9 +221,6 @@ namespace SunLive.Controllers
                                         {
                                             bmp.Save(outputMs, OriginalImage.RawFormat);
 
-                                            var directoryPath = Server.MapPath("~");
-                                            var imageFilename = Path.Combine(directoryPath, "Output/" + fileName + ".jpg");
-
                                             using (FileStream file = new FileStream(imageFilename, FileMode.Create, FileAccess.Write))
                                             {
                                                 outputMs.WriteTo(file);
@@ -235,6 +236,12 @@ namespace SunLive.Controllers
                         }
                     }
                 }
+
+                string dns = ConfigurationManager.AppSettings["dns"].ToString();
+                var update = Builders<FanPost>.Update.Set("CroppedImageURL", dns + "Output/" + fileName + ".jpg");
+
+                collection.FindOneAndUpdateAsync(filter, update);
+            
             }
             catch (Exception ex)
             {
