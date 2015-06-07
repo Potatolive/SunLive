@@ -16,7 +16,7 @@ namespace Sunlive.Entities
         public string CroppedImageURL { get; set; }
         public string TextContent { get; set; }
         public string HashTag { get; set; }
-        [DisplayFormat(DataFormatString = "{0:ddd, MMM d, yyyy}")]
+        [DisplayFormat(DataFormatString = "{0: d MMM yyyy}")]
         public DateTime PublishedOn { get; set; }
         public string PublishedBy { get; set; }
 

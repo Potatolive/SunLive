@@ -265,6 +265,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\PostController.cs" />
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -273,11 +274,6 @@
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\CropData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <DependentUpon>Settings.settings</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\input.xml" />
@@ -286,9 +282,17 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\croppic.css" />
+    <Content Include="Content\fancybox.css" />
+    <Content Include="Content\font-awesome-ie7.css" />
+    <Content Include="Content\font-awesome.css" />
+    <Content Include="Content\glyphicons.css" />
+    <Content Include="Content\halflings.css" />
     <Content Include="Content\Jcrop.gif" />
     <Content Include="Content\jquery.Jcrop.css" />
     <Content Include="Content\jquery.Jcrop.min.css" />
+    <Content Include="Content\social-icons.css" />
+    <Content Include="Content\Style.css" />
+    <Content Include="Content\TabulaTheme.css" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
@@ -401,10 +405,6 @@
     <None Include="Properties\PublishProfiles\sunlive - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\sunlive - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\sunlive.pubxml" />
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
     <Content Include="Icon.png" />
     <Content Include="Scripts\angular-ui\ui-bootstrap-tpls.js" />
@@ -1176,6 +1176,12 @@
     <Content Include="Scripts\knockout-2.2.0.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\npm.js" />
+    <Content Include="Scripts\Site\isotope.js" />
+    <Content Include="Scripts\Site\jquery.fancybox.js" />
+    <Content Include="Scripts\Site\jquery.imagesloaded.js" />
+    <Content Include="Scripts\Site\jquery.isotope.min.js" />
+    <Content Include="Scripts\Site\jquery.placeholder.min.js" />
+    <Content Include="Scripts\Site\Site.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -1219,6 +1225,8 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Web.config" />
     <Content Include="Scripts\version.json" />
+    <Content Include="Views\Post\Index.cshtml" />
+    <Content Include="Views\Shared\_BootStrapLayout.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Output\" />

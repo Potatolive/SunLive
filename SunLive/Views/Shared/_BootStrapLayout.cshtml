@@ -1,0 +1,193 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>PotatoLive - Aditya TV</title>
+    <link rel="icon" href="https://plive.azurewebsites.net/img/pliveicon.png" sizes="50x50">
+    <meta name="viewport" content="width=device-width" />
+
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Sans:400,700">
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif">
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Boogaloo">
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Economica:700,400italic">
+
+
+    <link href="@Url.Content("~/Content/croppic.css")"
+          rel="stylesheet" type="text/css" />
+
+    <link href="@Url.Content("~/Content/jquery.Jcrop.css")"
+          rel="stylesheet" type="text/css" />
+
+
+    @RenderSection("AdditionalMetaData", false)
+
+    @Scripts.Render("~/bundles/modernizr")
+    <link href="@Url.Content("~/Content/themes/base/jquery-ui.css")"
+          rel="stylesheet" type="text/css" />
+
+    @Styles.Render("~/Content/css")
+
+
+</head>
+<body>
+    <!--start: Header -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#"><img src="https://plive.azurewebsites.net/img/logo.png" alt="PotatoLive" style="height: 50px;" /></a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                @*<ul class="nav navbar-nav">
+                    <li class="active"><a href="#">Home</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Dropdown <span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="#">Action</a></li>
+                            <li><a href="#">Another action</a></li>
+                            <li><a href="#">Something else here</a></li>
+                            <li class="divider"></li>
+                            <li class="dropdown-header">Nav header</li>
+                            <li><a href="#">Separated link</a></li>
+                            <li><a href="#">One more separated link</a></li>
+                        </ul>
+                    </li>
+                </ul>*@
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        @if (Request.IsAuthenticated)
+                        {
+                            <text>
+                                <span class="label-success"> Hello, @User.Identity.Name! </span>
+                                <span class="disabled">
+                                    @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+                                    {
+                                        @Html.AntiForgeryToken()
+                                        <a href="javascript:document.getElementById('logoutForm').submit()">Log off</a>
+                                    }
+                                </span>
+                            </text>
+                        }
+                        else
+                        {
+                            @Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })
+                        }
+
+                </li>
+                </ul>
+            </div><!--/.nav-collapse -->
+        </div>
+    </nav>
+  
+    <div class="container">
+        <section class="mainContent">
+            @RenderBody()
+        </section>
+    </div>
+
+    @*<div id="under-footer">
+        <div class="container">
+            <div class="row-fluid">
+                <div class="span2">
+                    <div id="under-footer-logo">
+                        <a class="brand" href="#">Potato Live</a>
+                    </div>
+                </div>
+                <div class="span9">
+                    <div id="under-footer-copyright">
+                        © @DateTime.Now.Year, Developed by Bambaram
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>*@
+
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryui")
+    @Scripts.Render("~/bundles/angular")
+    @Scripts.Render("~/Resources")
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script src=@Url.Content("~/Scripts/Site/jquery.isotope.min.js") type="text/javascript"></script>
+
+    @Scripts.Render("~/bundles/jqueryDependents")
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#tabs").tabs();
+
+        });
+
+        function revertCrop(e, id) {
+            $.ajax({
+                type: "POST",
+                url: "Home/RevertCrop",
+                data: $('#form_crop_image_' + id).serialize(),
+                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                success: function (msg) {
+                    $('#img_' + id).find('img').attr('src', msg);
+                    $('#revert_' + id).addClass('hidden');
+                    $('#submit_' + id).addClass('hidden');
+                    console.log(msg);
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    console.log(errorThrown);
+                }
+            });
+        }
+
+        function cropImage(id) {
+
+            var jcrop_api;
+
+            $('#img_' + id).find('.imgforapproval').Jcrop({
+                onSelect: function (c) {
+                    $('#X_' + id).val(c.x);
+                    $('#Y_' + id).val(c.y);
+                    $('#W_' + id).val(c.w);
+                    $('#H_' + id).val(c.h);
+                    $('#submit_' + id).removeClass('hidden');
+                },
+                onChange: function (c) {
+                    
+                }
+            }, function () { jcrop_api = this; });
+
+            $('#submit_' + id).click(function () {
+                $('#imageWidth_' + id).val($('#img_' + id).width());
+                $('#imageHeight_' + id).val($('#img_' + id).height());
+
+                $.ajax({
+                    type: "POST",
+                    url: "Home/Crop",
+                    data: $('#form_crop_image_' + id).serialize(),
+                    contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                    success: function (msg) {
+                        if (jcrop_api) jcrop_api.release();
+                        $('#img_' + id).find('img').attr('src', msg + '?' + Math.random());
+                        $('#revert_' + id).removeClass('hidden');
+                        $('#submit_' + id).addClass('hidden');
+                        console.log("success");
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        console.log(errorThrown);
+                    }
+                });
+            })
+        }
+
+    </script>
+
+
+
+</body>
+</html>
