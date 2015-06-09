@@ -14,12 +14,17 @@ else
         @Html.AntiForgeryToken()
         foreach (AuthenticationClientData p in Model)
         {
-            @*<button type="submit" name="provider"  title="Log in using your @p.DisplayName account">@p.DisplayName</button>*@
-
+    if(p.AuthenticationClient.ProviderName == "facebook")
+    { 
     <button type="submit" class="facebook_connect" name="provider" value="@p.AuthenticationClient.ProviderName">
         <div class="img"><i class="icon-facebook"></i></div>
         <div class="text">Login with Facebook</div>
     </button>
+}
+else
+    { 
+    <button type="submit" name="provider" value="@p.AuthenticationClient.ProviderName" title="Log in using your @p.DisplayName account">@p.DisplayName</button>
+}
         }
     }
 }
