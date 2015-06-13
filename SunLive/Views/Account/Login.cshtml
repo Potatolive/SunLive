@@ -4,45 +4,48 @@
     ViewBag.Title = "Log in";
 }
 
-@{/*
+<div class="container">
 
-<hgroup class="title">
-    <h1>@ViewBag.Title.</h1>
-</hgroup>
+    <!-- start: Page Title -->
+    @*<div class="row-fluid">
+        <div id="page-title" class="span4 offset4">
 
-<section id="loginForm">
-<h2>Use a local account to log in.</h2>
-@using (Html.BeginForm(new { ReturnUrl = ViewBag.ReturnUrl })) {
-    @Html.AntiForgeryToken()
-    @Html.ValidationSummary(true)
+            <h2>Log in to your account</h2>
 
-    <fieldset>
-        <legend>Log in Form</legend>
-        <ol>
-            <li>
-                @Html.LabelFor(m => m.UserName)
-                @Html.TextBoxFor(m => m.UserName)
-                @Html.ValidationMessageFor(m => m.UserName)
-            </li>
-            <li>
-                @Html.LabelFor(m => m.Password)
-                @Html.PasswordFor(m => m.Password)
-                @Html.ValidationMessageFor(m => m.Password)
-            </li>
-            <li>
-                @Html.CheckBoxFor(m => m.RememberMe)
-                @Html.LabelFor(m => m.RememberMe, new { @class = "checkbox" })
-            </li>
-        </ol>
-        <input type="submit" value="Log in" />
-    </fieldset>
-    <p>
-        @Html.ActionLink("Register", "Register") if you don't have an account.
-    </p>
-}
-</section>
-*/}
+        </div>
+    </div>*@
+    <br />
+    <!-- end: Page Title -->
+    <!--start: Wrapper-->
+    <div class="row-fluid">
+        <div id="wrapper" class="full lr-page span4 offset4">
 
-<section class="social" id="socialLoginForm">
-    @Html.Action("ExternalLoginsList", new { ReturnUrl = ViewBag.ReturnUrl })
-</section>
+            <!-- start: Row -->
+            <div class="row-fluid">
+
+                <div id="login-form" class="span12">
+
+                    <div class="page-title-small">
+
+                        <h3>Use your account</h3>
+
+                    </div>
+
+                    
+
+                    @Html.Action("ExternalLoginsList", new { ReturnUrl = ViewBag.ReturnUrl })
+
+
+                    
+
+                </div>
+
+            </div>
+            <!-- end: Row -->
+
+        </div>
+        <!-- end: Wrapper  -->
+
+    </div>
+
+</div>

@@ -76,3 +76,8 @@ jQuery(document).ready(function () {
     });
 
 });
+
+function testing(id)
+{
+    console.log(id)
+}
