@@ -402,9 +402,12 @@
     <Content Include="Scripts\angular-animate.min.js.map" />
     <Content Include="Scripts\angular.min.js.map" />
     <None Include="Properties\PublishProfiles\local.pubxml" />
+    <None Include="Properties\PublishProfiles\sunlive - FTP %282%29.pubxml" />
     <None Include="Properties\PublishProfiles\sunlive - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\sunlive - Web Deploy %282%29.pubxml" />
     <None Include="Properties\PublishProfiles\sunlive - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\sunlive.pubxml" />
+    <None Include="Properties\PublishProfiles\sunlive2.pubxml" />
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
     <Content Include="Icon.png" />
     <Content Include="Scripts\angular-ui\ui-bootstrap-tpls.js" />
@@ -1194,19 +1197,6 @@
     </Content>
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Images\accent.png" />
-    <Content Include="Images\bullet.png" />
-    <Content Include="Images\heroAccent.png" />
-    <Content Include="Images\orderedList0.png" />
-    <Content Include="Images\orderedList1.png" />
-    <Content Include="Images\orderedList2.png" />
-    <Content Include="Images\orderedList3.png" />
-    <Content Include="Images\orderedList4.png" />
-    <Content Include="Images\orderedList5.png" />
-    <Content Include="Images\orderedList6.png" />
-    <Content Include="Images\orderedList7.png" />
-    <Content Include="Images\orderedList8.png" />
-    <Content Include="Images\orderedList9.png" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Account\_ChangePasswordPartial.cshtml" />
     <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
@@ -1229,6 +1219,7 @@
     <Content Include="Views\Shared\_BootStrapLayout.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Images\" />
     <Folder Include="Output\" />
   </ItemGroup>
   <ItemGroup>

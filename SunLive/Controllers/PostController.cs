@@ -19,6 +19,7 @@ using System.Drawing.Drawing2D;
 
 namespace SunLive.Controllers
 {
+    [Authorize]
     public class PostController : Controller
     {
         string connectionString = ConfigurationManager.AppSettings["connectionString"].ToString();

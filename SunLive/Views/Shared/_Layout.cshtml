@@ -56,6 +56,11 @@
     @Scripts.Render("~/Resources")
     @Scripts.Render("~/bundles/jqueryval")
 
+    <script src=@Url.Content("~/Scripts/Site/jquery.isotope.min.js") type="text/javascript"></script>
+
+    @Scripts.Render("~/bundles/jqueryDependents")
+
+
     <script src="http://code.jquery.com/jquery-migrate-1.2.1.js"></script>
     <script src=@Url.Content("~/Scripts/jcrop/jquery.Jcrop.js") type="text/javascript"></script>
 
@@ -88,6 +93,7 @@
             var jcrop_api;
 
             $('#img_' + id).find('.imgforapproval').Jcrop({
+                aspectRatio: 1,
                 onSelect: function (c) {
                     $('#X_' + id).val(c.x);
                     $('#Y_' + id).val(c.y);

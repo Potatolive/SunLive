@@ -34,9 +34,9 @@
 
                 newItem.PublishedOn = newItem.PublishedOn.ToLocalTime();
 
-        <div class="col-sm-6 col-md-4">
-            <div class="thumbnail">
-                                @{
+                <div class="col-sm-6 col-md-4 item">
+                    <div class="thumbnail picture">
+                        @{
                 string newImgUrl = newItem.ImageURL;
 
                 if (!string.IsNullOrEmpty(newItem.CroppedImageURL))
@@ -49,62 +49,62 @@
                          alt="No image..." class="imageTile imgforapproval"
                          data-holder-rendered="true" onmouseover="javascript:cropImage('@newItem._id'); return true;" />
                 </div>
-                                }
+                        }
 
-                <!--<canvas id="preview_@newItem._id"></canvas>-->
+                        <!--<canvas id="preview_@newItem._id"></canvas>-->
 
-                <form id="form_crop_image_@newItem._id">
-                    <input hidden id="crop_image_id_@newItem._id" name="ImgId" value="@newItem._id" />
-                    <input hidden id="X_@newItem._id" name="X" />
-                    <input hidden id="Y_@newItem._id" name="Y" />
-                    <input hidden id="W_@newItem._id" name="W" />
-                    <input hidden id="H_@newItem._id" name="H" />
-                    <input hidden id="imageWidth_@newItem._id" name="imageWidth" value="0" />
-                    <input hidden id="imageHeight_@newItem._id" name="imageHeight" value="0" />
-                    <input id="submit_@newItem._id" type="button" class="hidden" value="Crop" />
-                </form>
+                        <form id="form_crop_image_@newItem._id">
+                            <input hidden id="crop_image_id_@newItem._id" name="ImgId" value="@newItem._id" />
+                            <input hidden id="X_@newItem._id" name="X" />
+                            <input hidden id="Y_@newItem._id" name="Y" />
+                            <input hidden id="W_@newItem._id" name="W" />
+                            <input hidden id="H_@newItem._id" name="H" />
+                            <input hidden id="imageWidth_@newItem._id" name="imageWidth" value="0" />
+                            <input hidden id="imageHeight_@newItem._id" name="imageHeight" value="0" />
+                            <input id="submit_@newItem._id" type="button" class="hidden" value="Crop" />
+                        </form>
 
-                @if (!string.IsNullOrEmpty(newItem.CroppedImageURL))
-                {
-                    <input id="revert_@newItem._id" class="revertcrop" type="button" value="Revert" onclick="revertCrop(this, '@newItem._id');" />
-                }
-                else
-                {
-                    <input id="revert_@newItem._id" class="revertcrop hidden" type="button" value="Revert" onclick="revertCrop(this, '@newItem._id');" />
-                }
-
-                <div class="caption">
-                    <p class="pull-left">
-                        <small>@Html.DisplayFor(modelItem => newItem.HashTag)</small>
-                        <br />
-                        <small>@Html.DisplayFor(modelItem => newItem.PublishedOn)</small>
-                        <small>@Html.Raw(newItem.PublishedOn.ToShortTimeString())</small>
-                    </p>
-                    <p class="pull-right">
-                        <br />
-                        -@Html.Raw(newItem.PublishedBy.Split(' ')[0])
-                    </p>
-                    <p class="clearfix"></p>
-
-                    <div class="newsSummary">
-                        @if (newItem.TextContent.Length > 140)
+                        @if (!string.IsNullOrEmpty(newItem.CroppedImageURL))
                         {
-                            @Html.Raw(newItem.TextContent.Substring(0, 140) + " ...")
+                            <input id="revert_@newItem._id" class="revertcrop" type="button" value="Revert" onclick="revertCrop(this, '@newItem._id');" />
                         }
                         else
                         {
-                            @Html.Raw(newItem.TextContent)
+                            <input id="revert_@newItem._id" class="revertcrop hidden" type="button" value="Revert" onclick="revertCrop(this, '@newItem._id');" />
                         }
-                    </div>
-                    <br />
 
-                    <p>
-                        @Html.ActionLink("Approve", "Details", new { id = newItem.PostId }, new { @class = "btn btn-primary" }) *
-                        @Html.ActionLink("Reject", "Reject", new { id = newItem.PostId }, new { @class = "btn btn-danger " })
-                    </p>
+                        <div class="caption">
+                            <p class="pull-left">
+                                <small>@Html.DisplayFor(modelItem => newItem.HashTag)</small>
+                                <br />
+                                <small>@Html.DisplayFor(modelItem => newItem.PublishedOn)</small>
+                                <small>@Html.Raw(newItem.PublishedOn.ToShortTimeString())</small>
+                            </p>
+                            <p class="pull-right">
+                                <br />
+                                -@Html.Raw(newItem.PublishedBy.Split(' ')[0])
+                            </p>
+                            <p class="clearfix"></p>
+
+                            <div class="newsSummary">
+                                @if (newItem.TextContent.Length > 140)
+                                {
+                                    @Html.Raw(newItem.TextContent.Substring(0, 140) + " ...")
+                                }
+                                else
+                                {
+                                    @Html.Raw(newItem.TextContent)
+                                }
+                            </div>
+                            <br />
+
+                            <p>
+                                @Html.ActionLink("Approve", "Details", new { id = newItem.PostId }, new { @class = "btn btn-primary" }) *
+                                @Html.ActionLink("Reject", "Reject", new { id = newItem.PostId }, new { @class = "btn btn-danger " })
+                            </p>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
             }
         }
     </div>
@@ -119,41 +119,42 @@
                 approvedItem.PublishedOn = approvedItem.PublishedOn.ToLocalTime();
 
                 string imgUrl = approvedItem.ImageURL;
-                
-                if(!string.IsNullOrEmpty(approvedItem.CroppedImageURL)) {
+
+                if (!string.IsNullOrEmpty(approvedItem.CroppedImageURL))
+                {
                     imgUrl = approvedItem.CroppedImageURL;
                 }
-                
-                
-                <div class="col-sm-6 col-md-4">
-                    <div class="thumbnail">
+
+
+                <div class="col-sm-6 col-md-4 item">
+                    <div class="thumbnail picture">
                         <div id="img_@approvedItem._id">
                             <img src="@imgUrl"
                                  alt="No image..." class="imageTile imgforapproval"
-                                 data-holder-rendered="true"/> 
+                                 data-holder-rendered="true" />
                             <!-- onmouseover="javascript:cropImage('@approvedItem._id'); return true;" /> -->
                         </div>
 
                         <!--<canvas id="preview_@approvedItem._id"></canvas>-->
                         @*
-    <form id="form_crop_image_@approvedItem._id">
-        <input hidden id="crop_image_id_@approvedItem._id" name="ImgId" value="@approvedItem._id"/>
-        <input hidden id="X_@approvedItem._id" name="X"/>
-        <input hidden id="Y_@approvedItem._id" name="Y"/>
-        <input hidden id="W_@approvedItem._id" name="W"/>
-        <input hidden id="H_@approvedItem._id" name="H"/>
-        <input hidden id="imageWidth_@approvedItem._id" name="imageWidth" value="0"/>
-        <input hidden id="imageHeight_@approvedItem._id" name="imageHeight" value="0"/>
-        <input id="submit_@approvedItem._id" class="hidden" type="button" value="Crop"/>
-    </form>
+                            <form id="form_crop_image_@approvedItem._id">
+                                <input hidden id="crop_image_id_@approvedItem._id" name="ImgId" value="@approvedItem._id"/>
+                                <input hidden id="X_@approvedItem._id" name="X"/>
+                                <input hidden id="Y_@approvedItem._id" name="Y"/>
+                                <input hidden id="W_@approvedItem._id" name="W"/>
+                                <input hidden id="H_@approvedItem._id" name="H"/>
+                                <input hidden id="imageWidth_@approvedItem._id" name="imageWidth" value="0"/>
+                                <input hidden id="imageHeight_@approvedItem._id" name="imageHeight" value="0"/>
+                                <input id="submit_@approvedItem._id" class="hidden" type="button" value="Crop"/>
+                            </form>
 
-    @if(!string.IsNullOrEmpty(approvedItem.CroppedImageURL)) {
-        <input id="revert_@approvedItem._id" class="revertcrop" type="button" value="Revert" onclick="revertCrop(this, '@approvedItem._id');"/>
-    }
-    else
-    {
-        <input id="revert_@approvedItem._id" class="revertcrop hidden" type="button" value="Revert" onclick="revertCrop(this, '@approvedItem._id');" />
-    }
+                            @if(!string.IsNullOrEmpty(approvedItem.CroppedImageURL)) {
+                                <input id="revert_@approvedItem._id" class="revertcrop" type="button" value="Revert" onclick="revertCrop(this, '@approvedItem._id');"/>
+                            }
+                            else
+                            {
+                                <input id="revert_@approvedItem._id" class="revertcrop hidden" type="button" value="Revert" onclick="revertCrop(this, '@approvedItem._id');" />
+                            }
                         *@
 
                         <div class="caption">

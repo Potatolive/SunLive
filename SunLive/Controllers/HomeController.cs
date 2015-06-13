@@ -19,6 +19,7 @@ using System.Drawing.Drawing2D;
 
 namespace SunLive.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         string connectionString = ConfigurationManager.AppSettings["connectionString"].ToString();
@@ -179,8 +180,6 @@ namespace SunLive.Controllers
                                 var directoryPath = Server.MapPath("~");
                                 var imageFilename = Path.Combine(directoryPath, "Output/" + fileName + ".jpg");
 
-                                string OriginalImageFileName = null;
-
                                 if(string.IsNullOrEmpty(post.CroppedImageURL))
                                 {
                                     byte[] image = webClient.DownloadData(post.ImageURL);
@@ -193,8 +192,13 @@ namespace SunLive.Controllers
                                 }
                                 else
                                 {
-                                    OriginalImageFileName = Path.Combine(Server.MapPath("~"), post.CroppedImageURL);
-                                    OriginalImage = Image.FromFile(OriginalImageFileName);
+                                    byte[] image = webClient.DownloadData(post.CroppedImageURL);
+
+                                    using (MemoryStream originalFile = new MemoryStream(image))
+                                    {
+                                        OriginalImage = Image.FromStream(originalFile);
+                                        originalFile.Close();
+                                    }
                                 }
 
                                 float scaledHeight = (float)OriginalImage.Height / (float) data.imageHeight;
