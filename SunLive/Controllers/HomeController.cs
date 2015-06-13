@@ -23,11 +23,13 @@ namespace SunLive.Controllers
     public class HomeController : Controller
     {
         string connectionString = ConfigurationManager.AppSettings["connectionString"].ToString();
+        string pageName = ConfigurationManager.AppSettings["pageName"].ToString();
 
         public ActionResult Index()
         {
             var client = new MongoClient(connectionString);
-            var myDB = client.GetDatabase("SunLive");
+            
+            var myDB = client.GetDatabase(pageName);
             var collection = myDB.GetCollection<FanPost>("fanposts");
 
             FieldDefinition<FanPost> field = "FanPost";
@@ -51,7 +53,7 @@ namespace SunLive.Controllers
         public RedirectToRouteResult Details(string id)
         {
             var client = new MongoClient(connectionString);
-            var myDB = client.GetDatabase("SunLive");
+            var myDB = client.GetDatabase(pageName);
             var collection = myDB.GetCollection<FanPost>("fanposts");
 
             var filter = Builders<FanPost>.Filter.Eq("_id", id);
@@ -87,7 +89,7 @@ namespace SunLive.Controllers
         public RedirectToRouteResult Reject(string id)
         {
             var client = new MongoClient(connectionString);
-            var myDB = client.GetDatabase("SunLive");
+            var myDB = client.GetDatabase(pageName);
             var collection = myDB.GetCollection<FanPost>("fanposts");
 
             var filter = Builders<FanPost>.Filter.Eq("_id", id);
@@ -101,7 +103,7 @@ namespace SunLive.Controllers
         public RedirectToRouteResult Delete(string id)
         {
             var client = new MongoClient(connectionString);
-            var myDB = client.GetDatabase("SunLive");
+            var myDB = client.GetDatabase(pageName);
             var collection = myDB.GetCollection<FanPost>("fanposts");
 
             var filter = Builders<FanPost>.Filter.Eq("_id", id);
@@ -116,7 +118,7 @@ namespace SunLive.Controllers
         public ActionResult Search(FanPost post)
         {
             var client = new MongoClient(connectionString);
-            var myDB = client.GetDatabase("SunLive");
+            var myDB = client.GetDatabase(pageName);
             var collection = myDB.GetCollection<FanPost>("fanposts");
             var sort = Builders<FanPost>.Sort.Descending("PublishedOn");
 
@@ -153,7 +155,7 @@ namespace SunLive.Controllers
 
             string connectionString = ConfigurationManager.AppSettings["connectionString"].ToString();
             MongoClient client = new MongoClient(connectionString);
-            IMongoDatabase myDB = client.GetDatabase("SunLive");
+            IMongoDatabase myDB = client.GetDatabase(pageName);
 
             string fileName = Guid.NewGuid().ToString();
 
@@ -259,7 +261,7 @@ namespace SunLive.Controllers
         {
             string connectionString = ConfigurationManager.AppSettings["connectionString"].ToString();
             MongoClient client = new MongoClient(connectionString);
-            IMongoDatabase myDB = client.GetDatabase("SunLive");
+            IMongoDatabase myDB = client.GetDatabase(pageName);
 
             string fileName = Guid.NewGuid().ToString();
 
