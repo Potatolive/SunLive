@@ -19,7 +19,6 @@ using System.Drawing.Drawing2D;
 
 namespace SunLive.Controllers
 {
-    [Authorize]
     public class HomeController : Controller
     {
         string connectionString = ConfigurationManager.AppSettings["connectionString"].ToString();

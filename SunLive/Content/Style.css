@@ -2713,3 +2713,13 @@ nav{
  .navbar-brand{
             padding-top: 2px;
         }
+
+ .jcrop-keymgr
+{
+    opacity: 0
+}
+
+ .jcrop-holder
+ {
+     opacity: 0.8
+ }
