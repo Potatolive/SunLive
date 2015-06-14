@@ -2713,3 +2713,7 @@ nav{
  .navbar-brand{
             padding-top: 2px;
         }
+
+ hr{
+    margin:5px;
+}

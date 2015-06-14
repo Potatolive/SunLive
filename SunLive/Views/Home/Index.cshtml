@@ -35,6 +35,7 @@
                 newItem.PublishedOn = newItem.PublishedOn.ToLocalTime();
 
                 <div class="col-sm-6 col-md-4 item">
+                    
                     <div class="thumbnail picture">
                         @{
                 string newImgUrl = newItem.ImageURL;
@@ -61,32 +62,34 @@
                             <input hidden id="H_@newItem._id" name="H" />
                             <input hidden id="imageWidth_@newItem._id" name="imageWidth" value="0" />
                             <input hidden id="imageHeight_@newItem._id" name="imageHeight" value="0" />
-                            <input id="submit_@newItem._id" type="button" class="hidden" value="Crop" />
+                            <button id="submit_@newItem._id" type="button" class="btn btn-warning btn-xs pull-right hidden">
+                                <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Crop
+                            </button>
                         </form>
 
                         @if (!string.IsNullOrEmpty(newItem.CroppedImageURL))
                         {
-                            <input id="revert_@newItem._id" class="revertcrop" type="button" value="Revert" onclick="revertCrop(this, '@newItem._id');" />
+                            <button id="revert_@newItem._id" type="button" class="btn btn-warning btn-xs pull-right revertcrop"
+                                    onclick="revertCrop(this, '@newItem._id');">
+                                <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span> Revert
+                            </button>
                         }
                         else
                         {
-                            <input id="revert_@newItem._id" class="revertcrop hidden" type="button" value="Revert" onclick="revertCrop(this, '@newItem._id');" />
+                            <button id="revert_@newItem._id" type="button" class="btn btn-warning btn-xs pull-right revertcrop hidden"
+                                    onclick="revertCrop(this, '@newItem._id');">
+                                <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span> Revert
+                            </button>
                         }
-
                         <div class="caption">
-                            <p class="pull-left">
-                                <small>@Html.DisplayFor(modelItem => newItem.HashTag)</small>
-                                <br />
-                                <small>@Html.DisplayFor(modelItem => newItem.PublishedOn)</small>
-                                <small>@Html.Raw(newItem.PublishedOn.ToShortTimeString())</small>
-                            </p>
-                            <p class="pull-right">
-                                <br />
-                                -@Html.Raw(newItem.PublishedBy.Split(' ')[0])
-                            </p>
-                            <p class="clearfix"></p>
+                            <div style="margin-bottom: 20px">
+                                <span class="pull-left"><i class="icon-calendar"></i>@Html.DisplayFor(modelItem => newItem.PublishedOn)</span>
+                            </div>
+                            <div class="clearfix"></div>
 
-                            <div class="newsSummary">
+                            <hr />
+
+                            <div class="newsSummary pull-left">
                                 @if (newItem.TextContent.Length > 140)
                                 {
                                     @Html.Raw(newItem.TextContent.Substring(0, 140) + " ...")
@@ -96,12 +99,18 @@
                                     @Html.Raw(newItem.TextContent)
                                 }
                             </div>
+                            <span class="pull-right">- <i class="icon-user"></i> <a href="#">@Html.Raw(newItem.PublishedBy.Split(' ')[0])</a></span>
+
+                            <div class="clearfix"></div>
+
                             <br />
 
-                            <p>
-                                @Html.ActionLink("Approve", "Details", new { id = newItem.PostId }, new { @class = "btn btn-primary" }) *
-                                @Html.ActionLink("Reject", "Reject", new { id = newItem.PostId }, new { @class = "btn btn-danger " })
-                            </p>
+                            <div class="pull-right">
+
+                                @Html.ActionLink("Reject", "Reject", new { id = newItem.PostId }, new { @class = "btn btn-danger btn-xs" }) |
+                                @Html.ActionLink("Approve", "Details", new { id = newItem.PostId }, new { @class = "btn btn-success btn-xs" })
+                            </div>
+                            <div class="clearfix"></div>
                         </div>
                     </div>
                 </div>
@@ -158,18 +167,12 @@
                         *@
 
                         <div class="caption">
-                            <p class="pull-left">
-                                <small>@Html.DisplayFor(modelItem => approvedItem.HashTag)</small>
-                                <br />
-                                <small>@Html.DisplayFor(modelItem => approvedItem.PublishedOn)</small>
-                                <small>@Html.Raw(approvedItem.PublishedOn.ToShortTimeString())</small>
-                            </p>
-                            <p class="pull-right">
-                                <br />
-                                -@Html.Raw(approvedItem.PublishedBy.Split(' ')[0])
-                            </p>
-                            <p class="clearfix"></p>
+                            <div style="margin-bottom: 20px">
+                                <span class="pull-left"><i class="icon-calendar"></i>@Html.DisplayFor(modelItem => approvedItem.PublishedOn)</span>
+                            </div>
+                            <div class="clearfix"></div>
 
+                            <hr />
                             <div class="newsSummary">
                                 @if (approvedItem.TextContent.Length > 140)
                                 {
@@ -180,10 +183,14 @@
                                     @Html.Raw(approvedItem.TextContent)
                                 }
                             </div>
+                            <span class="pull-right">- <i class="icon-user"></i> <a href="#">@Html.Raw(approvedItem.PublishedBy.Split(' ')[0])</a></span>
+
+                            <div class="clearfix"></div>
                             <br />
-                            <p>
-                                @Html.ActionLink("Delete", "Delete", new { id = approvedItem.PostId }, new { @class = "btn btn-primary" })
-                            </p>
+                            <div class="pull-right">
+                                @Html.ActionLink("Delete", "Delete", new { id = approvedItem.PostId }, new { @class = "btn btn-danger btn-xs" })
+                            </div>
+                            <div class="clearfix"></div>
                         </div>
                     </div>
                 </div>
@@ -205,17 +212,12 @@
                              alt="No image..." class="imageTile"
                              data-holder-rendered="true">
                         <div class="caption">
-                            <p class="pull-left">
-                                <small>@Html.DisplayFor(modelItem => item.HashTag)</small>
-                                <br />
-                                <small>@Html.DisplayFor(modelItem => item.PublishedOn)</small>
-                                <small>@Html.Raw(item.PublishedOn.ToShortTimeString())</small>
-                            </p>
-                            <p class="pull-right">
-                                <br />
-                                -@Html.Raw(item.PublishedBy.Split(' ')[0])
-                            </p>
-                            <p class="clearfix"></p>
+                            <div style="margin-bottom: 20px">
+                                <span class="pull-left"><i class="icon-calendar"></i>@Html.DisplayFor(modelItem => item.PublishedOn)</span>
+                            </div>
+                            <div class="clearfix"></div>
+
+                            <hr />
 
                             <div class="newsSummary">
                                 @if (item.TextContent.Length > 140)
@@ -227,6 +229,9 @@
                                     @Html.Raw(item.TextContent)
                                 }
                             </div>
+                            <span class="pull-right">- <i class="icon-user"></i> <a href="#">@Html.Raw(item.PublishedBy.Split(' ')[0])</a></span>
+
+                            <div class="clearfix"></div>
                             <br />
                         </div>
                     </div>
