@@ -42,6 +42,26 @@ namespace SunLive.Controllers
             return View(posts.Result.ToList());
         }
 
+        public ActionResult Partial(string id)
+        {
+            var client = new MongoClient(connectionString);
+
+            var myDB = client.GetDatabase(pageName);
+            var collection = myDB.GetCollection<FanPost>("fanposts");
+
+            FieldDefinition<FanPost> field = "FanPost";
+
+            var filter = Builders<FanPost>.Filter.In("Status", new List<String>() { "New", "Approved", "Rejected", "Downloaded", "Delete", "Deleted" });
+
+            var sort = Builders<FanPost>.Sort.Descending("PublishedOn");
+
+            var posts = collection.Find<FanPost>(filter).Sort(sort).ToListAsync();
+
+            return View("PartialPost", posts.Result.FirstOrDefault());
+        }
+
+       
+
        
 
         public RedirectToRouteResult Details(string id)
@@ -136,7 +156,7 @@ namespace SunLive.Controllers
 
 
         [HttpPost]
-        public string Crop(CropData data)
+        public PartialViewResult Crop(CropData data)
         {
 
             string ImgId = data.ImgId;
@@ -146,7 +166,7 @@ namespace SunLive.Controllers
             IMongoDatabase myDB = client.GetDatabase(pageName);
 
             string fileName = Guid.NewGuid().ToString();
-
+            FanPost post = null;
             try
             {
                 var collection = myDB.GetCollection<FanPost>("fanposts");
@@ -157,7 +177,7 @@ namespace SunLive.Controllers
 
                 if (posts != null && posts.Result.Count > 0)
                 {
-                    FanPost post = posts.Result.FirstOrDefault();
+                    post = posts.Result.FirstOrDefault();
 
                     if (post != null)
                     {
@@ -170,9 +190,9 @@ namespace SunLive.Controllers
                                 var directoryPath = Server.MapPath("~");
                                 var imageFilename = Path.Combine(directoryPath, "Output/" + fileName + ".jpg");
 
-                                if(string.IsNullOrEmpty(post.CroppedImageURL))
+                                try
                                 {
-                                    byte[] image = webClient.DownloadData(post.ImageURL);
+                                    byte[] image = webClient.DownloadData(post.CroppedImageURL);
 
                                     using (MemoryStream originalFile = new MemoryStream(image))
                                     {
@@ -180,9 +200,9 @@ namespace SunLive.Controllers
                                         originalFile.Close();
                                     }
                                 }
-                                else
-                                {
-                                    byte[] image = webClient.DownloadData(post.CroppedImageURL);
+                                catch(Exception ex)
+                                {                                
+                                    byte[] image = webClient.DownloadData(post.ImageURL);
 
                                     using (MemoryStream originalFile = new MemoryStream(image))
                                     {
@@ -231,9 +251,15 @@ namespace SunLive.Controllers
                 }
 
                 string dns = ConfigurationManager.AppSettings["dns"].ToString();
-                var update = Builders<FanPost>.Update.Set("CroppedImageURL", dns + "Output/" + fileName + ".jpg");
+                var croppedImageURL = dns + "Output/" + fileName + ".jpg";
+                var update = Builders<FanPost>.Update.Set("CroppedImageURL", croppedImageURL);
 
                 collection.FindOneAndUpdateAsync(filter, update);
+
+                //Update url temporarily
+                post.CroppedImageURL = croppedImageURL + "?" + Guid.NewGuid().ToString();
+
+                return PartialView("PartialPost", post);
 
             }
             catch (Exception ex)
@@ -241,7 +267,8 @@ namespace SunLive.Controllers
                 throw new Exception("Image could not be cropped. Internal error. Please try again!");
             }
 
-            return "Output/" + fileName + ".jpg";
+            return null;
+
         }
 
         [HttpPost]

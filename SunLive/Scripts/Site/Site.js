@@ -1,26 +1,30 @@
 ﻿
 /* -------------------- Isotope --------------------- */
 
-var $container;
+var $grid;
 jQuery(document).ready(function () {
 
     $('#wall').imagesLoaded(function () {
 
-        $container = $('#wall');
+        var $container = $('#wall');
         $select = $('#filters select');
 
         // initialize Isotope
-        $container.isotope({
+        $grid = $container.isotope({
             // options...
             resizable: false, // disable normal resizing
             // set columnWidth to a percentage of container width
-            masonry: { columnWidth: $container.width() / 12 }
+            masonry: { columnWidth: $container.width() / 12 },
+            //sortBy: 'number',
+            //getSortData: {
+            //    'number': '.number parseInt'
+            //}
         });
 
         // update columnWidth on window resize
         $(window).smartresize(function () {
 
-            $container.isotope({
+            $grid = $container.isotope({
                 // update columnWidth to a percentage of container width
                 masonry: { columnWidth: $container.width() / 12 }
             });
@@ -92,10 +96,45 @@ jQuery(document).ready(function () {
             contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
             success: function (msg) {
                 //if (jcrop_api) jcrop_api.release();
-                $('#img_' + id).attr('src', '../' + msg + '?' + Math.random());
+                var test = 'http://localhost:54442/output/a22e0c4b-f479-4f35-a426-4050f2ada27e.jpg';
+                //$('#item_' + id).find('img').attr('src', test + '?' + Math.random());
+
+                //$('#item_' + id).replaceWith($.parseHTML(msg));
+                //var $container = $('#item_' + id);
+
+                //$container.find('img').css('height', '100px');
+                //$container.find('.jcrop-holder').css('height', '100px');
+
+                //$container.find('.jcrop-holder').css('width', 'auto');
+                //$container.find('.jcrop-holder').css('height', 'auto');
+
+                ////$container.find('.jcrop-tracker').css('width', 'auto');
+                ////$container.find('.jcrop-tracker').css('height', 'auto');
+
+                //$container.find('img').css('width', 'auto');
+                //$container.find('img').css('height', 'auto');
+
+
                 $('#revert_' + id).removeClass('hidden');
                 $('#crop_' + id).addClass('hidden');
                 console.log("success");
+
+                
+                var $isoGrid = $('#wall').isotope('reloadItems').isotope({
+                    itemClass: 'item',
+                    masonry: { columnWidth: $('#wall').width() / 12 }
+                });
+
+                //$('#wall').isotope('destroy');
+
+                //$isoGrid.isotope('layout');
+                $isoGrid.isotope('remove', $('#item_' + id));
+                $isoGrid.isotope('appended', $.parseHTML(msg), function () {
+                    console.log('inserted');
+                });
+
+                //$isoGrid.isotope('remove', $('#item_' + id));
+                //$isoGrid.isotope('layout');
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
                 console.log(errorThrown);
@@ -117,7 +156,7 @@ function revertCrop(e, id) {
         success: function (msg) {
             $('#img_' + id).find('img').attr('src', msg);
             $('#revert_' + id).addClass('hidden');
-            $('#submit_' + id).addClass('hidden');
+            $('#crop_' + id).addClass('hidden');
             console.log(msg);
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -136,7 +175,7 @@ function cropImage(id) {
             $('#Y_' + id).val(c.y);
             $('#W_' + id).val(c.w);
             $('#H_' + id).val(c.h);
-            $('#submit_' + id).removeClass('hidden');
+            $('#crop_' + id).removeClass('hidden');
         },
         onChange: function (c) {
 
