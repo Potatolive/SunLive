@@ -19,15 +19,16 @@ using System.Drawing.Drawing2D;
 
 namespace SunLive.Controllers
 {
-    [Authorize]
     public class PostController : Controller
     {
         string connectionString = ConfigurationManager.AppSettings["connectionString"].ToString();
+        string pageName = ConfigurationManager.AppSettings["pageName"].ToString();
 
         public ActionResult Index()
         {
             var client = new MongoClient(connectionString);
-            var myDB = client.GetDatabase("SunLive");
+            
+            var myDB = client.GetDatabase(pageName);
             var collection = myDB.GetCollection<FanPost>("fanposts");
 
             FieldDefinition<FanPost> field = "FanPost";
@@ -41,12 +42,32 @@ namespace SunLive.Controllers
             return View(posts.Result.ToList());
         }
 
+        public ActionResult Partial(string id)
+        {
+            var client = new MongoClient(connectionString);
+
+            var myDB = client.GetDatabase(pageName);
+            var collection = myDB.GetCollection<FanPost>("fanposts");
+
+            FieldDefinition<FanPost> field = "FanPost";
+
+            var filter = Builders<FanPost>.Filter.In("Status", new List<String>() { "New", "Approved", "Rejected", "Downloaded", "Delete", "Deleted" });
+
+            var sort = Builders<FanPost>.Sort.Descending("PublishedOn");
+
+            var posts = collection.Find<FanPost>(filter).Sort(sort).ToListAsync();
+
+            return View("PartialPost", posts.Result.FirstOrDefault());
+        }
+
+       
+
        
 
         public RedirectToRouteResult Details(string id)
         {
             var client = new MongoClient(connectionString);
-            var myDB = client.GetDatabase("SunLive");
+            var myDB = client.GetDatabase(pageName);
             var collection = myDB.GetCollection<FanPost>("fanposts");
 
             var filter = Builders<FanPost>.Filter.Eq("_id", id);
@@ -82,7 +103,7 @@ namespace SunLive.Controllers
         public RedirectToRouteResult Reject(string id)
         {
             var client = new MongoClient(connectionString);
-            var myDB = client.GetDatabase("SunLive");
+            var myDB = client.GetDatabase(pageName);
             var collection = myDB.GetCollection<FanPost>("fanposts");
 
             var filter = Builders<FanPost>.Filter.Eq("_id", id);
@@ -96,7 +117,7 @@ namespace SunLive.Controllers
         public RedirectToRouteResult Delete(string id)
         {
             var client = new MongoClient(connectionString);
-            var myDB = client.GetDatabase("SunLive");
+            var myDB = client.GetDatabase(pageName);
             var collection = myDB.GetCollection<FanPost>("fanposts");
 
             var filter = Builders<FanPost>.Filter.Eq("_id", id);
@@ -111,7 +132,7 @@ namespace SunLive.Controllers
         public ActionResult Search(FanPost post)
         {
             var client = new MongoClient(connectionString);
-            var myDB = client.GetDatabase("SunLive");
+            var myDB = client.GetDatabase(pageName);
             var collection = myDB.GetCollection<FanPost>("fanposts");
             var sort = Builders<FanPost>.Sort.Descending("PublishedOn");
 
@@ -142,10 +163,10 @@ namespace SunLive.Controllers
 
             string connectionString = ConfigurationManager.AppSettings["connectionString"].ToString();
             MongoClient client = new MongoClient(connectionString);
-            IMongoDatabase myDB = client.GetDatabase("SunLive");
+            IMongoDatabase myDB = client.GetDatabase(pageName);
 
             string fileName = Guid.NewGuid().ToString();
-
+            FanPost post = null;
             try
             {
                 var collection = myDB.GetCollection<FanPost>("fanposts");
@@ -156,7 +177,7 @@ namespace SunLive.Controllers
 
                 if (posts != null && posts.Result.Count > 0)
                 {
-                    FanPost post = posts.Result.FirstOrDefault();
+                    post = posts.Result.FirstOrDefault();
 
                     if (post != null)
                     {
@@ -169,11 +190,9 @@ namespace SunLive.Controllers
                                 var directoryPath = Server.MapPath("~");
                                 var imageFilename = Path.Combine(directoryPath, "Output/" + fileName + ".jpg");
 
-                                string OriginalImageFileName = null;
-
-                                if (string.IsNullOrEmpty(post.CroppedImageURL))
+                                try
                                 {
-                                    byte[] image = webClient.DownloadData(post.ImageURL);
+                                    byte[] image = webClient.DownloadData(post.CroppedImageURL);
 
                                     using (MemoryStream originalFile = new MemoryStream(image))
                                     {
@@ -181,10 +200,15 @@ namespace SunLive.Controllers
                                         originalFile.Close();
                                     }
                                 }
-                                else
-                                {
-                                    OriginalImageFileName = Path.Combine(Server.MapPath("~"), post.CroppedImageURL);
-                                    OriginalImage = Image.FromFile(OriginalImageFileName);
+                                catch(Exception ex)
+                                {                                
+                                    byte[] image = webClient.DownloadData(post.ImageURL);
+
+                                    using (MemoryStream originalFile = new MemoryStream(image))
+                                    {
+                                        OriginalImage = Image.FromStream(originalFile);
+                                        originalFile.Close();
+                                    }
                                 }
 
                                 float scaledHeight = (float)OriginalImage.Height / (float)data.imageHeight;
@@ -227,9 +251,17 @@ namespace SunLive.Controllers
                 }
 
                 string dns = ConfigurationManager.AppSettings["dns"].ToString();
-                var update = Builders<FanPost>.Update.Set("CroppedImageURL", dns + "Output/" + fileName + ".jpg");
+                var croppedImageURL = dns + "Output/" + fileName + ".jpg";
+                var update = Builders<FanPost>.Update.Set("CroppedImageURL", croppedImageURL);
 
                 collection.FindOneAndUpdateAsync(filter, update);
+
+                //Update url temporarily
+                post.CroppedImageURL = croppedImageURL + "?" + Guid.NewGuid().ToString();
+
+                //return PartialView("PartialPost", post);
+
+                return croppedImageURL;
 
             }
             catch (Exception ex)
@@ -237,7 +269,9 @@ namespace SunLive.Controllers
                 throw new Exception("Image could not be cropped. Internal error. Please try again!");
             }
 
-            return "Output/" + fileName + ".jpg";
+            return null;
+
+
         }
 
         [HttpPost]
@@ -245,7 +279,7 @@ namespace SunLive.Controllers
         {
             string connectionString = ConfigurationManager.AppSettings["connectionString"].ToString();
             MongoClient client = new MongoClient(connectionString);
-            IMongoDatabase myDB = client.GetDatabase("SunLive");
+            IMongoDatabase myDB = client.GetDatabase(pageName);
 
             string fileName = Guid.NewGuid().ToString();
 

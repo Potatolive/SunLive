@@ -15,7 +15,7 @@ namespace SunLive
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryDependents").Include(
                          "~/Scripts/bootstrap.js"
-                        , "~/Scripts/jcrop/jqery.Jcrop.js"
+                        , "~/Scripts/jcrop/jquery.Jcrop.js"
                         , "~/Scripts/croppic/croppic.js"
                         , "~/Scripts/Site/jquery.imagesloaded.js"
                         , "~/Scripts/Site/jquery.fancybox.js"
