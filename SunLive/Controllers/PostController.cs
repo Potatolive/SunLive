@@ -156,7 +156,7 @@ namespace SunLive.Controllers
 
 
         [HttpPost]
-        public PartialViewResult Crop(CropData data)
+        public string Crop(CropData data)
         {
 
             string ImgId = data.ImgId;
@@ -259,7 +259,9 @@ namespace SunLive.Controllers
                 //Update url temporarily
                 post.CroppedImageURL = croppedImageURL + "?" + Guid.NewGuid().ToString();
 
-                return PartialView("PartialPost", post);
+                //return PartialView("PartialPost", post);
+
+                return croppedImageURL;
 
             }
             catch (Exception ex)
@@ -268,6 +270,7 @@ namespace SunLive.Controllers
             }
 
             return null;
+
 
         }
 

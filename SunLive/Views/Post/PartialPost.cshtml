@@ -9,10 +9,10 @@
                 item.PublishedOn = item.PublishedOn.ToLocalTime();
                 string newImgUrl = item.ImageURL;
 
-                if (!string.IsNullOrEmpty(item.CroppedImageURL))
-                {
-                    newImgUrl = item.CroppedImageURL;
-                }
+                //if (!string.IsNullOrEmpty(item.CroppedImageURL))
+                //{
+                //    newImgUrl = item.CroppedImageURL;
+                //}
 
 <div id="item_@item._id" class="span3 item @item.Status grid-item">
     <p class="number "></p>
@@ -39,10 +39,10 @@
                 <input hidden id="imageWidth_@item._id" name="imageWidth" value="0" />
                 <input hidden id="imageHeight_@item._id" name="imageHeight" value="0" />
 
-                <button imaageid="@item._id" type="button" class="btn btn-warning btn-xs pull-right cropButton">
+                <button id="crop_@item._id" imaageid="@item._id" type="button" class="btn btn-warning btn-xs pull-right cropButton">
                     <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span> Crop
                 </button>
-                <button imaageid="@item._id" type="button" class="btn btn-warning btn-xs pull-right hidden revertButton">
+                <button id="revert_@item._id" imaageid="@item._id" type="button" class="btn btn-warning btn-xs pull-right hidden revertButton">
                     <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Revert
                 </button>
             </form>

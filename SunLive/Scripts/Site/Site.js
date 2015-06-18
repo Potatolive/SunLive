@@ -96,11 +96,11 @@ jQuery(document).ready(function () {
             contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
             success: function (msg) {
                 //if (jcrop_api) jcrop_api.release();
-                var test = 'http://localhost:54442/output/a22e0c4b-f479-4f35-a426-4050f2ada27e.jpg';
-                //$('#item_' + id).find('img').attr('src', test + '?' + Math.random());
+                var test = 'http://localhost:54442/output/a0d38ce6-625d-4b63-b7d4-d9e457f75433.jpg';
+                $('#item_' + id).find('img').attr('src', msg + '?' + Math.random());
 
                 //$('#item_' + id).replaceWith($.parseHTML(msg));
-                //var $container = $('#item_' + id);
+                var $itemContainer = $('#item_' + id);
 
                 //$container.find('img').css('height', '100px');
                 //$container.find('.jcrop-holder').css('height', '100px');
@@ -108,11 +108,15 @@ jQuery(document).ready(function () {
                 //$container.find('.jcrop-holder').css('width', 'auto');
                 //$container.find('.jcrop-holder').css('height', 'auto');
 
-                ////$container.find('.jcrop-tracker').css('width', 'auto');
-                ////$container.find('.jcrop-tracker').css('height', 'auto');
+                //$container.find('.jcrop-tracker').css('width', 'auto');
+                //$container.find('.jcrop-tracker').css('height', 'auto');
 
-                //$container.find('img').css('width', 'auto');
-                //$container.find('img').css('height', 'auto');
+                $itemContainer.find('.jcrop-holder').css('display', 'none');
+
+                var $originalImage = $('#img_' + id);
+                $originalImage.css('height', 'auto');
+                $originalImage.css('display', 'block');
+                $originalImage.css('visibility', 'visible');
 
 
                 $('#revert_' + id).removeClass('hidden');
@@ -120,18 +124,20 @@ jQuery(document).ready(function () {
                 console.log("success");
 
                 
-                var $isoGrid = $('#wall').isotope('reloadItems').isotope({
-                    itemClass: 'item',
-                    masonry: { columnWidth: $('#wall').width() / 12 }
-                });
+                //var $isoGrid = $('#wall').isotope('reloadItems').isotope({
+                //    masonry: { columnWidth: $('#wall').width() / 12 }
+                //});
 
-                //$('#wall').isotope('destroy');
+                ////$('#wall').isotope('destroy');
 
-                //$isoGrid.isotope('layout');
-                $isoGrid.isotope('remove', $('#item_' + id));
-                $isoGrid.isotope('appended', $.parseHTML(msg), function () {
-                    console.log('inserted');
-                });
+                ////$isoGrid.isotope('layout');
+                ////$isoGrid.isotope('remove', $('#item_' + id));
+                //var newDiv = $('#wall').append(msg);
+                
+                //$('#wall').isotope('reloadItems').isotope('reLayout')
+                //$isoGrid.isotope('append', newDiv, function () {
+                //    console.log('inserted');
+                //});
 
                 //$isoGrid.isotope('remove', $('#item_' + id));
                 //$isoGrid.isotope('layout');
@@ -142,28 +148,38 @@ jQuery(document).ready(function () {
         });
     });
 
-    
+    $('.revertButton').click(function () {
+        id = $(this).attr('imaageId');
+        $.ajax({
+            type: "POST",
+            url: "../Post/RevertCrop",
+            data: $('#form_crop_image_' + id).serialize(),
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            success: function (msg) {
+                var $itemContainer = $('#item_' + id);
+
+                $itemContainer.find('img').attr('src', msg);
+                $('#revert_' + id).addClass('hidden');
+                $('#crop_' + id).removeClass('hidden');
+
+                $itemContainer.find('.jcrop-holder').css('display', '');
+
+                var $originalImage = $('#img_' + id);
+                $originalImage.css('display', 'none');
+                $originalImage.css('visibility', 'hidden');
+
+
+                console.log(msg);
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                console.log(errorThrown);
+            }
+        });
+    });
 
 });
 
 
-function revertCrop(e, id) {
-    $.ajax({
-        type: "POST",
-        url: "Home/RevertCrop",
-        data: $('#form_crop_image_' + id).serialize(),
-        contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-        success: function (msg) {
-            $('#img_' + id).find('img').attr('src', msg);
-            $('#revert_' + id).addClass('hidden');
-            $('#crop_' + id).addClass('hidden');
-            console.log(msg);
-        },
-        error: function (XMLHttpRequest, textStatus, errorThrown) {
-            console.log(errorThrown);
-        }
-    });
-}
 
 function cropImage(id) {
     var jcrop_api;
