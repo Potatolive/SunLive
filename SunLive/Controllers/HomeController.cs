@@ -39,7 +39,7 @@ namespace SunLive.Controllers
 
             var posts = collection.Find<FanPost>(filter).Sort(sort).ToListAsync();
 
-            return View(posts.Result.ToList());
+            return View(posts.Result.ToList().Take(40));
         }
 
         public ActionResult About()

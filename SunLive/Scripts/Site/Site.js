@@ -188,6 +188,21 @@ jQuery(document).ready(function () {
             success: function (msg) {
                 if (msg == 'True') {
                     $('#item_' + id).removeClass('New').addClass('Rejected');
+                    var $itemContainer = $('#item_' + id);
+
+                    //Hide Cross Hair
+                    $itemContainer.find('.jcrop-holder').css('display', 'none');
+
+                    //Show original Image
+                    var $originalImage = $('#img_' + id);
+                    $originalImage.css('display', 'block');
+                    $originalImage.css('visibility', 'visible');
+
+                    //Hide buttons
+                    $itemContainer.find('.rejectButton').addClass('hidden');
+                    $itemContainer.find('.approveButton').addClass('hidden');
+                    $itemContainer.find('.cropButton').addClass('hidden');
+                    $itemContainer.find('.revertButton').addClass('hidden');
                 }
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -207,6 +222,25 @@ jQuery(document).ready(function () {
             success: function (msg) {
                 if (msg == 'True') {
                     $('#item_' + id).removeClass('New').addClass('Approved');
+
+                    var $itemContainer = $('#item_' + id);
+
+                    //Hide Cross Hair
+                    $itemContainer.find('.jcrop-holder').css('display', 'none');
+
+                    //Show original Image
+                    var $originalImage = $('#img_' + id);
+                    $originalImage.css('display', 'block');
+                    $originalImage.css('visibility', 'visible');
+
+                    //Hide buttons
+                    $itemContainer.find('.rejectButton').addClass('hidden');
+                    $itemContainer.find('.approveButton').addClass('hidden');
+                    $itemContainer.find('.cropButton').addClass('hidden');
+                    $itemContainer.find('.revertButton').addClass('hidden');
+
+                    //Add Delete Class
+                    $itemContainer.find('.deleteButton').removeClass('hidden');
                 }
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -241,6 +275,7 @@ jQuery(document).ready(function () {
 
         var id = $(this).attr('imageId');
         console.log(id);
+
         $('#img_' + id).Jcrop({
             aspectRatio: 1,
             onSelect: function (c) {
