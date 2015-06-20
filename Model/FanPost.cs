@@ -23,5 +23,7 @@ namespace Sunlive.Entities
         public string Status { get; set; }
 
         public string FileName { get; set; }
+
+        public string OutputDir { get; set; }
     }
 }
