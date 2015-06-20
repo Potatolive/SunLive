@@ -64,68 +64,33 @@ namespace SunLive.Controllers
 
        
 
-        public RedirectToRouteResult Details(string id)
+        public bool Approve(string id)
         {
-            var client = new MongoClient(connectionString);
-            var myDB = client.GetDatabase(pageName);
-            var collection = myDB.GetCollection<FanPost>("fanposts");
-
-            var filter = Builders<FanPost>.Filter.Eq("_id", id);
-            var update = Builders<FanPost>.Update.Set("Status", "Approved");
-
-            var result = collection.FindOneAndUpdateAsync<FanPost>(filter, update);
-
-            /*string textcontent = string.Empty;
-
-            if (result.Result.TextContent.Length > 140)
-            {
-               textcontent = result.Result.TextContent.Substring(0, 140) + " ...";
-            }
-            else
-            {
-                textcontent = result.Result.TextContent;
-            }
-
-            var directoryPath = Server.MapPath("~");
-            var textContentFilename = Path.Combine(directoryPath, "Output/TextContent.txt");
-            var imageFilename = Path.Combine(directoryPath, "Output/ImageContent.jpg");
-
-            System.IO.File.WriteAllText(textContentFilename, textcontent + " -" + result.Result.PublishedBy.Split(' ')[0]);
-
-            using (WebClient webClient = new WebClient())
-            {
-                webClient.DownloadFile(result.Result.ImageURL, imageFilename);
-            }*/
-
-            return RedirectToAction("Index");
+            return UpdateStatus(id, "Approved");
         }
 
-        public RedirectToRouteResult Reject(string id)
+        public bool Reject(string id)
         {
-            var client = new MongoClient(connectionString);
-            var myDB = client.GetDatabase(pageName);
-            var collection = myDB.GetCollection<FanPost>("fanposts");
-
-            var filter = Builders<FanPost>.Filter.Eq("_id", id);
-            var update = Builders<FanPost>.Update.Set("Status", "Rejected");
-
-            var result = collection.FindOneAndUpdateAsync<FanPost>(filter, update);
-
-            return RedirectToAction("Index");
+            return UpdateStatus(id, "Rejected");
         }
 
-        public RedirectToRouteResult Delete(string id)
+        public bool Delete(string id)
+        {
+            return UpdateStatus(id, "Delete");
+        }
+
+        private bool UpdateStatus(string id, string status)
         {
             var client = new MongoClient(connectionString);
             var myDB = client.GetDatabase(pageName);
             var collection = myDB.GetCollection<FanPost>("fanposts");
 
             var filter = Builders<FanPost>.Filter.Eq("_id", id);
-            var update = Builders<FanPost>.Update.Set("Status", "Delete");
+            var update = Builders<FanPost>.Update.Set("Status", status);
 
             var result = collection.FindOneAndUpdateAsync<FanPost>(filter, update);
 
-            return RedirectToAction("Index");
+            return true;
         }
 
         [HttpPost]

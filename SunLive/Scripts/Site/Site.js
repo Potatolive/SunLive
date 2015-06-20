@@ -85,7 +85,7 @@ jQuery(document).ready(function () {
 
     $('.cropButton').click(function () {
 
-        id = $(this).attr('imaageId');
+        var id = $(this).attr('data-imageid');
         $('#imageWidth_' + id).val($('#img_' + id).width());
         $('#imageHeight_' + id).val($('#img_' + id).height());
 
@@ -149,7 +149,7 @@ jQuery(document).ready(function () {
     });
 
     $('.revertButton').click(function () {
-        id = $(this).attr('imaageId');
+        var id = $(this).attr('data-imageid');
         $.ajax({
             type: "POST",
             url: "../Post/RevertCrop",
@@ -177,26 +177,87 @@ jQuery(document).ready(function () {
         });
     });
 
+    $('.rejectButton').click(function () {
+        var id = $(this).attr('data-imageid');
+        console.log(id);
+
+        $.ajax({
+            type: "GET",
+            url: "../Post/Reject/" + id,
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            success: function (msg) {
+                if (msg == 'True') {
+                    $('#item_' + id).removeClass('New').addClass('Rejected');
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                console.log(errorThrown);
+            }
+        });
+    });
+    
+    $('.approveButton').click(function () {
+        var id = $(this).attr('data-imageid');
+        console.log(id);
+
+        $.ajax({
+            type: "GET",
+            url: "../Post/Approve/" + id,
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            success: function (msg) {
+                if (msg == 'True') {
+                    $('#item_' + id).removeClass('New').addClass('Approved');
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                console.log(errorThrown);
+            }
+        });
+    });
+
+    $('.deleteButton').click(function () {
+        var id = $(this).attr('data-imageid');
+        console.log(id);
+
+        
+        $.ajax({
+            type: "GET",
+            url: "../Post/Delete/" + id,
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            success: function (msg) {
+
+                if (msg == 'True') {
+                    $('#wall').isotope('remove', $('#item_' + id));
+                    console.log(msg);
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                console.log(errorThrown);
+            }
+        });
+    });
+
+    $('.image.New').mouseover(function () {
+
+        var id = $(this).attr('imageId');
+        console.log(id);
+        $('#img_' + id).Jcrop({
+            aspectRatio: 1,
+            onSelect: function (c) {
+                $('#X_' + id).val(c.x);
+                $('#Y_' + id).val(c.y);
+                $('#W_' + id).val(c.w);
+                $('#H_' + id).val(c.h);
+                $('#crop_' + id).removeClass('hidden');
+            },
+            onChange: function (c) {
+
+            }
+        });
+    });
+
+
 });
 
 
 
-function cropImage(id) {
-    var jcrop_api;
-
-    $('#img_' + id).Jcrop({
-        aspectRatio: 1,
-        onSelect: function (c) {
-            $('#X_' + id).val(c.x);
-            $('#Y_' + id).val(c.y);
-            $('#W_' + id).val(c.w);
-            $('#H_' + id).val(c.h);
-            $('#crop_' + id).removeClass('hidden');
-        },
-        onChange: function (c) {
-
-        }
-    });
-
-   
-}
