@@ -9,10 +9,11 @@
                 item.PublishedOn = item.PublishedOn.ToLocalTime();
                 string newImgUrl = item.ImageURL;
 
-                //if (!string.IsNullOrEmpty(item.CroppedImageURL))
-                //{
-                //    newImgUrl = item.CroppedImageURL;
-                //}
+                //Ignoring croppedImage for New Case
+                if (!string.IsNullOrEmpty(item.CroppedImageURL) && item.Status != "New")
+                {
+                    newImgUrl = item.CroppedImageURL;
+                }
 
 <div id="item_@item._id" class="span3 item @item.Status grid-item">
     <p class="number "></p>
@@ -23,13 +24,14 @@
         </div>
 
 
-  <div class="image" onmouseover="javascript:cropImage('@item._id'); return true;">
-            <img id="img_@item._id" class="imgforapproval" src="@newImgUrl" alt="" />
+        <div class="image @item.Status" imageId ="@item._id">
+            <img id="img_@item._id" class="imgforapproval " src="@newImgUrl" alt="" />
         </div>
 
 
-        <div class="meta">
+        <div class="meta" style="min-height: 20px">
 
+            @if (item.Status == "New") { 
             <form id="form_crop_image_@item._id">
                 <input hidden id="crop_image_id_@item._id" name="ImgId" value="@item._id" />
                 <input hidden id="X_@item._id" name="X" />
@@ -39,13 +41,16 @@
                 <input hidden id="imageWidth_@item._id" name="imageWidth" value="0" />
                 <input hidden id="imageHeight_@item._id" name="imageHeight" value="0" />
 
-                <button id="crop_@item._id" imaageid="@item._id" type="button" class="btn btn-warning btn-xs pull-right cropButton">
-                    <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span> Crop
-                </button>
-                <button id="revert_@item._id" imaageid="@item._id" type="button" class="btn btn-warning btn-xs pull-right hidden revertButton">
-                    <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Revert
-                </button>
+                <span>450 x 1300 pixels</span>
+                    <button id="crop_@item._id" data-imageid="@item._id" type="button" class="btn btn-warning btn-xs pull-right hidden cropButton">
+                        <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span> Crop
+                    </button>
+    <button id="revert_@item._id" data-imageid="@item._id" type="button" class="btn btn-warning btn-xs pull-right hidden revertButton">
+        <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Revert
+    </button>
+             
             </form>
+            }
 
 
             <div class="clearfix"></div>
@@ -64,12 +69,25 @@
         </div>
         <div class="meta">
             <div class="pull-right">
-                <button type="button" class="btn btn-danger btn-xs ">
-                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Reject
-                </button>
-                <button type="button" class="btn btn-success btn-xs ">
-                    <span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Approve
-                </button>
+@if (item.Status == "New")
+{
+
+    <button type="button" class="btn btn-danger btn-xs rejectButton" data-imageid="@item._id">
+        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Reject
+    </button>
+    <button type="button" class="btn btn-success btn-xs approveButton" data-imageid="@item._id">
+        <span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Approve
+    </button>
+}
+
+                @{
+                    var deleteButtonStatus = (item.Status == "Approved" || item.Status == "Downloaded") ? string.Empty :"hidden"  ;
+                }
+
+<button type="button" class="btn btn-danger btn-xs deleteButton @deleteButtonStatus" data-imageid="@item._id" >
+    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Delete
+</button>
+
             </div>
             <div class="clearfix"></div>
         </div>
