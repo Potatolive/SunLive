@@ -26,20 +26,79 @@ namespace SunLive.Controllers
 
         public ActionResult Index()
         {
-            var client = new MongoClient(connectionString);
-            
-            var myDB = client.GetDatabase(pageName);
-            var collection = myDB.GetCollection<FanPost>("fanposts");
+            try
+            {
+                var client = new MongoClient(connectionString);
 
-            FieldDefinition<FanPost> field = "FanPost";
+                var myDB = client.GetDatabase(pageName);
 
-            var filter = Builders<FanPost>.Filter.In("Status", new List<String>() { "New", "Approved", "Rejected", "Downloaded", "Delete", "Deleted" });
 
-            var sort = Builders<FanPost>.Sort.Descending("PublishedOn");
+                var collection = myDB.GetCollection<FanPost>("fanposts");
 
-            var posts = collection.Find<FanPost>(filter).Sort(sort).ToListAsync();
+                FieldDefinition<FanPost> field = "FanPost";
 
-            return View(posts.Result.ToList());
+                var filter = Builders<FanPost>.Filter.In("Status", new List<String>() { "New" }); //, "Approved", "Rejected", "Downloaded", "Delete", "Deleted" });
+
+                var sort = Builders<FanPost>.Sort.Ascending("PublishedOn");
+
+                var posts = collection.Find<FanPost>(filter).Sort(sort).ToListAsync();
+
+                return View(posts.Result.ToList());
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Internal Server error. Please try again after sometime. If the problem persists contact admin!");
+            }
+        }
+
+        public ActionResult Approved()
+        {
+            try
+            {
+                var client = new MongoClient(connectionString);
+
+                var myDB = client.GetDatabase(pageName);
+                var collection = myDB.GetCollection<FanPost>("fanposts");
+
+                FieldDefinition<FanPost> field = "FanPost";
+
+                var filter = Builders<FanPost>.Filter.In("Status", new List<String>() { "Approved", "Downloaded" }); //, "Approved", "Rejected", "Downloaded", "Delete", "Deleted" });
+
+                var sort = Builders<FanPost>.Sort.Ascending("PublishedOn");
+
+                var posts = collection.Find<FanPost>(filter).Sort(sort).ToListAsync();
+
+                return View("Index", posts.Result.ToList());
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Internal Server error. Please try again after sometime. If the problem persists contact admin!");
+            }
+        }
+
+        public ActionResult Rejected()
+        {
+            try
+            {
+                var client = new MongoClient(connectionString);
+
+                var myDB = client.GetDatabase(pageName);
+                var collection = myDB.GetCollection<FanPost>("fanposts");
+
+                FieldDefinition<FanPost> field = "FanPost";
+
+                var filter = Builders<FanPost>.Filter.In("Status", new List<String>() { "Rejected" }); //, "Approved", "Rejected", "Downloaded", "Delete", "Deleted" });
+
+                var sort = Builders<FanPost>.Sort.Ascending("PublishedOn");
+
+                var posts = collection.Find<FanPost>(filter).Sort(sort).ToListAsync();
+
+                return View("Index", posts.Result.ToList());
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Internal Server error. Please try again after sometime. If the problem persists contact admin!");
+            }
         }
 
         public ActionResult About()
@@ -83,6 +142,20 @@ namespace SunLive.Controllers
             }*/
 
             return RedirectToAction("Index");
+        }
+
+        public RedirectToRouteResult Prioritize(string id)
+        {
+            var client = new MongoClient(connectionString);
+            var myDB = client.GetDatabase(pageName);
+            var collection = myDB.GetCollection<FanPost>("fanposts");
+
+            var filter = Builders<FanPost>.Filter.Eq("_id", id);
+            var update = Builders<FanPost>.Update.Set("OutputDir", "PriorityOutput");
+
+            var result = collection.FindOneAndUpdateAsync<FanPost>(filter, update);
+
+            return Details(id);
         }
 
         public RedirectToRouteResult Reject(string id)
