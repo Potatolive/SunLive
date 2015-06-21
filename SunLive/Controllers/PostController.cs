@@ -51,11 +51,10 @@ namespace SunLive.Controllers
 
             FieldDefinition<FanPost> field = "FanPost";
 
-            var filter = Builders<FanPost>.Filter.In("Status", new List<String>() { "New", "Approved", "Rejected", "Downloaded", "Delete", "Deleted" });
+            var filter = Builders<FanPost>.Filter.Eq("_id", id);
 
-            var sort = Builders<FanPost>.Sort.Descending("PublishedOn");
+            var posts = collection.Find<FanPost>(filter).ToListAsync(); ;
 
-            var posts = collection.Find<FanPost>(filter).Sort(sort).ToListAsync();
 
             return View("PartialPost", posts.Result.FirstOrDefault());
         }

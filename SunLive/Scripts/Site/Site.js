@@ -12,6 +12,7 @@ jQuery(document).ready(function () {
         // initialize Isotope
         $grid = $container.isotope({
             // options...
+            itemSelector: '.grid-item',
             resizable: false, // disable normal resizing
             // set columnWidth to a percentage of container width
             masonry: { columnWidth: $container.width() / 12 },
@@ -25,16 +26,13 @@ jQuery(document).ready(function () {
         $(window).smartresize(function () {
 
             $grid = $container.isotope({
+                itemSelector: '.grid-item',
                 // update columnWidth to a percentage of container width
                 masonry: { columnWidth: $container.width() / 12 }
             });
         });
 
-
-        $container.isotope({
-            itemSelector: '.item'
-        });
-
+    
         $select.change(function () {
 
             var filters = $(this).val();
@@ -140,7 +138,6 @@ jQuery(document).ready(function () {
                 //});
 
                 //$isoGrid.isotope('remove', $('#item_' + id));
-                //$isoGrid.isotope('layout');
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
                 console.log(errorThrown);
@@ -295,4 +292,24 @@ jQuery(document).ready(function () {
 });
 
 
+function testing()
+{
+    $.ajax({
+        type: "GET",
+        url: "../post/partial/132507616819788_838388519588064",
+        contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+        success: function (msg) {
+            $item = $('<div></div>');
+            $item.html(msg);
+            console.log($item.html());
+            //$item = $('#item_132507616819788_838919079535008');
+            //$item.attr('id', 'test');
+            $('#wall').append($item).isotope('appended',$item);
 
+            
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            console.log(errorThrown);
+        }
+    });
+}
