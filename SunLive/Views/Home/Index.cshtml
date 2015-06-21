@@ -43,7 +43,7 @@
             <div class="row" id="New">
                 @foreach (var newItem in Model)
                 {
-                    if (!string.IsNullOrEmpty(newItem.ImageURL) && newItem.Status == "New")
+                    if (newItem.Status == "New")
                     {
 
                         newItem.convertPubishedOnToIstDateTime();
@@ -136,7 +136,7 @@
             <div class="row" id="Approved">
                 @foreach (var newItem in Model)
                 {
-                    if (!string.IsNullOrEmpty(newItem.ImageURL) && (newItem.Status == "Approved" || newItem.Status == "Downloaded"))
+                    if ((newItem.Status == "Approved" || newItem.Status == "Downloaded"))
                     {
 
                         newItem.convertPubishedOnToIstDateTime();
@@ -212,7 +212,7 @@
             <div class="row" id="Rejected">
                 @foreach (var newItem in Model)
                 {
-                    if (!string.IsNullOrEmpty(newItem.ImageURL) && newItem.Status == "Rejected")
+                    if (newItem.Status == "Rejected")
                     {
 
                         newItem.convertPubishedOnToIstDateTime();

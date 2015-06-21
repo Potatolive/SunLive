@@ -26,6 +26,8 @@ namespace Sunlive.Entities
 
         public string OutputDir { get; set; }
 
+        public string Source { get; set; }
+
         public void convertPubishedOnToIstDateTime()
         {
             try
