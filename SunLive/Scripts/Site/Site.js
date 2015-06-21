@@ -112,7 +112,8 @@ jQuery(document).ready(function () {
                 $itemContainer.find('.jcrop-holder').css('display', 'none');
 
                 var $originalImage = $('#img_' + id);
-                $originalImage.css('height', 'auto');
+                //$originalImage.css('height', 'auto');
+                //$originalImage.css('width', '100%');
                 $originalImage.css('display', 'block');
                 $originalImage.css('visibility', 'visible');
 
