@@ -6,8 +6,6 @@
     <link rel="icon" href="https://plive.azurewebsites.net/img/pliveicon.png" sizes="50x50">
     <meta name="viewport" content="width=device-width" />
 
-    <script src=@Url.Content("~/Scripts/croppic/croppic.js") type="text/javascript"></script>
-
     <link href="@Url.Content("~/Content/croppic.css")"
           rel="stylesheet" type="text/css" />
 
@@ -62,18 +60,35 @@
 
 
     <script src="http://code.jquery.com/jquery-migrate-1.2.1.js"></script>
+
     <script src=@Url.Content("~/Scripts/jcrop/jquery.Jcrop.js") type="text/javascript"></script>
 
     <script type="text/javascript">
-        $(document).ready(function () {
-            $("#tabs").tabs();
+        /*$(document).ready(function () {
+            $("#filters").tabs();
 
-        });
+        });*/
+
+        function url_domain() {
+            var a = document.createElement('a');
+            a.href = window.location;
+            var url = a.protocol + '//' + a.hostname;
+
+            if (a.port != '') {
+                url += ':' + a.port + '/';
+            }
+            else {
+                url += '/';
+            }
+
+            return url;
+        }
 
         function revertCrop(e, id) {
+
             $.ajax({
                 type: "POST",
-                url: "Home/RevertCrop",
+                url: url_domain() + 'Home/RevertCrop',
                 data: $('#form_crop_image_' + id).serialize(),
                 contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
                 success: function (msg) {
@@ -89,7 +104,6 @@
         }
 
         function cropImage(id) {
-
             var jcrop_api;
 
             $('#img_' + id).find('.imgforapproval').Jcrop({
@@ -112,7 +126,7 @@
 
                 $.ajax({
                     type: "POST",
-                    url: "Home/Crop",
+                    url: url_domain() + 'Home/Crop',
                     data: $('#form_crop_image_' + id).serialize(),
                     contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
                     success: function (msg) {

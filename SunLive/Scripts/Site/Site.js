@@ -89,7 +89,7 @@ jQuery(document).ready(function () {
 
         $.ajax({
             type: "POST",
-            url: "../Post/Crop",
+            url: "../../Post/Crop",
             data: $('#form_crop_image_' + id).serialize(),
             contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
             success: function (msg) {

@@ -21,222 +21,265 @@
 <br />
 
 <div id="tabs" class="clear-fix clearfix">
-    <ul>
-        <li><a href="#New">New</a></li>
-        <li><a href="#Approved">Approved</a></li>
-        <li><a href="#Rejected">Rejected</a></li>
-    </ul>
-    <div class="row" id="New">
-        @foreach (var newItem in Model)
-        {
-            if (!string.IsNullOrEmpty(newItem.ImageURL) && newItem.Status == "New")
-            {
+        <div id="filters">
+            <ul class="">
+                <li><a href="/Home">New</a></li>
+                <li><a href="/Home/Approved">Approved</a></li>
+                <li><a href="/Home/Rejected">Rejected</a></li>
+            </ul>
+        </div>
 
-                newItem.PublishedOn = newItem.PublishedOn.ToLocalTime();
-
-                <div class="col-sm-6 col-md-4 item">
-                    
-                    <div class="thumbnail picture">
-                        @{
-                string newImgUrl = newItem.ImageURL;
-
-                if (!string.IsNullOrEmpty(newItem.CroppedImageURL))
+    @if (Model.Count() == 0)
+    {
+        <div>
+            <br />
+            <br />
+            <h1>No posts available to display!</h1>
+        </div>
+    }
+    else
+    {
+        { 
+            <div class="row" id="New">
+                @foreach (var newItem in Model)
                 {
-                    newImgUrl = newItem.CroppedImageURL;
-                }
+                    if (newItem.Status == "New")
+                    {
 
-                <div id="img_@newItem._id">
-                    <img src="@newImgUrl"
-                         alt="No image..." class="imageTile imgforapproval"
-                         data-holder-rendered="true" onmouseover="javascript:cropImage('@newItem._id'); return true;" />
-                </div>
-                        }
+                        newItem.convertPubishedOnToIstDateTime();
+                        
+                        <div class="col-sm-6 col-md-4 item">
 
-                        <!--<canvas id="preview_@newItem._id"></canvas>-->
+                            <div class="thumbnail picture">
+                                @{
+                                    string newImgUrl = newItem.ImageURL;
 
-                        <form id="form_crop_image_@newItem._id">
-                            <input hidden id="crop_image_id_@newItem._id" name="ImgId" value="@newItem._id" />
-                            <input hidden id="X_@newItem._id" name="X" />
-                            <input hidden id="Y_@newItem._id" name="Y" />
-                            <input hidden id="W_@newItem._id" name="W" />
-                            <input hidden id="H_@newItem._id" name="H" />
-                            <input hidden id="imageWidth_@newItem._id" name="imageWidth" value="0" />
-                            <input hidden id="imageHeight_@newItem._id" name="imageHeight" value="0" />
-                            <button id="submit_@newItem._id" type="button" class="btn btn-warning btn-xs pull-right hidden">
-                                <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Crop
-                            </button>
-                        </form>
+                                    if (!string.IsNullOrEmpty(newItem.CroppedImageURL))
+                                    {
+                                        newImgUrl = newItem.CroppedImageURL;
+                                    }
 
-                        @if (!string.IsNullOrEmpty(newItem.CroppedImageURL))
-                        {
-                            <button id="revert_@newItem._id" type="button" class="btn btn-warning btn-xs pull-right revertcrop"
-                                    onclick="revertCrop(this, '@newItem._id');">
-                                <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span> Revert
-                            </button>
-                        }
-                        else
-                        {
-                            <button id="revert_@newItem._id" type="button" class="btn btn-warning btn-xs pull-right revertcrop hidden"
-                                    onclick="revertCrop(this, '@newItem._id');">
-                                <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span> Revert
-                            </button>
-                        }
-                        <div class="caption">
-                            <div style="margin-bottom: 20px">
-                                <span class="pull-left"><i class="icon-calendar"></i>@Html.DisplayFor(modelItem => newItem.PublishedOn)</span>
-                            </div>
-                            <div class="clearfix"></div>
+                                    <div id="img_@newItem._id">
+                                        <img src="@newImgUrl" class="imgforapproval"
+                                             alt="No image..." style="height: auto; width: 100%;"
+                                             data-holder-rendered="true" onmouseover="javascript:cropImage('@newItem._id'); return true;" />
+                                    </div>
+                                }
 
-                            <hr />
+                                <!--<canvas id="preview_@newItem._id"></canvas>-->
 
-                            <div class="newsSummary pull-left">
-                                @if (newItem.TextContent.Length > 140)
+                                <form id="form_crop_image_@newItem._id">
+                                    <input hidden id="crop_image_id_@newItem._id" name="ImgId" value="@newItem._id" />
+                                    <input hidden id="X_@newItem._id" name="X" />
+                                    <input hidden id="Y_@newItem._id" name="Y" />
+                                    <input hidden id="W_@newItem._id" name="W" />
+                                    <input hidden id="H_@newItem._id" name="H" />
+                                    <input hidden id="imageWidth_@newItem._id" name="imageWidth" value="0" />
+                                    <input hidden id="imageHeight_@newItem._id" name="imageHeight" value="0" />
+                                    <button id="submit_@newItem._id" type="button" class="btn btn-warning btn-xs pull-right hidden">
+                                        <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Crop
+                                    </button>
+                                </form>
+
+                                @if (!string.IsNullOrEmpty(newItem.CroppedImageURL))
                                 {
-                                    @Html.Raw(newItem.TextContent.Substring(0, 140) + " ...")
+                                    <button id="revert_@newItem._id" type="button" class="btn btn-warning btn-xs pull-right revertcrop"
+                                            onclick="revertCrop(this, '@newItem._id');">
+                                        <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span> Revert
+                                    </button>
                                 }
                                 else
                                 {
-                                    @Html.Raw(newItem.TextContent)
+                                    <button id="revert_@newItem._id" type="button" class="btn btn-warning btn-xs pull-right revertcrop hidden"
+                                            onclick="revertCrop(this, '@newItem._id');">
+                                        <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span> Revert
+                                    </button>
                                 }
+                                <div class="caption">
+                                    <div style="margin-bottom: 20px">
+                                        <span class="pull-left"><i class="icon-calendar"></i>@Html.DisplayFor(modelItem => newItem.PublishedOn)</span>
+                                    </div>
+                                    <div class="clearfix"></div>
+
+                                    <hr />
+
+                                    <div class="newsSummary pull-left">
+                                        @if (newItem.TextContent.Length > 140)
+                                        {
+                                            @Html.Raw(newItem.TextContent.Substring(0, 140) + " ...")
+                                        }
+                                        else
+                                        {
+                                            @Html.Raw(newItem.TextContent)
+                                        }
+                                    </div>
+                                    <span class="pull-right">- <i class="icon-user"></i> <a href="#">@Html.Raw(newItem.PublishedBy.Split(' ')[0])</a></span>
+
+                                    <div class="clearfix"></div>
+
+                                    <br />
+
+                                    <div class="pull-right">
+                                        @Html.ActionLink("Reject", "Reject", new { id = newItem.PostId }, new { @class = "btn btn-danger btn-xs" }) |
+                                        @Html.ActionLink("Approve", "Details", new { id = newItem.PostId }, new { @class = "btn btn-success btn-xs" }) |
+                                        @Html.ActionLink("Prioritize", "Prioritize", new { id = newItem.PostId }, new { @class = "btn btn-info btn-xs" }) 
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
                             </div>
-                            <span class="pull-right">- <i class="icon-user"></i> <a href="#">@Html.Raw(newItem.PublishedBy.Split(' ')[0])</a></span>
-
-                            <div class="clearfix"></div>
-
-                            <br />
-
-                            <div class="pull-right">
-
-                                @Html.ActionLink("Reject", "Reject", new { id = newItem.PostId }, new { @class = "btn btn-danger btn-xs" }) |
-                                @Html.ActionLink("Approve", "Details", new { id = newItem.PostId }, new { @class = "btn btn-success btn-xs" })
-                            </div>
-                            <div class="clearfix"></div>
                         </div>
-                    </div>
-                </div>
-            }
-        }
-    </div>
-
-    <div class="row" id="Approved">
-
-        @foreach (var approvedItem in Model)
-        {
-            if (!string.IsNullOrEmpty(approvedItem.ImageURL) && (approvedItem.Status == "Approved" || approvedItem.Status == "Downloaded"))
-            {
-
-                approvedItem.PublishedOn = approvedItem.PublishedOn.ToLocalTime();
-
-                string imgUrl = approvedItem.ImageURL;
-
-                if (!string.IsNullOrEmpty(approvedItem.CroppedImageURL))
-                {
-                    imgUrl = approvedItem.CroppedImageURL;
+                    }
                 }
+            </div>
+        }
+        {
+            <div class="row" id="Approved">
+                @foreach (var newItem in Model)
+                {
+                    if ((newItem.Status == "Approved" || newItem.Status == "Downloaded"))
+                    {
 
+                        newItem.convertPubishedOnToIstDateTime();
 
-                <div class="col-sm-6 col-md-4 item">
-                    <div class="thumbnail picture">
-                        <div id="img_@approvedItem._id">
-                            <img src="@imgUrl"
-                                 alt="No image..." class="imageTile imgforapproval"
+                        <div class="col-sm-6 col-md-4 item">
+
+                            <div class="thumbnail picture">
+                                @{
+                        string newImgUrl = newItem.ImageURL;
+
+                        if (!string.IsNullOrEmpty(newItem.CroppedImageURL))
+                        {
+                            newImgUrl = newItem.CroppedImageURL;
+                        }
+
+                        <div id="img_@newItem._id">
+                            <img src="@newImgUrl" class="imgforapproval"
+                                 alt="No image..." style="height: auto; width: 100%;"
                                  data-holder-rendered="true" />
-                            <!-- onmouseover="javascript:cropImage('@approvedItem._id'); return true;" /> -->
                         </div>
+                                }
 
-                        <!--<canvas id="preview_@approvedItem._id"></canvas>-->
-                        @*
-                            <form id="form_crop_image_@approvedItem._id">
-                                <input hidden id="crop_image_id_@approvedItem._id" name="ImgId" value="@approvedItem._id"/>
-                                <input hidden id="X_@approvedItem._id" name="X"/>
-                                <input hidden id="Y_@approvedItem._id" name="Y"/>
-                                <input hidden id="W_@approvedItem._id" name="W"/>
-                                <input hidden id="H_@approvedItem._id" name="H"/>
-                                <input hidden id="imageWidth_@approvedItem._id" name="imageWidth" value="0"/>
-                                <input hidden id="imageHeight_@approvedItem._id" name="imageHeight" value="0"/>
-                                <input id="submit_@approvedItem._id" class="hidden" type="button" value="Crop"/>
-                            </form>
-
-                            @if(!string.IsNullOrEmpty(approvedItem.CroppedImageURL)) {
-                                <input id="revert_@approvedItem._id" class="revertcrop" type="button" value="Revert" onclick="revertCrop(this, '@approvedItem._id');"/>
-                            }
-                            else
-                            {
-                                <input id="revert_@approvedItem._id" class="revertcrop hidden" type="button" value="Revert" onclick="revertCrop(this, '@approvedItem._id');" />
-                            }
-                        *@
-
-                        <div class="caption">
-                            <div style="margin-bottom: 20px">
-                                <span class="pull-left"><i class="icon-calendar"></i>@Html.DisplayFor(modelItem => approvedItem.PublishedOn)</span>
-                            </div>
-                            <div class="clearfix"></div>
-
-                            <hr />
-                            <div class="newsSummary">
-                                @if (approvedItem.TextContent.Length > 140)
+                                @if (!string.IsNullOrEmpty(newItem.CroppedImageURL))
                                 {
-                                    @Html.Raw(approvedItem.TextContent.Substring(0, 140) + " ...")
+                                    <button id="revert_@newItem._id" type="button" class="btn btn-warning btn-xs pull-right revertcrop"
+                                            onclick="revertCrop(this, '@newItem._id');">
+                                        <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span> Revert
+                                    </button>
                                 }
                                 else
                                 {
-                                    @Html.Raw(approvedItem.TextContent)
+                                    <button id="revert_@newItem._id" type="button" class="btn btn-warning btn-xs pull-right revertcrop hidden"
+                                            onclick="revertCrop(this, '@newItem._id');">
+                                        <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span> Revert
+                                    </button>
                                 }
-                            </div>
-                            <span class="pull-right">- <i class="icon-user"></i> <a href="#">@Html.Raw(approvedItem.PublishedBy.Split(' ')[0])</a></span>
+                                <div class="caption">
+                                    <div style="margin-bottom: 20px">
+                                        <span class="pull-left"><i class="icon-calendar"></i>@Html.DisplayFor(modelItem => newItem.PublishedOn)</span>
+                                    </div>
+                                    <div class="clearfix"></div>
 
-                            <div class="clearfix"></div>
-                            <br />
-                            <div class="pull-right">
-                                @Html.ActionLink("Delete", "Delete", new { id = approvedItem.PostId }, new { @class = "btn btn-danger btn-xs" })
+                                    <hr />
+
+                                    <div class="newsSummary pull-left">
+                                        @if (newItem.TextContent.Length > 140)
+                                        {
+                                            @Html.Raw(newItem.TextContent.Substring(0, 140) + " ...")
+                                        }
+                                        else
+                                        {
+                                            @Html.Raw(newItem.TextContent)
+                                        }
+                                    </div>
+                                    <span class="pull-right">- <i class="icon-user"></i> <a href="#">@Html.Raw(newItem.PublishedBy.Split(' ')[0])</a></span>
+
+                                    <div class="clearfix"></div>
+
+                                    <br />
+
+                                    <div class="pull-right">
+                                        @Html.ActionLink("Delete", "Delete", new { id = newItem.PostId }, new { @class = "btn btn-danger btn-xs" })
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
                             </div>
-                            <div class="clearfix"></div>
                         </div>
-                    </div>
-                </div>
-            }
+                    }
+                }
+            </div>
         }
-    </div>
-
-    <div class="row" id="Rejected">
-        @foreach (var item in Model)
         {
-            if (!string.IsNullOrEmpty(item.ImageURL) && item.Status == "Rejected")
-            {
+            <div class="row" id="Rejected">
+                @foreach (var newItem in Model)
+                {
+                    if (newItem.Status == "Rejected")
+                    {
 
-                item.PublishedOn = item.PublishedOn.ToLocalTime();
+                        newItem.convertPubishedOnToIstDateTime();
 
-                <div class="col-sm-6 col-md-4">
-                    <div class="thumbnail">
-                        <img src="@item.ImageURL"
-                             alt="No image..." class="imageTile"
-                             data-holder-rendered="true">
-                        <div class="caption">
-                            <div style="margin-bottom: 20px">
-                                <span class="pull-left"><i class="icon-calendar"></i>@Html.DisplayFor(modelItem => item.PublishedOn)</span>
-                            </div>
-                            <div class="clearfix"></div>
+                        <div class="col-sm-6 col-md-4 item">
 
-                            <hr />
+                            <div class="thumbnail picture">
+                                @{
+                        string newImgUrl = newItem.ImageURL;
 
-                            <div class="newsSummary">
-                                @if (item.TextContent.Length > 140)
+                        if (!string.IsNullOrEmpty(newItem.CroppedImageURL))
+                        {
+                            newImgUrl = newItem.CroppedImageURL;
+                        }
+
+                        <div id="img_@newItem._id">
+                            <img src="@newImgUrl" class="imgforapproval"
+                                 alt="No image..." style="height: auto; width: 100%;"
+                                 data-holder-rendered="true"/>
+                        </div>
+                                }
+                                
+                                @if (!string.IsNullOrEmpty(newItem.CroppedImageURL))
                                 {
-                                    @Html.Raw(item.TextContent.Substring(0, 140) + " ...")
+                                    <button id="revert_@newItem._id" type="button" class="btn btn-warning btn-xs pull-right revertcrop"
+                                            onclick="revertCrop(this, '@newItem._id');">
+                                        <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span> Revert
+                                    </button>
                                 }
                                 else
                                 {
-                                    @Html.Raw(item.TextContent)
+                                    <button id="revert_@newItem._id" type="button" class="btn btn-warning btn-xs pull-right revertcrop hidden"
+                                            onclick="revertCrop(this, '@newItem._id');">
+                                        <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span> Revert
+                                    </button>
                                 }
-                            </div>
-                            <span class="pull-right">- <i class="icon-user"></i> <a href="#">@Html.Raw(item.PublishedBy.Split(' ')[0])</a></span>
+                                <div class="caption">
+                                    <div style="margin-bottom: 20px">
+                                        <span class="pull-left"><i class="icon-calendar"></i>@Html.DisplayFor(modelItem => newItem.PublishedOn)</span>
+                                    </div>
+                                    <div class="clearfix"></div>
 
-                            <div class="clearfix"></div>
-                            <br />
+                                    <hr />
+
+                                    <div class="newsSummary pull-left">
+                                        @if (newItem.TextContent.Length > 140)
+                                        {
+                                            @Html.Raw(newItem.TextContent.Substring(0, 140) + " ...")
+                                        }
+                                        else
+                                        {
+                                            @Html.Raw(newItem.TextContent)
+                                        }
+                                    </div>
+                                    <span class="pull-right">- <i class="icon-user"></i> <a href="#">@Html.Raw(newItem.PublishedBy.Split(' ')[0])</a></span>
+
+                                    <div class="clearfix"></div>
+
+                                    <br />
+
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-            }
+                    }
+                }
+            </div>
         }
+    }
     </div>
-</div>

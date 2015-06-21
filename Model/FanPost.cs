@@ -16,7 +16,7 @@ namespace Sunlive.Entities
         public string CroppedImageURL { get; set; }
         public string TextContent { get; set; }
         public string HashTag { get; set; }
-        [DisplayFormat(DataFormatString = "{0: d MMM yyyy}")]
+        [DisplayFormat(DataFormatString = "{0: d MMM yyyy hh:mm tt}")]
         public DateTime PublishedOn { get; set; }
         public string PublishedBy { get; set; }
 
@@ -25,5 +25,26 @@ namespace Sunlive.Entities
         public string FileName { get; set; }
 
         public string OutputDir { get; set; }
+
+        public string Source { get; set; }
+
+        public void convertPubishedOnToIstDateTime()
+        {
+            try
+            {
+                TimeZoneInfo istZone = TimeZoneInfo.FindSystemTimeZoneById("India Standard Time");
+                PublishedOn = TimeZoneInfo.ConvertTime(PublishedOn.ToLocalTime(), TimeZoneInfo.Local, istZone);
+            }
+            catch (TimeZoneNotFoundException)
+            {
+                Console.WriteLine("The registry does not define the Indian Standard Time zone.");
+                PublishedOn = DateTime.MinValue;
+            }
+            catch (InvalidTimeZoneException)
+            {
+                Console.WriteLine("Registry data on the Indian Standard Time zone has been corrupted.");
+                PublishedOn = DateTime.MinValue;
+            }
+        }
     }
 }
