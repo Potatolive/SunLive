@@ -26,20 +26,28 @@ namespace SunLive.Controllers
 
         public ActionResult Index()
         {
-            var client = new MongoClient(connectionString);
-            
-            var myDB = client.GetDatabase(pageName);
-            var collection = myDB.GetCollection<FanPost>("fanposts");
+            try
+            {
+                var client = new MongoClient(connectionString);
 
-            FieldDefinition<FanPost> field = "FanPost";
+                var myDB = client.GetDatabase(pageName);
+                var collection = myDB.GetCollection<FanPost>("fanposts");
 
-            var filter = Builders<FanPost>.Filter.In("Status", new List<String>() { "New", "Approved", "Rejected", "Downloaded", "Delete", "Deleted" });
+                FieldDefinition<FanPost> field = "FanPost";
 
-            var sort = Builders<FanPost>.Sort.Descending("PublishedOn");
+                var filter = Builders<FanPost>.Filter.In("Status", new List<String>() { "New", "Approved", "Rejected", "Downloaded", "Delete", "Deleted" });
 
-            var posts = collection.Find<FanPost>(filter).Sort(sort).ToListAsync();
+                var sort = Builders<FanPost>.Sort.Descending("PublishedOn");
 
-            return View(posts.Result.ToList().Take(40));
+                var posts = collection.Find<FanPost>(filter).Sort(sort).ToListAsync();
+
+                return View(posts.Result.ToList().Take(40));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.StackTrace);
+                return View("Error", model: "Internal Server error. Please try again after sometime. If the problem persists contact admin!");
+            }
         }
 
         public ActionResult Partial(string id)

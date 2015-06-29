@@ -47,7 +47,8 @@ namespace SunLive.Controllers
             }
             catch (Exception ex)
             {
-                throw new Exception("Internal Server error. Please try again after sometime. If the problem persists contact admin!");
+                Console.WriteLine(ex.StackTrace);
+                return View("Error", model: "Internal Server error. Please try again after sometime. If the problem persists contact admin!");
             }
         }
 
@@ -72,7 +73,8 @@ namespace SunLive.Controllers
             }
             catch (Exception ex)
             {
-                throw new Exception("Internal Server error. Please try again after sometime. If the problem persists contact admin!");
+                Console.WriteLine(ex.StackTrace);
+                return View("Error", model: "Internal Server error. Please try again after sometime. If the problem persists contact admin!");
             }
         }
 
@@ -97,7 +99,8 @@ namespace SunLive.Controllers
             }
             catch (Exception ex)
             {
-                throw new Exception("Internal Server error. Please try again after sometime. If the problem persists contact admin!");
+                Console.WriteLine(ex.StackTrace);
+                return View("Error", model: "Internal Server error. Please try again after sometime. If the problem persists contact admin!");
             }
         }
 
@@ -118,28 +121,6 @@ namespace SunLive.Controllers
             var update = Builders<FanPost>.Update.Set("Status", "Approved");
 
             var result = collection.FindOneAndUpdateAsync<FanPost>(filter, update);
-
-            /*string textcontent = string.Empty;
-
-            if (result.Result.TextContent.Length > 140)
-            {
-               textcontent = result.Result.TextContent.Substring(0, 140) + " ...";
-            }
-            else
-            {
-                textcontent = result.Result.TextContent;
-            }
-
-            var directoryPath = Server.MapPath("~");
-            var textContentFilename = Path.Combine(directoryPath, "Output/TextContent.txt");
-            var imageFilename = Path.Combine(directoryPath, "Output/ImageContent.jpg");
-
-            System.IO.File.WriteAllText(textContentFilename, textcontent + " -" + result.Result.PublishedBy.Split(' ')[0]);
-
-            using (WebClient webClient = new WebClient())
-            {
-                webClient.DownloadFile(result.Result.ImageURL, imageFilename);
-            }*/
 
             return RedirectToAction("Index");
         }
