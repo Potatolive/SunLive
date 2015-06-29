@@ -94,7 +94,12 @@ jQuery(document).ready(function () {
             contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
             success: function (msg) {
                 //if (jcrop_api) jcrop_api.release();
-                var test = 'http://localhost:54442/output/a0d38ce6-625d-4b63-b7d4-d9e457f75433.jpg';
+                
+                var portrait = false;
+                if ($('#img_' + id).height() > $('#img_' + id).width())
+                {
+                    portrait = true;
+                }
                 $('#item_' + id).find('img').attr('src', msg + '?' + Math.random());
 
                 //$('#item_' + id).replaceWith($.parseHTML(msg));
@@ -112,7 +117,14 @@ jQuery(document).ready(function () {
                 $itemContainer.find('.jcrop-holder').css('display', 'none');
 
                 var $originalImage = $('#img_' + id);
-                //$originalImage.css('height', 'auto');
+                if (portrait == true) {
+                    $originalImage.css('height', 'auto');
+                }
+                else
+                {
+                    $originalImage.css('width', 'auto');
+                    $originalImage.css('margin', 'auto');
+                }
                 //$originalImage.css('width', '100%');
                 $originalImage.css('display', 'block');
                 $originalImage.css('visibility', 'visible');
