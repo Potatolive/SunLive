@@ -1,6 +1,7 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
+using MongoDB.Driver.Linq;
 using SunLive.Models;
 using System;
 using System.Collections.Generic;
@@ -19,13 +20,46 @@ using System.Drawing.Drawing2D;
 
 namespace SunLive.Controllers
 {
+    [Authorize]
     public class PostController : Controller
     {
         string connectionString = ConfigurationManager.AppSettings["connectionString"].ToString();
-        string pageName = ConfigurationManager.AppSettings["pageName"].ToString();
+        const int PAGE_SIZE = 50;
 
-        public ActionResult Index()
+        public ActionResult Yesterday(string pageName, string publishedOn)
         {
+            var beginDate = String.IsNullOrWhiteSpace(publishedOn)?DateTime.Today:Convert.ToDateTime(publishedOn);
+            return new RedirectResult("~/Post/Index/?pageName=" + pageName +  "&publishedOn=" + beginDate.AddDays(-1).ToString("yyyy-MM-dd"));
+        }
+
+        public ActionResult Tomorrow(string pageName, string publishedOn)
+        {
+            var beginDate = String.IsNullOrWhiteSpace(publishedOn) ? DateTime.Today : Convert.ToDateTime(publishedOn);
+            return new RedirectResult("~/Post/Index/?pageName=" + pageName + "&publishedOn=" + beginDate.AddDays(1).ToString("yyyy-MM-dd"));
+        }
+
+        public ActionResult Next(string pageName, string publishedOn, string page)
+        {
+            var beginDate = String.IsNullOrWhiteSpace(publishedOn) ? DateTime.Today : Convert.ToDateTime(publishedOn);
+            return new RedirectResult("~/Post/Index/?pageName=" + pageName + "&publishedOn=" + beginDate.ToString("yyyy-MM-dd") 
+                + "&page=" + (string.IsNullOrEmpty(page)?1:Int32.Parse(page) + 1).ToString());
+        }
+
+        public ActionResult Prev(string pageName, string publishedOn, string page)
+        {
+            var beginDate = String.IsNullOrWhiteSpace(publishedOn) ? DateTime.Today : Convert.ToDateTime(publishedOn);
+            return new RedirectResult("~/Post/Index/?pageName=" + pageName + "&publishedOn=" + beginDate.ToString("yyyy-MM-dd") 
+                + "&page=" + ((string.IsNullOrEmpty(page) || Int32.Parse(page) <= 0) ? 0 : Int32.Parse(page) - 1).ToString());
+        }
+
+
+        public ActionResult Index(string pageName, string publishedOn, string page)
+        {
+            if (string.IsNullOrWhiteSpace(pageName))
+            {
+                return View();
+            }
+
             try
             {
                 var client = new MongoClient(connectionString);
@@ -33,15 +67,35 @@ namespace SunLive.Controllers
                 var myDB = client.GetDatabase(pageName);
                 var collection = myDB.GetCollection<FanPost>("fanposts");
 
-                FieldDefinition<FanPost> field = "FanPost";
+                var beginDate = String.IsNullOrWhiteSpace(publishedOn)?DateTime.Today:Convert.ToDateTime(publishedOn);
+                var endDate = beginDate.AddDays(1);
 
-                var filter = Builders<FanPost>.Filter.In("Status", new List<String>() { "New", "Approved", "Rejected", "Downloaded", "Delete", "Deleted" });
+                var filter = (Builders<FanPost>.Filter.Gte("PublishedOn", beginDate.ToString("yyyy-MM-dd")) &
+                                Builders<FanPost>.Filter.Lt("PublishedOn", endDate.ToString("yyyy-MM-dd"))) |
+                                (Builders<FanPost>.Filter.Gte("PublishedOn", beginDate) &
+                                Builders<FanPost>.Filter.Lt("PublishedOn", endDate));
+                var sort = Builders<FanPost>.Sort.Ascending("PublishedOn");
 
-                var sort = Builders<FanPost>.Sort.Descending("PublishedOn");
+                int pageNumber = 0;
 
-                var posts = collection.Find<FanPost>(filter).Sort(sort).ToListAsync();
+                if (!string.IsNullOrWhiteSpace(page)) Int32.TryParse(page, out pageNumber);
 
-                return View(posts.Result.ToList().Take(40));
+                var posts = collection.Find<FanPost>(filter).Skip(PAGE_SIZE * pageNumber).Limit(PAGE_SIZE).Sort(sort).ToListAsync();
+
+                var totalPosts = collection.Find<FanPost>(filter).CountAsync();
+
+                if (((PAGE_SIZE * pageNumber) + posts.Result.Count) > 0)
+                {
+                    ViewBag.PageInfo = ((PAGE_SIZE * pageNumber) + 1) + "-" + ((PAGE_SIZE * pageNumber) + posts.Result.Count) + " of " + totalPosts.Result;
+                }
+
+                ViewBag.PublishedOn = beginDate;
+                ViewBag.PageNumber = pageNumber;
+                ViewBag.PostCount = posts.Result.Count;
+                ViewBag.TodaysCount = TodaysCount(pageName);
+                ViewBag.PageName = pageName;
+
+                return View(posts.Result.ToList());
             }
             catch (Exception ex)
             {
@@ -50,8 +104,13 @@ namespace SunLive.Controllers
             }
         }
 
-        public ActionResult Partial(string id)
+        public ActionResult Partial(string pageName, string id)
         {
+            if (string.IsNullOrWhiteSpace(pageName))
+            {
+                return View("PartialPost");
+            }
+
             var client = new MongoClient(connectionString);
 
             var myDB = client.GetDatabase(pageName);
@@ -63,31 +122,60 @@ namespace SunLive.Controllers
 
             var posts = collection.Find<FanPost>(filter).ToListAsync(); ;
 
-
             return View("PartialPost", posts.Result.FirstOrDefault());
         }
 
-       
-
-       
-
-        public bool Approve(string id)
+        public bool Approve(string pageName, string id)
         {
-            return UpdateStatus(id, "Approved");
+            return UpdateStatus(pageName, id, "Approved");
         }
 
-        public bool Reject(string id)
+        public bool Prioritize(string pageName, string id)
         {
-            return UpdateStatus(id, "Rejected");
+            if (string.IsNullOrWhiteSpace(pageName))
+            {
+                return false;
+            }
+
+            var client = new MongoClient(connectionString);
+            var myDB = client.GetDatabase(pageName);
+            var collection = myDB.GetCollection<FanPost>("fanposts");
+
+            var filter = Builders<FanPost>.Filter.Eq("_id", id);
+            var update = Builders<FanPost>.Update.Set("OutputDir", "PriorityOutput");
+
+            var result = collection.FindOneAndUpdateAsync<FanPost>(filter, update);
+
+            return UpdateStatus(pageName, id, "Approved");
         }
 
-        public bool Delete(string id)
+        public bool Reject(string pageName, string id)
         {
-            return UpdateStatus(id, "Delete");
+            if (string.IsNullOrWhiteSpace(pageName))
+            {
+                return false;
+            }
+
+            return UpdateStatus(pageName, id, "Rejected");
         }
 
-        private bool UpdateStatus(string id, string status)
+        public bool Delete(string pageName, string id)
         {
+            if (string.IsNullOrWhiteSpace(pageName))
+            {
+                return false;
+            }
+
+            return UpdateStatus(pageName, id, "Delete");
+        }
+
+        private bool UpdateStatus(string pageName, string id, string status)
+        {
+            if (string.IsNullOrWhiteSpace(pageName))
+            {
+                return false;
+            }
+
             var client = new MongoClient(connectionString);
             var myDB = client.GetDatabase(pageName);
             var collection = myDB.GetCollection<FanPost>("fanposts");
@@ -101,8 +189,13 @@ namespace SunLive.Controllers
         }
 
         [HttpPost]
-        public ActionResult Search(FanPost post)
+        public ActionResult Search(string pageName, FanPost post)
         {
+            if (string.IsNullOrWhiteSpace(pageName))
+            {
+                return View("Index");
+            }
+
             var client = new MongoClient(connectionString);
             var myDB = client.GetDatabase(pageName);
             var collection = myDB.GetCollection<FanPost>("fanposts");
@@ -114,8 +207,24 @@ namespace SunLive.Controllers
                 var filter = Builders<FanPost>.Filter.Regex("TextContent",
                     BsonRegularExpression.Create(
                         new Regex(post.TextContent, RegexOptions.IgnoreCase
+                    ))) | Builders<FanPost>.Filter.Regex("PublishedBy",
+                    BsonRegularExpression.Create(
+                        new Regex(post.TextContent, RegexOptions.IgnoreCase
                     )));
                 var posts = collection.Find<FanPost>(filter).Sort(sort).ToListAsync();
+
+                int pageNumber = 0;
+                if (((PAGE_SIZE * pageNumber) + posts.Result.Count) > 0)
+                {
+                    ViewBag.PageInfo = ((PAGE_SIZE * pageNumber) + 1) + "-" + ((PAGE_SIZE * pageNumber) + posts.Result.Count) + " of " + posts.Result.Count;
+                }
+                
+                ViewBag.PublishedOn = DateTime.Today;
+                ViewBag.PageNumber = pageNumber;
+                ViewBag.PostCount = posts.Result.Count;
+                ViewBag.TodaysCount = TodaysCount(pageName);
+                ViewBag.PageName = pageName;
+
                 return View("Index", posts.Result.ToList());
             }
             else
@@ -131,11 +240,16 @@ namespace SunLive.Controllers
         public string Crop(CropData data)
         {
 
+            if (string.IsNullOrWhiteSpace(data.pageName))
+            {
+                return null;
+            }
+
             string ImgId = data.ImgId;
 
             string connectionString = ConfigurationManager.AppSettings["connectionString"].ToString();
             MongoClient client = new MongoClient(connectionString);
-            IMongoDatabase myDB = client.GetDatabase(pageName);
+            IMongoDatabase myDB = client.GetDatabase(data.pageName);
 
             string fileName = Guid.NewGuid().ToString();
             FanPost post = null;
@@ -249,9 +363,14 @@ namespace SunLive.Controllers
         [HttpPost]
         public string RevertCrop(CropData data)
         {
+            if (string.IsNullOrWhiteSpace(data.pageName))
+            {
+                return null;
+            }
+
             string connectionString = ConfigurationManager.AppSettings["connectionString"].ToString();
             MongoClient client = new MongoClient(connectionString);
-            IMongoDatabase myDB = client.GetDatabase(pageName);
+            IMongoDatabase myDB = client.GetDatabase(data.pageName);
 
             string fileName = Guid.NewGuid().ToString();
 
@@ -276,6 +395,35 @@ namespace SunLive.Controllers
             }
 
             return string.Empty;
+        }
+
+        public long TodaysCount(string pageName)
+        {
+            try
+            {
+                var client = new MongoClient(connectionString);
+
+                var myDB = client.GetDatabase(pageName);
+                var collection = myDB.GetCollection<FanPost>("fanposts");
+
+                var beginDate = DateTime.Today;
+                var endDate = beginDate.AddDays(1);
+
+                var filter = (Builders<FanPost>.Filter.Gte("PublishedOn", beginDate.ToString("yyyy-MM-dd")) &
+                                Builders<FanPost>.Filter.Lt("PublishedOn", endDate.ToString("yyyy-MM-dd"))) |
+                                (Builders<FanPost>.Filter.Gte("PublishedOn", beginDate) &
+                                Builders<FanPost>.Filter.Lt("PublishedOn", endDate));
+                var sort = Builders<FanPost>.Sort.Ascending("PublishedOn");
+
+                var totalPosts = collection.Find<FanPost>(filter).CountAsync();
+
+                return totalPosts.Result;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                throw new Exception("Internal error");
+            }
         }
     }
 }

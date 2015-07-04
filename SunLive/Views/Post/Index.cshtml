@@ -1,39 +1,128 @@
 ﻿@model IEnumerable<Sunlive.Entities.FanPost>
 
 @{
+    const int PAGE_SIZE = 50;
     Layout = "~/Views/Shared/_BootstrapLayout.cshtml";
 }
 @section AdditionalMetaData
 {
-    <meta http-equiv="refresh" content="60000" />
+    
 }
 
-<div id="page-title">
 
-    <h2>Aditya TV </h2>
 
-</div>
-<br />
-<br />
-<div class="pull-right">
-    <form class="form-inline" action="~/Post/Search" method="post">
+<div class="align_center" style="margin-top: 60px; width: 100%">
 
-        <div class="form-group">
-            <label for="search"></label>
-            <input type="text" class="form-control" id="TextContent" name="TextContent" placeholder="Enter a text to search">
+    <div class="btn-group pull-left">
+        @if (string.IsNullOrWhiteSpace(ViewBag.PageName))
+        {
+            <button type="button" class="btn btn-default">Channel</button>
+        }
+        else
+        {
+            <button type="button" class="btn btn-default">@ViewBag.PageName</button>
+        }
+
+        
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <span class="caret"></span>
+            <span class="sr-only">Toggle Dropdown</span>
+        </button>
+        <ul class="dropdown-menu">
+            <li><a href="~/Post/Index/?pageName=AdithyaTV">AdithyaTV</a></li>
+            <li><a href="~/Post/Index/?pageName=sunmusic">sunmusic</a></li>
+        </ul>
+    </div>
+    
+    @if (string.IsNullOrWhiteSpace(ViewBag.PageName))
+    {
+        <div class="pull-left" style="margin-left:30px; width: 50%; align-content:center">
+            <h1>Select a channel!</h1>
         </div>
-        <button type="submit" class="btn btn-default">Search</button>
-    </form>
+    }
+    else
+    {
+        
+    <div class="form-group pull-right">
+            
+        <div id="newMessages" class="hidden pull-left">
+            <label class="messageCount form-control-static pull-left" style="padding-left: 5px; padding-right: 5px;"></label>
+            <button class="btn btn-danger pull-left" id="refresh"><span class="glyphicon glyphicon-refresh"></span></button>
+        </div>
+        <input type="hidden" id="postcount" value="@ViewBag.TodaysCount" data-pagename="@ViewBag.PageName" data-today="@DateTime.Today.ToString("yyyy-MM-dd")" />
+        
+        <label class="form-control-static pull-left btn-separator" style="margin-left: 5px; margin-right: 5px;">&nbsp;&nbsp;</label>
+
+        @if (ViewBag.PublishedOn == null)
+        {
+            ViewBag.PublishedOn = DateTime.Today;
+        }
+
+        @if (ViewBag.PageInfo != null)
+        {
+            if (ViewBag.PageNumber > 0)
+            {
+                <form class="form-inline pull-left" action="~/Post/Prev/?pageName=@ViewBag.PageName&publishedOn=@ViewBag.PublishedOn.ToString("yyyy-MM-dd")&page=@ViewBag.PageNumber" method="post">
+                    <button type="submit" class="btn btn-success"><span class="icon-double-angle-left"></span></button>
+                </form>
+            }
+            else
+            {
+                <button type="submit" class="pull-left btn btn-default disabled"><span class="icon-double-angle-left"></span></button>
+            }
+
+            <label class="form-control-static pull-left" style="margin-left: 5px; margin-right: 5px;">@ViewBag.PageInfo</label>
+
+            if (ViewBag.PostCount == PAGE_SIZE)
+            {
+                <form class="form-inline pull-left" action="~/Post/Next/?pageName=@ViewBag.PageName&publishedOn=@ViewBag.PublishedOn.ToString("yyyy-MM-dd")&page=@ViewBag.PageNumber" method="post">
+                    <button type="submit" class="btn btn-success"><span class="icon-double-angle-right"></span></button>
+                </form>
+            }
+            else
+            {
+                <form class="form-inline pull-left" action="~/Post/Next/?pageName=@ViewBag.PageName&publishedOn=@ViewBag.PublishedOn.ToString("yyyy-MM-dd")&page=@ViewBag.PageNumber" method="post">
+                    <button type="submit" class="btn btn-default disabled"><span class="icon-double-angle-right"></span></button>
+                </form>
+            }
+        }
+
+        
+
+        <label class="form-control-static pull-left btn-separator" style="margin-left: 5px; margin-right: 5px;">&nbsp;&nbsp;</label>
+
+        <form class="form-inline pull-left" action="~/Post/Yesterday/?pageName=@ViewBag.PageName&publishedOn=@ViewBag.PublishedOn.ToString("yyyy-MM-dd")" method="post">
+            <button type="submit" class="btn btn-info "><span class="glyphicon glyphicon-chevron-left"></span></button>
+        </form>
+        <form class="form-inline pull-left">
+            <input type="date" class="form-control" style="width:100px" value="@ViewBag.PublishedOn.ToString("yyyy-MM-dd")" />
+        </form>
+        
+        @if (ViewBag.PublishedOn < DateTime.Today)
+        {
+            <form class="form-inline pull-left" action="~/Post/Tomorrow/?pageName=@ViewBag.PageName&publishedOn=@ViewBag.PublishedOn.ToString("yyyy-MM-dd")" method="post">
+                <button type="submit" class="btn btn-info"><span class="glyphicon glyphicon-chevron-right"></span></button>
+            </form>
+        }
+        else
+        {
+            <button type="submit" class="pull-left btn btn-default disabled"><span class="glyphicon glyphicon-chevron-right"></span></button>
+        }
+
+        <label class="form-control-static pull-left btn-separator" style="margin-left: 5px; margin-right: 5px;">&nbsp;&nbsp;</label>
+
+        <form class="form-inline pull-left" action="~/Post/Search/?pageName=@ViewBag.PageName" method="post">
+            <input type="text" class="form-control" id="TextContent" name="TextContent" placeholder="Enter a text to search">
+            <button type="submit" class="btn btn-default">Search</button>
+        </form>
+    </div>
+    }
 </div>
-
+<br/>
 <br />
-<br />
-<br />
-
-
-
-
-
+<hr />
+@if (!string.IsNullOrWhiteSpace(ViewBag.PageName))
+    {
 <div id="wrapper">
 
     <div id="filters">
@@ -45,37 +134,51 @@
             <li><a href="#filter" data-option-value=".Approved, .Downloaded ">Approved </a></li>
             <li>/</li>
             <li><a href="#filter" data-option-value=".Rejected">Rejected</a></li>
+            <li>/</li>
+            <li><a href="#filter" data-option-value=".Delete">To be Deleted</a></li>
+            <li>/</li>
+            <li><a href="#filter" data-option-value=".Deleted">Deleted</a></li>
         </ul>
     </div>
-
+    @if (Model == null || Model.Count() == 0)
+    {
+        <div class="row" style="margin-left:20px; width: 50%; align-content:center">
+            <h1>No posts available to display!</h1>
+        </div>
+    }
     <!-- start: Wall -->
     <div id="wall" class="row-fluid">
 
         @*<div class="span3 item">
-            <div class="quotes">
-                <div class="quote">
-                    “That’s not what we think design is. It’s not just what it looks like and feels like. Design is how it works”
+                <div class="quotes">
+                    <div class="quote">
+                        “That’s not what we think design is. It’s not just what it looks like and feels like. Design is how it works”
+                    </div>
+                    <div class="author">
+                        - Steve Jobs -
+                    </div>
                 </div>
-                <div class="author">
-                    - Steve Jobs -
-                </div>
-            </div>
-        </div>*@
+            </div>*@
         @{
             var count = 0;
         }
-        
-        @foreach (var item in Model)
+
+        @if(Model != null) 
         {
-            count++;
-            @Html.Partial("PartialPost", item)
+            foreach (var item in Model)
+            {
+                count++;
+                @Html.Partial("PartialPost", item)
+            }
         }
-       
+        
+
 
 
     </div>
     <!-- end: Wall -->
 
 </div>
+}
 
 

@@ -162,7 +162,7 @@ jQuery(document).ready(function () {
         var id = $(this).attr('data-imageid');
         $.ajax({
             type: "POST",
-            url: "../Post/RevertCrop",
+            url: "../../Post/RevertCrop",
             data: $('#form_crop_image_' + id).serialize(),
             contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
             success: function (msg) {
@@ -191,9 +191,11 @@ jQuery(document).ready(function () {
         var id = $(this).attr('data-imageid');
         console.log(id);
 
+        var pageName = $(this).attr('data-pagename');
+
         $.ajax({
             type: "GET",
-            url: "../Post/Reject/" + id,
+            url: "../../Post/Reject/?id=" + id + "&pageName=" + pageName,
             contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
             success: function (msg) {
                 if (msg == 'True') {
@@ -211,6 +213,7 @@ jQuery(document).ready(function () {
                     //Hide buttons
                     $itemContainer.find('.rejectButton').addClass('hidden');
                     $itemContainer.find('.approveButton').addClass('hidden');
+                    $itemContainer.find('.prioritizeButton').addClass('hidden');
                     $itemContainer.find('.cropButton').addClass('hidden');
                     $itemContainer.find('.revertButton').addClass('hidden');
                 }
@@ -225,9 +228,14 @@ jQuery(document).ready(function () {
         var id = $(this).attr('data-imageid');
         console.log(id);
 
+        var pageName = $(this).attr('data-pagename');
+
+        console.log(pageName);
+
+
         $.ajax({
             type: "GET",
-            url: "../Post/Approve/" + id,
+            url: "../../Post/Approve/?id=" + id + "&pageName=" + pageName,
             contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
             success: function (msg) {
                 if (msg == 'True') {
@@ -246,6 +254,49 @@ jQuery(document).ready(function () {
                     //Hide buttons
                     $itemContainer.find('.rejectButton').addClass('hidden');
                     $itemContainer.find('.approveButton').addClass('hidden');
+                    $itemContainer.find('.prioritizeButton').addClass('hidden');
+                    $itemContainer.find('.cropButton').addClass('hidden');
+                    $itemContainer.find('.revertButton').addClass('hidden');
+
+                    //Add Delete Class
+                    $itemContainer.find('.deleteButton').removeClass('hidden');
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                console.log(errorThrown);
+            }
+        });
+    });
+
+
+    $('.prioritizeButton').click(function () {
+        var id = $(this).attr('data-imageid');
+        console.log(id);
+
+        var pageName = $(this).attr('data-pagename');
+
+        $.ajax({
+            type: "GET",
+            url: "../../Post/Prioritize/?id=" + id + "&pageName=" + pageName,
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            success: function (msg) {
+                if (msg == 'True') {
+                    $('#item_' + id).removeClass('New').addClass('Approved');
+
+                    var $itemContainer = $('#item_' + id);
+
+                    //Hide Cross Hair
+                    $itemContainer.find('.jcrop-holder').css('display', 'none');
+
+                    //Show original Image
+                    var $originalImage = $('#img_' + id);
+                    $originalImage.css('display', 'block');
+                    $originalImage.css('visibility', 'visible');
+
+                    //Hide buttons
+                    $itemContainer.find('.rejectButton').addClass('hidden');
+                    $itemContainer.find('.approveButton').addClass('hidden');
+                    $itemContainer.find('.prioritizeButton').addClass('hidden');
                     $itemContainer.find('.cropButton').addClass('hidden');
                     $itemContainer.find('.revertButton').addClass('hidden');
 
@@ -263,10 +314,11 @@ jQuery(document).ready(function () {
         var id = $(this).attr('data-imageid');
         console.log(id);
 
-        
+        var pageName = $(this).attr('data-pagename');
+
         $.ajax({
             type: "GET",
-            url: "../Post/Delete/" + id,
+            url: "../../Post/Delete/?id=" + id + "&pageName=" + pageName,
             contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
             success: function (msg) {
 
@@ -301,6 +353,35 @@ jQuery(document).ready(function () {
         });
     });
 
+    $('#refresh').click(function () {
+        var pageName = $('#postcount').attr('data-pagename');
+        var today = $('#postcount').attr('data-today');
+        window.location.href = "../../Post/Index/?pageName=" + pageName + "&publishedOn=" + today;
+    });
+
+    if ($('#postcount')) {
+        setInterval(function () {
+
+            var pageName = $('#postcount').attr('data-pagename');
+            var today = $('#postcount').attr('data-today');
+
+            $.ajax({
+                type: "GET",
+                url: "../../Post/TodaysCount/?pageName=" + pageName + "&publishedOn=" + today,
+                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                success: function (msg) {
+                    var newMessage = msg - $('#postcount').val();
+                    if (newMessage > 0) {
+                        $('#newMessages .messageCount').text(newMessage + " new messages");
+                        $('#newMessages').removeClass('hidden');
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    console.log(errorThrown);
+                }
+            });
+        }, 3000);
+    }
 
 });
 

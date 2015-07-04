@@ -16,5 +16,7 @@ namespace SunLive.Models
         public int imageWidth { get; set; }
 
         public int imageHeight { get; set; }
+
+        public string pageName { get; set; }
     }
 }

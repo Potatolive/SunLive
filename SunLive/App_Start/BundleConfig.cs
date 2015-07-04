@@ -52,7 +52,8 @@ namespace SunLive
                         "~/Content/themes/base/jquery.ui.tabs.css",
                         "~/Content/themes/base/jquery.ui.datepicker.css",
                         "~/Content/themes/base/jquery.ui.progressbar.css",
-                        "~/Content/themes/base/jquery.ui.theme.css"));
+                        "~/Content/themes/base/jquery.ui.theme.css",
+                        "~/Content/site.css"));
 
             bundles.Add(new ScriptBundle("~/Resources").IncludeDirectory("~/Resources","*.js", true));
             bundles.Add(new ScriptBundle("~/bundles/angular").Include(
