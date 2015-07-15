@@ -7,3 +7,7 @@
 
 <highchart id="chart1" config="chartConfig1"></highchart>
 
+<div ng-show="current">
+    Current Date: {{current.date | date:'d MMM yyyy' }}
+    Value: {{current.value}}
+</div>
