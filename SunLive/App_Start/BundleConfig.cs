@@ -63,7 +63,10 @@ namespace SunLive
                 "~/Scripts/angular-loader.js",
                 "~/Scripts/angular-resource.js",
                 "~/Scripts/angular-sanitize.js",
-                "~/Scripts/angular-animate.js"
+                "~/Scripts/angular-animate.js",
+                "~/Scripts/highstock.js",
+                "~/Scripts/highcharts-ng.js",
+                "~/Scripts/loading-bar.js"
                 ));
 
         }
