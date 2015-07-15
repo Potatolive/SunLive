@@ -659,7 +659,8 @@
             chart: {
                 type: 'line',
                 zoomType: 'x'
-            }
+            },
+            navigator: { enabled: true }
         },
         series: [{
             name :"Message Count",
