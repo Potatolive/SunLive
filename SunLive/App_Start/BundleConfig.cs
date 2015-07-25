@@ -36,8 +36,9 @@ namespace SunLive
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                 "~/Content/bootstrap.css"
-                ,"~/Content/bootstrap-responsive.css"
+                , "~/Content/bootstrap-responsive.css"
                 , "~/Content/Style.css"
+                , "~/Content/CustomTheme.css"
                 ));
 
             bundles.Add(new StyleBundle("~/Content/themes/base/css").Include(

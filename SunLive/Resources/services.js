@@ -1,9 +1,9 @@
-﻿rndApp.factory('unverifiedService', function ($http, $q) {
+﻿rndApp.factory('chartService', function ($http, $q) {
     return {      
-        getAllUnverified: function () {
+        getUniqueChartData: function () {
             var deferred = $q.defer();
 
-            $http({ cache: true, method: 'GET', url: '/Text/FindUnverified' })
+            $http({ cache: true, method: 'GET', url: '/Analytics/GetUniqueTimeSeries' })
                 .success(function (data, status, headers, config) {
                     deferred.resolve(data);
                 })
@@ -13,11 +13,10 @@
                 });
             return deferred.promise;
         },
-        getUsageExamples: function (token) {
+        getPerDayInfo: function () {
             var deferred = $q.defer();
 
-            var tokenUrl = '/Text/FindUnverifiedExamples?token=' + token.AmbiguousWord;
-            $http({ cache: true, method: 'GET', url: tokenUrl })
+            $http({ cache: true, method: 'GET', url: '/Analytics/GetPerDayInfo' })
                 .success(function (data, status, headers, config) {
                     deferred.resolve(data);
                 })
@@ -27,6 +26,7 @@
                 });
             return deferred.promise;
         },
+        
         saveWordCorrection: function (word) {
             var deferred = $q.defer();
                        
@@ -39,48 +39,6 @@
                     deferred.reject(status);
                 });
 
-            return deferred.promise;
-        },
-        getNDC: function (token) {
-            var deferred = $q.defer();
-
-            var tokenUrl = '/Text/GetNDC?token=' + token;
-            $http({ cache: true, method: 'GET', url: tokenUrl })
-                .success(function (data, status, headers, config) {
-                    deferred.resolve(data);
-                })
-                .error(function (data, status, headers, config) {
-                    console.log(status);
-                    deferred.status(reject);
-                });
-            return deferred.promise;
-        },
-        getRxNorm: function (token, decider) {
-            var deferred = $q.defer();
-
-            var tokenUrl = '/Text/GetRxNORM?token=' + token + '&&isSuppressed=' + decider;
-            $http({ cache: true, method: 'GET', url: tokenUrl })
-                .success(function (data, status, headers, config) {
-                    deferred.resolve(data);
-                })
-                .error(function (data, status, headers, config) {
-                    console.log(status);
-                    deferred.status(reject);
-                });
-            return deferred.promise;
-        },
-        getMDDB: function (token) {
-            var deferred = $q.defer();
-
-            var tokenUrl = '/Text/GetMDDB?token=' + token;
-            $http({ cache: true, method: 'GET', url: tokenUrl })
-                .success(function (data, status, headers, config) {
-                    deferred.resolve(data);
-                })
-                .error(function (data, status, headers, config) {
-                    console.log(status);
-                    deferred.status(reject);
-                });
             return deferred.promise;
         },
     };
