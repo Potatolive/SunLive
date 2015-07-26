@@ -1,0 +1,51 @@
+﻿@{
+    Layout = null;
+}
+
+<h1></h1>
+<br />
+
+<div class="pull-right" ng-show="totalMessages">
+    <h3>Total Messages in selected time period: <b>{{totalMessages}}</b></h3>
+</div>
+<highchart id="chart1" config="uniqueDataChart"></highchart>
+
+<h2 style="text-align: center">{{selectedDay.dateTime | date:'EEEE, MMM d, y' }}</h2>
+<div class="col-sm-4">
+    <div>
+        <section class="panel panel-box">
+            <div class="panel-top bg-info pull-left">
+                <i class="fa fa-envelope-o text-large"></i>
+            </div>
+            <div class="panel-bottom bg-reverse">
+                <p class="size-h1">{{selectedDay.uniqueMessages}}</p>
+                <p class="text-muted">Unique Messages</p>
+            </div>
+        </section>
+    </div>
+    <div>
+            <section class="panel panel-box">
+                <div class="panel-top bg-success pull-left">
+                    <i class="fa fa-users text-large"></i>
+                </div>
+                <div class="panel-bottom bg-reverse">
+                    <p class="size-h1">{{selectedDay.uniqueUsers}}</p>
+                    <p class="text-muted">Unique Users</p>
+                </div>
+            </section>
+        </div>
+    <div>
+            <section class="panel panel-box">
+                <div class="panel-top bg-warning pull-left">
+                    <i class="fa fa-line-chart text-large"></i>
+                </div>
+                <div class="panel-bottom bg-reverse">
+                    <p class="size-h1">{{selectedDay.uniqueUsers}}</p>
+                    <p class="text-muted">Average Message Per User</p>
+                </div>
+            </section>
+        </div>
+    </div>
+<div class="col-sm-8">
+    <highchart id="dayInfo" config="dayInfoConfig"></highchart>
+</div>

@@ -268,12 +268,14 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AnalyticsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PostController.cs" />
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\JsonCamelCaseResult.cs" />
     <Compile Include="Hubs\MessageHub.cs" />
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\CropData.cs" />
@@ -287,6 +289,7 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\croppic.css" />
+    <Content Include="Content\CustomTheme.css" />
     <Content Include="Content\fancybox.css" />
     <Content Include="Content\font-awesome-ie7.css" />
     <Content Include="Content\font-awesome.css" />
@@ -425,6 +428,9 @@
     <Content Include="Scripts\angular-ui\ui-bootstrap.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\highcharts-ng.js" />
+    <Content Include="Scripts\highstock.js" />
+    <Content Include="Scripts\highstock.src.js" />
     <Content Include="Scripts\i18n\angular-locale_aa-dj.js" />
     <Content Include="Scripts\i18n\angular-locale_aa-er.js" />
     <Content Include="Scripts\i18n\angular-locale_aa-et.js" />
@@ -1186,6 +1192,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\knockout-2.2.0.debug.js" />
     <Content Include="Scripts\knockout-2.2.0.js" />
+    <Content Include="Scripts\loading-bar.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\npm.js" />
     <Content Include="Scripts\Site\isotope.js" />
@@ -1194,6 +1201,7 @@
     <Content Include="Scripts\Site\jquery.isotope.min.js" />
     <Content Include="Scripts\Site\jquery.placeholder.min.js" />
     <Content Include="Scripts\Site\Site.js" />
+    <Content Include="Scripts\ui-bootstrap-tpls-0.10.0.min.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -1228,6 +1236,9 @@
     <Content Include="Views\Shared\_BootStrapLayout.cshtml" />
     <Content Include="Views\Post\PartialPost.cshtml" />
     <Content Include="Views\Home\Error.cshtml" />
+    <Content Include="Views\Shared\_AngularLayout.cshtml" />
+    <Content Include="Views\Analytics\Index.cshtml" />
+    <Content Include="Views\Analytics\Dashboard.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Images\" />

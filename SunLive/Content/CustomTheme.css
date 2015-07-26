@@ -1,0 +1,279 @@
+﻿/* line 8, D:/Works/connectTrends/app/assets/stylesheets/ui/components/_panels.scss */
+.panel .panel-title {
+  font-size: 14px;
+}
+.panel-box {
+  display: table;
+  table-layout: fixed;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  border: none;
+}
+/* line 23, D:/Works/connectTrends/app/assets/stylesheets/ui/components/_panels.scss */
+.panel-box .panel-item {
+  display: table-cell;
+  padding: 30px;
+  width: 1%;
+  vertical-align: top;
+  border-radius: 0;
+}
+/* line 30, D:/Works/connectTrends/app/assets/stylesheets/ui/components/_panels.scss */
+.panel-box .panel-left {
+  -moz-border-radius-topleft: 2px;
+  -webkit-border-top-left-radius: 2px;
+  border-top-left-radius: 2px;
+  -moz-border-radius-bottomleft: 2px;
+  -webkit-border-bottom-left-radius: 2px;
+  border-bottom-left-radius: 2px;
+}
+/* line 33, D:/Works/connectTrends/app/assets/stylesheets/ui/components/_panels.scss */
+.panel-box .panel-right {
+  -moz-border-radius-topright: 2px;
+  -webkit-border-top-right-radius: 2px;
+  border-top-right-radius: 2px;
+  -moz-border-radius-bottomright: 2px;
+  -webkit-border-bottom-right-radius: 2px;
+  border-bottom-right-radius: 2px;
+}
+/* line 38, D:/Works/connectTrends/app/assets/stylesheets/ui/components/_panels.scss */
+.panel-box.info-box i {
+  line-height: 70px;
+}
+/* line 44, D:/Works/connectTrends/app/assets/stylesheets/ui/components/_panels.scss */
+.panel-box .panel-top,
+.panel-box .panel-bottom {
+  display: block;
+}
+/* line 47, D:/Works/connectTrends/app/assets/stylesheets/ui/components/_panels.scss */
+.panel-box .panel-top {
+  padding: 30px 20px;
+  -moz-border-radius-topleft: 2px;
+  -webkit-border-top-left-radius: 2px;
+  border-top-left-radius: 2px;
+  -moz-border-radius-topright: 2px;
+  -webkit-border-top-right-radius: 2px;
+  border-top-right-radius: 2px;
+}
+/* line 51, D:/Works/connectTrends/app/assets/stylesheets/ui/components/_panels.scss */
+.panel-box .panel-bottom {
+  padding: 10px;
+  -moz-border-radius-bottomleft: 2px;
+  -webkit-border-bottom-left-radius: 2px;
+  border-bottom-left-radius: 2px;
+  -moz-border-radius-bottomright: 2px;
+  -webkit-border-bottom-right-radius: 2px;
+  border-bottom-right-radius: 2px;
+}
+/* line 55, D:/Works/connectTrends/app/assets/stylesheets/ui/components/_panels.scss */
+.panel-box .panel-bottom p {
+  margin: 0;
+}
+/* line 60, D:/Works/connectTrends/app/assets/stylesheets/ui/components/_panels.scss */
+.panel-box .list-justified-container {
+  padding: 15px 0;
+}
+/* line 64, D:/Works/connectTrends/app/assets/stylesheets/ui/components/_panels.scss */
+.panel-box ul.list-justified {
+  display: table;
+  width: 100%;
+  list-style: none;
+  padding: 0;
+}
+/* line 70, D:/Works/connectTrends/app/assets/stylesheets/ui/components/_panels.scss */
+.panel-box ul.list-justified > li {
+  float: none;
+  display: table-cell;
+  padding: 10px;
+  width: 1%;
+  border-right: 1px solid #eeeeee;
+}
+/* line 76, D:/Works/connectTrends/app/assets/stylesheets/ui/components/_panels.scss */
+.panel-box ul.list-justified > li:last-child {
+  border: none;
+}
+/* line 80, D:/Works/connectTrends/app/assets/stylesheets/ui/components/_panels.scss */
+.panel-box ul.list-justified > li p {
+  margin: 0;
+}
+/* line 86, D:/Works/connectTrends/app/assets/stylesheets/ui/components/_panels.scss */
+.panel-box .panel-icon {
+  display: block;
+  margin: -75px auto 0;
+  padding: 28px 35px 35px;
+  border-radius: 50%;
+  border: 10px solid white;
+  width: 150px;
+  height: 150px;
+  line-height: 80px;
+  text-align: center;
+  font-size: 58px;
+  text-shadow: -6px 8px 5px rgba(0, 0, 0, 0.3);
+}
+
+/* line 15, D:/Works/connectTrends/app/assets/stylesheets/ui/components/_type.scss */
+.text-small {
+  font-size: 12px;
+}
+
+/* line 16, D:/Works/connectTrends/app/assets/stylesheets/ui/components/_type.scss */
+.text-normal {
+  font-size: 14px;
+}
+
+/* line 17, D:/Works/connectTrends/app/assets/stylesheets/ui/components/_type.scss */
+.text-huge {
+  font-size: 72px;
+}
+
+/* line 18, D:/Works/connectTrends/app/assets/stylesheets/ui/components/_type.scss */
+.text-large {
+  font-size: 50px;
+}
+
+/* line 19, D:/Works/connectTrends/app/assets/stylesheets/ui/components/_type.scss */
+.size-h1 {
+  font-size: 36px;
+}
+
+/* line 20, D:/Works/connectTrends/app/assets/stylesheets/ui/components/_type.scss */
+.size-h2 {
+  font-size: 30px;
+}
+
+/* line 21, D:/Works/connectTrends/app/assets/stylesheets/ui/components/_type.scss */
+.size-h3 {
+  font-size: 24px;
+}
+
+/* line 22, D:/Works/connectTrends/app/assets/stylesheets/ui/components/_type.scss */
+.size-h4 {
+  font-size: 18px;
+}
+
+/* line 23, D:/Works/connectTrends/app/assets/stylesheets/ui/components/_type.scss */
+.text-thin {
+  font-weight: 300;
+}
+
+/* line 24, D:/Works/connectTrends/app/assets/stylesheets/ui/components/_type.scss */
+.text-ultralight {
+  font-weight: 100;
+}
+
+
+/* line 85, D:/Works/connectTrends/app/assets/stylesheets/bootstrap-sass/bootstrap/_type.scss */
+.text-left {
+  text-align: left;
+}
+
+/* line 86, D:/Works/connectTrends/app/assets/stylesheets/bootstrap-sass/bootstrap/_type.scss */
+.text-right {
+  text-align: right;
+}
+
+/* line 87, D:/Works/connectTrends/app/assets/stylesheets/bootstrap-sass/bootstrap/_type.scss */
+.text-center {
+  text-align: center;
+}
+
+/* line 88, D:/Works/connectTrends/app/assets/stylesheets/bootstrap-sass/bootstrap/_type.scss */
+.text-justify {
+  text-align: justify;
+}
+
+/* line 91, D:/Works/connectTrends/app/assets/stylesheets/bootstrap-sass/bootstrap/_type.scss */
+.text-muted {
+  color: #999999;
+}
+
+/* line 605, D:/Works/connectTrends/app/assets/stylesheets/bootstrap-sass/bootstrap/_mixins.scss */
+.text-primary {
+  color: #1c7ebb;
+}
+
+
+/* line 28, D:/Works/connectTrends/app/assets/stylesheets/ui/components/_scaffolding.scss */
+.bg-primary {
+  background-color: #1c7ebb;
+  color: white;
+}
+
+/* line 32, D:/Works/connectTrends/app/assets/stylesheets/ui/components/_scaffolding.scss */
+.bg-primary-light {
+  background-color: #449dd5;
+  color: white;
+}
+
+/* line 36, D:/Works/connectTrends/app/assets/stylesheets/ui/components/_scaffolding.scss */
+.bg-success {
+  background-color: #23ae89;
+  color: white;
+}
+
+/* line 40, D:/Works/connectTrends/app/assets/stylesheets/ui/components/_scaffolding.scss */
+.bg-info {
+  background-color: #2ec1cc;
+  color: white;
+}
+
+/* line 44, D:/Works/connectTrends/app/assets/stylesheets/ui/components/_scaffolding.scss */
+.bg-warning {
+  background-color: #ffb61c;
+  color: white;
+}
+
+/* line 48, D:/Works/connectTrends/app/assets/stylesheets/ui/components/_scaffolding.scss */
+.bg-danger {
+  background-color: #e94b3b;
+  color: white;
+}
+
+/* line 53, D:/Works/connectTrends/app/assets/stylesheets/ui/components/_scaffolding.scss */
+.bg-orange {
+  background-color: #f98e33;
+  color: white;
+}
+
+/* line 57, D:/Works/connectTrends/app/assets/stylesheets/ui/components/_scaffolding.scss */
+.bg-violet {
+  background-color: #6a55c2;
+  color: white;
+}
+
+/* line 62, D:/Works/connectTrends/app/assets/stylesheets/ui/components/_scaffolding.scss */
+.bg-dark {
+  background-color: #222533;
+  color: white;
+}
+
+/* line 66, D:/Works/connectTrends/app/assets/stylesheets/ui/components/_scaffolding.scss */
+.bg-bright {
+  background-color: #fafafa;
+  color: #767676;
+}
+
+/* line 70, D:/Works/connectTrends/app/assets/stylesheets/ui/components/_scaffolding.scss */
+.bg-reverse {
+  background-color: white;
+  color: #767676;
+}
+
+/* line 75, D:/Works/connectTrends/app/assets/stylesheets/ui/components/_scaffolding.scss */
+.bg-facebook {
+  background-color: #335397;
+  color: white;
+}
+
+/* line 79, D:/Works/connectTrends/app/assets/stylesheets/ui/components/_scaffolding.scss */
+.bg-twitter {
+  background-color: #00c7f7;
+  color: white;
+}
+
+/* line 83, D:/Works/connectTrends/app/assets/stylesheets/ui/components/_scaffolding.scss */
+.bg-google-plus {
+  background-color: #df4a32;
+  color: white;
+}
+

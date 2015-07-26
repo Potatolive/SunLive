@@ -36,8 +36,9 @@ namespace SunLive
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                 "~/Content/bootstrap.css"
-                ,"~/Content/bootstrap-responsive.css"
+                , "~/Content/bootstrap-responsive.css"
                 , "~/Content/Style.css"
+                , "~/Content/CustomTheme.css"
                 ));
 
             bundles.Add(new StyleBundle("~/Content/themes/base/css").Include(
@@ -63,7 +64,10 @@ namespace SunLive
                 "~/Scripts/angular-loader.js",
                 "~/Scripts/angular-resource.js",
                 "~/Scripts/angular-sanitize.js",
-                "~/Scripts/angular-animate.js"
+                "~/Scripts/angular-animate.js",
+                "~/Scripts/highstock.js",
+                "~/Scripts/highcharts-ng.js",
+                "~/Scripts/loading-bar.js"
                 ));
 
         }
