@@ -5,6 +5,9 @@
 <h1></h1>
 <br />
 
+<div class="pull-right" ng-show="totalMessages">
+    <h3>Total Messages in selected time period: <b>{{totalMessages}}</b></h3>
+</div>
 <highchart id="chart1" config="uniqueDataChart"></highchart>
 
 <h2 style="text-align: center">{{selectedDay.dateTime | date:'EEEE, MMM d, y' }}</h2>

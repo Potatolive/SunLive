@@ -1,7 +1,11 @@
 ﻿rndApp.controller('dashboardController', function ($scope, $location, $filter, chartService) {
     
 
-    $scope.current = { date: '', value: '' };
+    $scope.paintTotalMessages = function (fromdate, toDate) {
+        chartService.getTotalMessages(fromdate, toDate).then(function (data) {
+            $scope.totalMessages = data;
+        });
+    };
 
     $scope.paintPerDayInfo = function (selectedDay) {
         $scope.dayInfoConfig = {
@@ -82,15 +86,19 @@
         $scope.$apply();
     }
     
-
+    
+ 
     chartService.getPerDayInfo().then(function (data) {
         $scope.categories = data.categories;
         $scope.perDayInfo = data.perDayInfo;
 
+        var firstAvailableDay = data.perDayInfo[0];
         var lastAvailableDay = data.perDayInfo[data.perDayInfo.length - 1];
         $scope.selectedDay = lastAvailableDay;
 
         $scope.paintPerDayInfo(lastAvailableDay);
+
+        $scope.paintTotalMessages(firstAvailableDay.dateTime, lastAvailableDay.dateTime);
 
     });
     
@@ -104,8 +112,18 @@
                 chart: {
                     type: 'line',
                     zoomType: 'x',
+                    //events: {
+                    //    selection: function (event) {
+                    //        if (event.xAxis) {
+                    //            console.log(event.xAxis[0].min + " -----" + event.xAxis[0].max);
+                    //        } else {
+                    //            console.log('Selection reset');
+                    //        }
+                    //    }
+                    //}
 
                 },
+
                 colors: ['#7cb5ec', '#2b908f'],
 
                 plotOptions: {
@@ -115,7 +133,7 @@
                             events: {
                                 click: function () {
                                     $scope.dayClickOnChart(this);
-                                }
+                                },
                             }
                         }
                     }
@@ -126,9 +144,17 @@
 
             series: incomingData,
             title: {
-                text: 'Time Series: Messages'
+                text: 'Time Series: Messages & Users'
             },
-            xAxis: { type: 'datetime' },
+            xAxis: {
+                type: 'datetime',
+                events: {
+                    setExtremes: function(e)
+                    {
+                        $scope.paintTotalMessages(e.min, e.max);
+                    }
+                }
+            },
             loading: false,
             useHighStocks: true,
             loading: false,

@@ -52,6 +52,13 @@ namespace SunLive.Controllers
             return new JsonCamelCaseResult(result, JsonRequestBehavior.AllowGet);
         }
 
+        public long GetTotalMessages(double fromDate, double toDate)
+        {
+            //Include both from and to dates in calculation.. 
+            var rnd = new Random();
+            return rnd.Next(0, 100);
+        }
+
         public ActionResult GetPerDayInfo()
         {
             var result = new List<PerDayInfo>();
