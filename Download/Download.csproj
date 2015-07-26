@@ -88,10 +88,16 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Downloader\Downloader.csproj">
+      <Project>{22809a75-4d46-4f98-9ff6-b5bf9f645d8d}</Project>
+      <Name>Downloader</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Model\Model.csproj">
       <Project>{535aa202-715e-4ad0-ad41-fab08b82bd03}</Project>
       <Name>Model</Name>
