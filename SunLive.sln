@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30501.0
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SunLive", "SunLive\SunLive.csproj", "{9800458B-9CC3-43E7-BB6C-673AE49DEC78}"
 EndProject
@@ -10,6 +10,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Download", "Download\Download.csproj", "{AA7CF053-5EFB-4AEE-863F-1D51B37CBC1A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataLoader", "DataLoader\DataLoader.csproj", "{472DCB21-30F4-479E-8A20-752845C71F89}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Downloader", "Downloader\Downloader.csproj", "{22809A75-4D46-4F98-9FF6-B5BF9F645D8D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{472DCB21-30F4-479E-8A20-752845C71F89}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{472DCB21-30F4-479E-8A20-752845C71F89}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{472DCB21-30F4-479E-8A20-752845C71F89}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22809A75-4D46-4F98-9FF6-B5BF9F645D8D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22809A75-4D46-4F98-9FF6-B5BF9F645D8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22809A75-4D46-4F98-9FF6-B5BF9F645D8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22809A75-4D46-4F98-9FF6-B5BF9F645D8D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
