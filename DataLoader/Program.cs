@@ -9,6 +9,7 @@ namespace DataLoader
     {
         static void Main(string[] args)
         {
+            MongoClient client = new MongoClient(connectionString);
         }
     }
 }
