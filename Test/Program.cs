@@ -67,7 +67,7 @@ namespace Test
 
             var result = coll.Aggregate()
                 .Match("{ PublishedOnDateTime: { $gt: ISODate(\"" + startDate + "\"), $lte: ISODate(\"" + endDate + "\") } }")
-                .Project("{_id : \"$_id\",dt : { $substr: [\"$PublishedOnDateTime\", 0, 10] },bucket: \"$bucket12\"}")
+                .Project("{_id : \"$_id\",dt : { $substr: [\"$PublishedOnDateTime\", 0, 13] },bucket: \"$bucket12\"}")
                 .Group("{_id: { dt: \"$dt\", bucket: \"$bucket\"},messages: { $sum: 1 }}")
                 .Sort("{ _id : 1 }");
 
