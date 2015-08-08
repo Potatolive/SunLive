@@ -112,7 +112,4 @@ namespace SunLive.Controllers
 
       
     }
-
-    
-
 }
