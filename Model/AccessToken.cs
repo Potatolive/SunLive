@@ -13,5 +13,13 @@ namespace Sunlive.Entities
         public string token { get; set; }
 
         public string userlist { get; set; }
+
+        public string client_id { get; set; }
+
+        public string client_secret { get; set; }
+
+        public DateTime expires { get; set; }
+
+        public string access_token { get; set; }
     }
 }

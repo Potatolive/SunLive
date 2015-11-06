@@ -2,22 +2,42 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Downloader
 {
     static class TextParts
     {
-        public static List<List<string>> getParts(string content, string publishedBy, int MAX_CHAR, int MAX_LINE)
+        public static List<List<string>> getParts(string content, string publishedBy, int MAX_CHAR, int MAX_LINE, bool multiParts)
         {
             string publishedByFirstName = publishedBy.Split(' ')[0];
 
-            List<string> lines = createLines(content, publishedByFirstName, MAX_CHAR, MAX_LINE);
-            var parts = createParts(lines, MAX_LINE);
-            return addPublishedByAndPartNumber(parts, publishedByFirstName);
+            try
+            {
+                List<string> lines = createLines(content, publishedByFirstName, MAX_CHAR, MAX_LINE);
+                var parts = createParts(lines, MAX_LINE);
+
+                if(parts.Count > MAX_LINE)
+                {
+                    parts.RemoveRange(MAX_LINE, parts.Count - MAX_LINE);
+                }
+
+                if (!multiParts)
+                {
+                    parts = new List<List<string>>() { parts[0] };
+                }
+
+                return addPublishedByAndPartNumber(parts, publishedByFirstName, MAX_CHAR, MAX_LINE);
+            }
+            catch (Exception ex)
+            {
+                List<List<string>> parts = new List<List<string>>() { new List<string>() { " " } };
+                return addPublishedByAndPartNumber(parts, publishedByFirstName, MAX_CHAR, MAX_LINE);
+            }
         }
 
-        private static List<List<string>> addPublishedByAndPartNumber(List<List<string>> parts, string publishedBy)
+        private static List<List<string>> addPublishedByAndPartNumber(List<List<string>> parts, string publishedBy, int MAX_CHAR, int MAX_LINE)
         {
             int partCount = 0;
             foreach (var part in parts)
@@ -27,14 +47,34 @@ namespace Downloader
                 {
                     if (i + 1 == part.Count)
                     {
+
+                        publishedBy = Regex.Replace(publishedBy, @"[^\u0000-\u007F]", string.Empty);
+
+                        string publishedByText = string.Empty;
+
                         if (parts.Count > 1)
                         {
-                            part[i] += "[" + partCount + "/" + (parts.Count) + "] - " + publishedBy;
+                            publishedByText = "[" + partCount + "/" + (parts.Count) + "] - " + publishedBy;
                         }
                         else
                         {
-                            part[i] += " - " + publishedBy;
+                            publishedByText = " - " + publishedBy;
                         }
+
+                        if (part.Count < MAX_LINE && !string.IsNullOrWhiteSpace(part[i]))
+                        {
+                            part.Add(" - " + publishedBy);
+                        }
+                        else
+                        {
+                            if (part[i] != null && part[i].Length + publishedByText.Length > MAX_CHAR)
+                            {
+                                part[i] = part[i].Substring(0, MAX_CHAR - publishedByText.Length);
+                            }
+
+                            part[i] += publishedByText;
+                        }
+                        break;
                     }
                 }
             }
@@ -71,7 +111,10 @@ namespace Downloader
 
         private static List<string> createLines(string textContent, string publishedBy, int MAX_CHAR, int MAX_LINE)
         {
-            if (string.IsNullOrWhiteSpace(textContent)) return new List<string>() { publishedBy };
+            if (string.IsNullOrWhiteSpace(textContent)) return new List<string>() { string.Empty };
+
+            textContent = textContent.Replace('\n', ' ').Replace('\t', ' ');
+            textContent = Regex.Replace(textContent, @"[^\u0000-\u007F]", string.Empty);
 
             var lines = new List<string>();
             var currentLine = String.Empty;
@@ -86,14 +129,15 @@ namespace Downloader
                     if (!String.IsNullOrWhiteSpace(currentLine))
                     {
                         lines.Add(currentLine);
-                        currentLine = "";
                     }
+
+                    currentLine = "";
 
                     lines.Add(word.Substring(0, MAX_CHAR - 1));
 
-                    if (word.Length <= 2 * MAX_CHAR)
+                    if (word.Length >= MAX_CHAR)
                     {
-                        currentLine = word.Substring(MAX_CHAR - 1, word.Length - MAX_CHAR - 1) + ' ';
+                        currentLine = word.Substring(MAX_CHAR, word.Length - MAX_CHAR) + ' ';
                     }
 
                     continue;
@@ -101,7 +145,10 @@ namespace Downloader
 
                 if ((String.Format("{0} {1}", currentLine, w).Length > (((lines.Count + 1) % MAX_LINE == 0) ? (MAX_CHAR - publishedBy.Length - 5) : MAX_CHAR)))
                 {
-                    lines.Add(currentLine);
+                    if (!String.IsNullOrWhiteSpace(currentLine))
+                    {
+                        lines.Add(currentLine);
+                    }
                     currentLine = "";
                 }
 

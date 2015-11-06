@@ -318,7 +318,7 @@ namespace SunLive.Controllers
 
         private void UpdateAccessToken(UserProfile userProfile)
         {
-            try
+            /*try
             {
                 string connectionString = ConfigurationManager.AppSettings["connectionString"].ToString();
 
@@ -334,7 +334,7 @@ namespace SunLive.Controllers
             catch (Exception ex)
             {
                 ModelState.AddModelError("Access Token", "Unable to update access token.");
-            }
+            }*/
         }
 
         //

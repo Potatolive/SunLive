@@ -13,7 +13,7 @@ namespace Downloader
 {
     public static class DownLoad
     {
-        public static void processDownload(IMongoDatabase myDB, string directoryPath, int MAX_CHAR, int MAX_LINE, string HASHTAG)
+        public static void processDownload(IMongoDatabase myDB, string directoryPath, int MAX_CHAR, int MAX_LINE, string HASHTAG, bool multiParts)
         {
             var collection = myDB.GetCollection<FanPost>("fanposts");
 
@@ -27,9 +27,15 @@ namespace Downloader
             {
                 foreach (FanPost post in posts.Result)
                 {
+
+                    Guid guid = Guid.NewGuid();
+
+                    var filterPost = Builders<FanPost>.Filter.Eq("_id", post._id);
+                    var update = Builders<FanPost>.Update.Set("Status", "Downloaded").Set("FileName", guid.ToString());
+                    var result = collection.FindOneAndUpdateAsync<FanPost>(filterPost, update);
+
                     if (!string.IsNullOrEmpty(post.ImageURL))
                     {
-                        Guid guid = Guid.NewGuid();
 
                         string outputDir = "output";
 
@@ -51,13 +57,14 @@ namespace Downloader
 
                         string textContent = removeHashTag(post.TextContent, HASHTAG);
 
-                        List<List<string>> parts = TextParts.getParts(textContent, post.PublishedBy.Split(' ')[0], MAX_CHAR, MAX_LINE);
+                        List<List<string>> parts = TextParts.getParts(textContent, post.PublishedBy.Split(' ')[0], MAX_CHAR, MAX_LINE, multiParts);
 
                         int partNumber = 0;
 
                         foreach (var part in parts)
                         {
-                            try 
+                            
+                            try
                             {
                                 string directory = directoryPath + "/" + outputDir + "/";
                                 string fileName = guid + "_" + partNumber++;
@@ -70,14 +77,10 @@ namespace Downloader
                             }
                             catch (Exception ex)
                             {
-                                throw;
+                                
                             }
-                            finally
-                            {
-                                var filterPost = Builders<FanPost>.Filter.Eq("_id", post._id);
-                                var update = Builders<FanPost>.Update.Set("Status", "Downloaded").Set("FileName", guid.ToString());
-                                var result = collection.FindOneAndUpdateAsync<FanPost>(filterPost, update);
-                            }
+
+                            result.Wait();
                         }
 
                         
@@ -90,9 +93,11 @@ namespace Downloader
         {
             if (string.IsNullOrWhiteSpace(textcontent) || string.IsNullOrWhiteSpace(HASHTAG)) return textcontent;
 
-            Regex regEx = new Regex(HASHTAG,
+            Regex regEx = new Regex(@"(?<=#)\w+",
                 RegexOptions.IgnoreCase | RegexOptions.Multiline);
-            return regEx.Replace(textcontent, string.Empty);
+            string withoutHashtag = regEx.Replace(textcontent, string.Empty);
+
+            return withoutHashtag.Replace('#', ' ');
         }
 
         private static void downloadText(string textContentFilename, List<string> lines)
