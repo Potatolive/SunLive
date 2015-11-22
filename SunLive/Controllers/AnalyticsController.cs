@@ -17,19 +17,25 @@ using System.Web.Mvc;
 
 namespace SunLive.Controllers
 {
+    [Authorize]
     public class AnalyticsController : Controller
     {
-        IMongoDatabase MongoDB = null;
+        
+        //IMongoDatabase MongoDB = null;
 
-        public AnalyticsController()
+
+        public IMongoDatabase GetDatabase(string pageName)
         {
             string connectionString = ConfigurationManager.AppSettings["connectionString"].ToString();
             MongoClient client = new MongoClient(connectionString);
 
+            return client.GetDatabase(pageName);
+        }
+
+        public AnalyticsController()
+        {
             //Need to make this config driven
-            MongoDB = client.GetDatabase("Testing");
-
-
+            //MongoDB = client.GetDatabase("AdithyaTV");
         }
         public ActionResult Index()
         {
@@ -41,14 +47,16 @@ namespace SunLive.Controllers
             return View();
         }
 
-        ChartSeries FetchDailyMessages(string startDate, string endDate)
+        ChartSeries FetchDailyMessages(string pageName, string startDate, string endDate)
         {
+            IMongoDatabase MongoDB = GetDatabase(pageName);
+
             var coll = MongoDB.GetCollection<FanPost>("fanposts");
 
             var temp = coll.Aggregate();
 
             if (!string.IsNullOrEmpty(startDate)
-          && !string.IsNullOrEmpty(endDate))
+                && !string.IsNullOrEmpty(endDate))
             {
                 temp = temp.Match("{ PublishedOn: { $gt: \"" + startDate + "\", $lte: \"" + endDate + "\" } }");
             }
@@ -78,8 +86,10 @@ namespace SunLive.Controllers
             return series;
         }
 
-        ChartSeries FetchDailyUsers(string startDate, string endDate)
+        ChartSeries FetchDailyUsers(string pageName, string startDate, string endDate)
         {
+            IMongoDatabase MongoDB = GetDatabase(pageName);
+
             var coll = MongoDB.GetCollection<FanPost>("fanposts");
 
             var temp = coll.Aggregate();
@@ -116,8 +126,10 @@ namespace SunLive.Controllers
             return series;
         }
 
-        public List<BsonDocument> FetchMessagePerTimeSlot(string startDate, string endDate)
+        public List<BsonDocument> FetchMessagePerTimeSlot(string pageName, string startDate, string endDate)
         {
+            IMongoDatabase MongoDB = GetDatabase(pageName);
+
             var coll = MongoDB.GetCollection<FanPost>("fanposts");
 
             var temp = coll.Aggregate();
@@ -142,12 +154,12 @@ namespace SunLive.Controllers
             return list.Result;
         }
 
-        public ActionResult GetUniqueTimeSeries()
+        public ActionResult GetUniqueTimeSeries(string pageName)
         {
             var result = new List<ChartSeries>();
 
-            result.Add(FetchDailyUsers(null, null)); //"2015-06-16", "2015-07-16"));
-            result.Add(FetchDailyMessages(null, null)); //"2015-06-16", "2015-07-16"));
+            result.Add(FetchDailyUsers(pageName, null, null)); //"2015-06-16", "2015-07-16"));
+            result.Add(FetchDailyMessages(pageName, null, null)); //"2015-06-16", "2015-07-16"));
 
             return new JsonCamelCaseResult(result, JsonRequestBehavior.AllowGet);
         }

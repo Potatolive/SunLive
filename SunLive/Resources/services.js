@@ -1,9 +1,9 @@
-﻿rndApp.factory('chartService', function ($http, $q) {
+﻿rndApp.factory('chartService', function ($http, $q, $routeParams) {
     return {      
         getUniqueChartData: function () {
             var deferred = $q.defer();
 
-            $http({ cache: true, method: 'GET', url: '/Analytics/GetUniqueTimeSeries' })
+            $http({ cache: true, method: 'GET', url: '/Analytics/GetUniqueTimeSeries?pageName=' + $routeParams.pageName})
                 .success(function (data, status, headers, config) {
                     deferred.resolve(data);
                 })
