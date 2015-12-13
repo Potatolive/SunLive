@@ -1,4 +1,4 @@
-﻿rndApp.controller('dashboardController', function ($scope, $location, $filter, chartService) {
+﻿rndApp.controller('dashboardController', ['$scope', '$location', '$filter', 'chartService', function ($scope, $location, $filter, chartService) {
     
 
     $scope.paintTotalMessages = function (fromdate, toDate) {
@@ -135,7 +135,10 @@
                                     $scope.dayClickOnChart(this);
                                 },
                             }
-                        }
+                        },
+                        dataLabels: {
+                            enabled: true
+                        },
                     }
                 },
                 navigator: { enabled: true }
@@ -165,4 +168,4 @@
         };
     });
         
-});
+}]);

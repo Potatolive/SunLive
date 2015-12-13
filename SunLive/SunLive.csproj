@@ -419,6 +419,7 @@
     <Content Include="Scripts\angular.min.js.map" />
     <None Include="Properties\PublishProfiles\ganegeee - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\ganegeee - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\Localhost.pubxml" />
     <None Include="Properties\PublishProfiles\potatolive - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\potatolive - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\sunlive - FTP %282%29.pubxml" />

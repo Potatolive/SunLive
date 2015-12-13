@@ -5,9 +5,16 @@
     ERROR: 4
 };
 
-var rndApp = angular.module("rndApp", ["ngRoute", "ui.bootstrap", "chieffancypants.loadingBar", "services.hub", "highcharts-ng"]);
+var rndApp = angular.module("rndApp",
+    [
+        "ngRoute",
+        "ui.bootstrap",
+        "chieffancypants.loadingBar",
+        //"services.hub",
+        "highcharts-ng"
+    ]);
 
-rndApp.config(function ($routeProvider, cfpLoadingBarProvider) {
+rndApp.config(["$routeProvider", "cfpLoadingBarProvider",function ($routeProvider, cfpLoadingBarProvider) {
     $routeProvider
         .when("/", {
             templateUrl: "/Analytics/Dashboard",
@@ -17,6 +24,4 @@ rndApp.config(function ($routeProvider, cfpLoadingBarProvider) {
             templateUrl: "/Analytics/Dashboard",
             controller: "dashboardController"
         });
-});
-
-
+}]);

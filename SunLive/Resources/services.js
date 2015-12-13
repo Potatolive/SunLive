@@ -1,4 +1,4 @@
-﻿rndApp.factory('chartService', function ($http, $q, $routeParams) {
+﻿rndApp.factory('chartService', ['$http', '$q', '$routeParams', function ($http, $q, $routeParams) {
     return {      
         getUniqueChartData: function () {
             var deferred = $q.defer();
@@ -55,4 +55,4 @@
             return deferred.promise;
         },
     };
-});
+}]);

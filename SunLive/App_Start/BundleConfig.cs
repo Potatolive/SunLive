@@ -56,7 +56,16 @@ namespace SunLive
                         "~/Content/themes/base/jquery.ui.theme.css",
                         "~/Content/site.css"));
 
-            bundles.Add(new ScriptBundle("~/Resources").IncludeDirectory("~/Resources","*.js", true));
+            //bundles.Add(new ScriptBundle("~/AngularResources").IncludeDirectory("~/Resources","*.js", true));
+
+            /*bundles.Add(new ScriptBundle("~/bundles/angularResources").Include(
+                "~/Scripts/app.js",
+                "~/Scripts/controllers.js",
+                "~/Scripts/directives.js",
+                "~/Scripts/filters.js",
+                "~/Scripts/services.js"
+            ));*/
+
             bundles.Add(new ScriptBundle("~/bundles/angular").Include(
                 "~/Scripts/angular.js",
                 "~/Scripts/angular-route.js",
@@ -69,7 +78,6 @@ namespace SunLive
                 "~/Scripts/highcharts-ng.js",
                 "~/Scripts/loading-bar.js"
                 ));
-
         }
     }
 }
