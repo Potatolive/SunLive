@@ -2711,7 +2711,6 @@ nav{
  .navbar-brand{
             padding-top: 2px;
         }
-        }
 
  hr{
     margin:5px;
@@ -2731,3 +2730,9 @@ nav{
     margin-top:50px;
 }
 
+.profileimg {
+    width: 50px !important;
+    height: 50px !important;
+    margin-right: 5px;
+    float: left;
+}

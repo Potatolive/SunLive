@@ -72,6 +72,9 @@ namespace Downloader
                                 var imageFilename = Path.Combine(directory, fileName + ".jpg");
                                 downloadImage(imageFilename, url);
 
+                                var profileImageFilename = Path.Combine(directory, fileName + ".profileimage.jpg");
+                                downloadImage(profileImageFilename, post.PublishedByUrl);
+
                                 var textContentFilename = Path.Combine(directory, fileName + ".txt");
                                 downloadText(textContentFilename, part);
                             }

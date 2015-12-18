@@ -21,9 +21,12 @@
 <div id="item_@item._id" class="span3 item @item.Status grid-item">
     <p class="number "></p>
     <div class="picture">
-        <div style="margin-bottom: 5px">
-            <span><i class="icon-calendar"></i>@Html.DisplayFor(modelItem => item.PublishedOn)</span>
-            <span class="pull-right"><i class="icon-user"></i> <a href="#">@item.PublishedBy</a></span>
+        <div style="height: 50px; margin-bottom: 5px">
+            <span><img id="prfoile_img_@item._id" src="@item.PublishedByUrl" alt="" class="profileimg"/></span>
+            <div style="margin-left: 5px;">
+                <div><i class="icon-user"></i> <a href="#">@item.PublishedBy</a></div>
+                <div><i class="icon-calendar"></i>@Html.DisplayFor(modelItem => item.PublishedOn)</div>
+            </div>
         </div>
 
 

@@ -20,6 +20,10 @@ namespace Sunlive.Entities
         public DateTime PublishedOn { get; set; }
         public string PublishedBy { get; set; }
 
+        public string PublishedById { get; set; }
+
+        public string PublishedByUrl { get; set; }
+
         public string Status { get; set; }
 
         public string FileName { get; set; }
