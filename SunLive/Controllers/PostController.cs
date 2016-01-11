@@ -274,7 +274,7 @@ namespace SunLive.Controllers
                                 Image OriginalImage = null;
 
                                 var directoryPath = Server.MapPath("~");
-                                var imageFilename = Path.Combine(directoryPath, "Output/" + fileName + ".jpg");
+                                var imageFilename = Path.Combine(directoryPath, "Content/" + fileName + ".jpg");
 
                                 try
                                 {
@@ -337,7 +337,7 @@ namespace SunLive.Controllers
                 }
 
                 string dns = ConfigurationManager.AppSettings["dns"].ToString();
-                var croppedImageURL = dns + "Output/" + fileName + ".jpg";
+                var croppedImageURL = dns + "Content/" + fileName + ".jpg";
                 var update = Builders<FanPost>.Update.Set("CroppedImageURL", croppedImageURL);
 
                 collection.FindOneAndUpdateAsync(filter, update);

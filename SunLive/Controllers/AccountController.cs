@@ -253,10 +253,10 @@ namespace SunLive.Controllers
 
                             if (user != null)
                             {
-                                user.AccessToken = accessToken;
-                                db.SaveChanges();
+                                //user.AccessToken = accessToken;
+                                //db.SaveChanges();
 
-                                UpdateAccessToken(user);
+                                //UpdateAccessToken(user);
                             }
                         }
                     }   
@@ -363,7 +363,8 @@ namespace SunLive.Controllers
                     if (user == null)
                     {
                         // Insert name into the profile table
-                        UserProfile newUserProfile = new UserProfile { UserName = model.UserName, AccessToken = model.AccessToken };
+                        //UserProfile newUserProfile = new UserProfile { UserName = model.UserName, AccessToken = model.AccessToken };
+                        UserProfile newUserProfile = new UserProfile { UserName = model.UserName };
                         db.UserProfiles.Add(newUserProfile);
                         db.SaveChanges();
 

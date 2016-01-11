@@ -422,11 +422,13 @@
     <None Include="Properties\PublishProfiles\Localhost.pubxml" />
     <None Include="Properties\PublishProfiles\potatolive - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\potatolive - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\socialtv.pubxml" />
     <None Include="Properties\PublishProfiles\sunlive - FTP %282%29.pubxml" />
     <None Include="Properties\PublishProfiles\sunlive - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\sunlive - Web Deploy %282%29.pubxml" />
     <None Include="Properties\PublishProfiles\sunlive - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\sunlive2.pubxml" />
+    <None Include="Properties\PublishProfiles\sunlivenew.pubxml" />
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
     <Content Include="Icon.png" />
     <Content Include="Scripts\angular-ui\ui-bootstrap-tpls.js" />

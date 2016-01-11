@@ -77,6 +77,13 @@ namespace Downloader
 
                                 var textContentFilename = Path.Combine(directory, fileName + ".txt");
                                 downloadText(textContentFilename, part);
+
+                                List<string> publishedByFirstName = new List<string>();
+                                publishedByFirstName.Add(post.PublishedBy.Split(' ')[0]);
+
+                                var textProfileFilename = Path.Combine(directory, fileName + ".profile.txt");
+                                downloadText(textProfileFilename, publishedByFirstName);
+
                             }
                             catch (Exception ex)
                             {

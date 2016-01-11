@@ -234,7 +234,7 @@ namespace SunLive.Controllers
                                 Image OriginalImage = null;
 
                                 var directoryPath = Server.MapPath("~");
-                                var imageFilename = Path.Combine(directoryPath, "Output/" + fileName + ".jpg");
+                                var imageFilename = Path.Combine(directoryPath, "Content/" + fileName + ".jpg");
 
                                 if(string.IsNullOrEmpty(post.CroppedImageURL))
                                 {
@@ -297,7 +297,7 @@ namespace SunLive.Controllers
                 }
 
                 string dns = ConfigurationManager.AppSettings["dns"].ToString();
-                var update = Builders<FanPost>.Update.Set("CroppedImageURL", dns + "Output/" + fileName + ".jpg");
+                var update = Builders<FanPost>.Update.Set("CroppedImageURL", dns + "Content/" + fileName + ".jpg");
 
                 collection.FindOneAndUpdateAsync(filter, update);
             
@@ -307,7 +307,7 @@ namespace SunLive.Controllers
                 throw new Exception("Image could not be cropped. Internal error. Please try again!");
             }
 
-            return "Output/" + fileName + ".jpg";
+            return "Content/" + fileName + ".jpg";
         }
 
         [HttpPost]

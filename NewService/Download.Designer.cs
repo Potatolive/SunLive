@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            this.ServiceName = "SunLiveDownloaderV3";
+            this.ServiceName = "SunLiveDownloaderV5";
         }
 
         #endregion

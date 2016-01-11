@@ -22,7 +22,7 @@
     <p class="number "></p>
     <div class="picture">
         <div style="height: 50px; margin-bottom: 5px">
-            <span><img id="prfoile_img_@item._id" src="@item.PublishedByUrl" alt="" class="profileimg"/></span>
+            <span><img src="@item.PublishedByUrl" alt="" class="profilepicture"/></span>
             <div style="margin-left: 5px;">
                 <div><i class="icon-user"></i> <a href="#">@item.PublishedBy</a></div>
                 <div><i class="icon-calendar"></i>@Html.DisplayFor(modelItem => item.PublishedOn)</div>
@@ -63,7 +63,7 @@
         </div>
         <div class="description">
             <p>
-                @if (item.TextContent.Length > 140)
+                @if (!string.IsNullOrWhiteSpace(item.TextContent) && item.TextContent.Length > 140)
                 {
                     @Html.Raw(item.TextContent.Substring(0, 140) + " ...")
                 }

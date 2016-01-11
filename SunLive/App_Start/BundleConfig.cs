@@ -38,6 +38,7 @@ namespace SunLive
                 "~/Content/bootstrap.css"
                 , "~/Content/bootstrap-responsive.css"
                 , "~/Content/Style.css"
+                , "~/Content/Site.css"
                 , "~/Content/CustomTheme.css"
                 ));
 

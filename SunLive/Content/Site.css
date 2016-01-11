@@ -50,3 +50,10 @@ body {
     height: 34px;
     width: 1px;
 }
+
+.profilepicture {
+    width: 50px !important;
+    height: 50px !important;
+    margin-right: 5px;
+    float: left;
+}
