@@ -26,6 +26,8 @@ namespace NewService
         int MAX_LINE = Int32.Parse(ConfigurationManager.AppSettings["MAX_LINE"]);
         bool multiParts = bool.Parse(ConfigurationManager.AppSettings["multiParts"]);
         int TIMER_INTERVAL = Int32.Parse(ConfigurationManager.AppSettings["TIMER_INTERVAL"]);
+        bool downloadProfileInfo = bool.Parse(ConfigurationManager.AppSettings["downloadprofileinfo"]);
+
         string eventSource = "SunLive";
         string eventLog = "Application";
 
@@ -65,7 +67,7 @@ namespace NewService
                 foreach (string page in pages)
                 {
                     var myDB = client.GetDatabase(page);
-                    Downloader.DownLoad.processDownload(myDB, directoryPath, MAX_CHAR, MAX_LINE, HASHTAG, multiParts);
+                    Downloader.DownLoad.processDownload(myDB, directoryPath, MAX_CHAR, MAX_LINE, HASHTAG, multiParts, downloadProfileInfo);
                 }
             }
             catch (Exception ex)

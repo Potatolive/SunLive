@@ -5,11 +5,15 @@
     var item = Model;
 
     item.ImageURL = item.ImageURL.Replace("normal.", "400x400.");
-    
+
+    if (string.IsNullOrEmpty(item.Source)) {
+        item.Source = "Facebook";
+    }
+
 }
             @if (!string.IsNullOrEmpty(item.ImageURL))
             {
-                item.PublishedOn = item.PublishedOn.ToLocalTime();
+                //item.PublishedOn = item.PublishedOn;
                 string newImgUrl = item.ImageURL;
 
                 //Ignoring croppedImage for New Case
@@ -24,8 +28,9 @@
         <div style="height: 50px; margin-bottom: 5px">
             <span><img src="@item.PublishedByUrl" alt="" class="profilepicture"/></span>
             <div style="margin-left: 5px;">
-                <div><i class="icon-user"></i> <a href="#">@item.PublishedBy</a></div>
+                <div><i class="icon-user"></i> <a href="#">@item.PublishedBy -- @item.Status</a></div>
                 <div><i class="icon-calendar"></i>@Html.DisplayFor(modelItem => item.PublishedOn)</div>
+                <div>@item.Source</div>
             </div>
         </div>
 

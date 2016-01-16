@@ -24,7 +24,7 @@ namespace SunLive.Controllers
     public class PostController : Controller
     {
         string connectionString = ConfigurationManager.AppSettings["connectionString"].ToString();
-        const int PAGE_SIZE = 50;
+        const int PAGE_SIZE = 25;
 
         public ActionResult Yesterday(string pageName, string publishedOn)
         {
@@ -70,11 +70,14 @@ namespace SunLive.Controllers
                 var beginDate = String.IsNullOrWhiteSpace(publishedOn)?DateTime.Today:Convert.ToDateTime(publishedOn);
                 var endDate = beginDate.AddDays(1);
 
-                var filter = (Builders<FanPost>.Filter.Gte("PublishedOn", beginDate.ToString("yyyy-MM-dd")) &
+                List<string> status = new List<string>() { "New" };
+
+                var filter = (Builders<FanPost>.Filter.In("Status", status)) &
+                               (Builders<FanPost>.Filter.Gte("PublishedOn", beginDate.ToString("yyyy-MM-dd")) &
                                 Builders<FanPost>.Filter.Lt("PublishedOn", endDate.ToString("yyyy-MM-dd"))) |
                                 (Builders<FanPost>.Filter.Gte("PublishedOn", beginDate) &
                                 Builders<FanPost>.Filter.Lt("PublishedOn", endDate));
-                var sort = Builders<FanPost>.Sort.Ascending("PublishedOn");
+                var sort = Builders<FanPost>.Sort.Descending("PublishedOn");
 
                 int pageNumber = 0;
 

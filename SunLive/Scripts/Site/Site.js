@@ -84,8 +84,8 @@ jQuery(document).ready(function () {
     $('.cropButton').click(function () {
 
         var id = $(this).attr('data-imageid');
-        $('#imageWidth_' + id).val($('#img_' + id).width());
-        $('#imageHeight_' + id).val($('#img_' + id).height());
+        $('#imageWidth_' + id).val($('[id="img_' + id+'"]').width());
+        $('#imageHeight_' + id).val($('[id="img_' + id + '"]').height());
 
         $.ajax({
             type: "POST",
@@ -96,14 +96,14 @@ jQuery(document).ready(function () {
                 //if (jcrop_api) jcrop_api.release();
                 
                 var portrait = false;
-                if ($('#img_' + id).height() > $('#img_' + id).width())
+                if ($('[id="img_' + id + '"]').height() > $('[id="img_' + id + '"]').width())
                 {
                     portrait = true;
                 }
-                $('#item_' + id).find('img').attr('src', msg + '?' + Math.random());
+                $('[id="item_' + id + '"]').find('img').attr('src', msg + '?' + Math.random());
 
                 //$('#item_' + id).replaceWith($.parseHTML(msg));
-                var $itemContainer = $('#item_' + id);
+                var $itemContainer = $('[id="item_' + id + '"]');
 
                 //$container.find('img').css('height', '100px');
                 //$container.find('.jcrop-holder').css('height', '100px');
@@ -116,7 +116,7 @@ jQuery(document).ready(function () {
 
                 $itemContainer.find('.jcrop-holder').css('display', 'none');
 
-                var $originalImage = $('#img_' + id);
+                var $originalImage = $('[id="img_' + id + '"]');
                 if (portrait == true) {
                     $originalImage.css('height', 'auto');
                 }
@@ -166,7 +166,7 @@ jQuery(document).ready(function () {
             data: $('#form_crop_image_' + id).serialize(),
             contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
             success: function (msg) {
-                var $itemContainer = $('#item_' + id);
+                var $itemContainer = $('[id="item_' + id + '"]');
 
                 $itemContainer.find('img').attr('src', msg);
                 $('#revert_' + id).addClass('hidden');
@@ -174,7 +174,7 @@ jQuery(document).ready(function () {
 
                 $itemContainer.find('.jcrop-holder').css('display', '');
 
-                var $originalImage = $('#img_' + id);
+                var $originalImage = $('[id="img_' + id + '"]');
                 $originalImage.css('display', 'none');
                 $originalImage.css('visibility', 'hidden');
 
@@ -199,14 +199,14 @@ jQuery(document).ready(function () {
             contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
             success: function (msg) {
                 if (msg == 'True') {
-                    $('#item_' + id).removeClass('New').addClass('Rejected');
-                    var $itemContainer = $('#item_' + id);
+                    $('[id="item_' + id + '"]').removeClass('New').addClass('Rejected');
+                    var $itemContainer = $('[id="item_' + id + '"]');
 
                     //Hide Cross Hair
                     $itemContainer.find('.jcrop-holder').css('display', 'none');
 
                     //Show original Image
-                    var $originalImage = $('#img_' + id);
+                    var $originalImage = $('[id="img_' + id + '"]');
                     $originalImage.css('display', 'block');
                     $originalImage.css('visibility', 'visible');
 
@@ -239,15 +239,15 @@ jQuery(document).ready(function () {
             contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
             success: function (msg) {
                 if (msg == 'True') {
-                    $('#item_' + id).removeClass('New').addClass('Approved');
+                    $('[id="item_' + id + '"]').removeClass('New').addClass('Approved');
 
-                    var $itemContainer = $('#item_' + id);
+                    var $itemContainer = $('[id="item_' + id + '"]');
 
                     //Hide Cross Hair
                     $itemContainer.find('.jcrop-holder').css('display', 'none');
 
                     //Show original Image
-                    var $originalImage = $('#img_' + id);
+                    var $originalImage = $('[id="img_' + id + '"]');
                     $originalImage.css('display', 'block');
                     $originalImage.css('visibility', 'visible');
 
@@ -281,15 +281,15 @@ jQuery(document).ready(function () {
             contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
             success: function (msg) {
                 if (msg == 'True') {
-                    $('#item_' + id).removeClass('New').addClass('Approved');
+                    $('[id="item_' + id + '"]').removeClass('New').addClass('Approved');
 
-                    var $itemContainer = $('#item_' + id);
+                    var $itemContainer = $('[id="item_' + id + '"]');
 
                     //Hide Cross Hair
                     $itemContainer.find('.jcrop-holder').css('display', 'none');
 
                     //Show original Image
-                    var $originalImage = $('#img_' + id);
+                    var $originalImage = $('[id="img_' + id + '"]');
                     $originalImage.css('display', 'block');
                     $originalImage.css('visibility', 'visible');
 
@@ -323,7 +323,7 @@ jQuery(document).ready(function () {
             success: function (msg) {
 
                 if (msg == 'True') {
-                    $('#wall').isotope('remove', $('#item_' + id));
+                    $('#wall').isotope('remove', $('[id="item_' + id + '"]'));
                     console.log(msg);
                 }
             },
@@ -333,12 +333,14 @@ jQuery(document).ready(function () {
         });
     });
 
-    $('.image.New').mouseover(function () {
+    $('.image').mouseover(function () {
 
         var id = $(this).attr('imageId');
         console.log(id);
 
-        $('#img_' + id).Jcrop({
+        //alert($('#img_' + id));
+
+        $('[id="img_' + id+'"]').Jcrop({
             aspectRatio: 1,
             onSelect: function (c) {
                 $('#X_' + id).val(c.x);

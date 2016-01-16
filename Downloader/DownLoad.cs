@@ -13,7 +13,7 @@ namespace Downloader
 {
     public static class DownLoad
     {
-        public static void processDownload(IMongoDatabase myDB, string directoryPath, int MAX_CHAR, int MAX_LINE, string HASHTAG, bool multiParts)
+        public static void processDownload(IMongoDatabase myDB, string directoryPath, int MAX_CHAR, int MAX_LINE, string HASHTAG, bool multiParts, bool downloadProfileInfo)
         {
             var collection = myDB.GetCollection<FanPost>("fanposts");
 
@@ -72,18 +72,20 @@ namespace Downloader
                                 var imageFilename = Path.Combine(directory, fileName + ".jpg");
                                 downloadImage(imageFilename, url);
 
-                                var profileImageFilename = Path.Combine(directory, fileName + ".profileimage.jpg");
-                                downloadImage(profileImageFilename, post.PublishedByUrl);
-
                                 var textContentFilename = Path.Combine(directory, fileName + ".txt");
                                 downloadText(textContentFilename, part);
 
-                                List<string> publishedByFirstName = new List<string>();
-                                publishedByFirstName.Add(post.PublishedBy.Split(' ')[0]);
+                                if (downloadProfileInfo)
+                                {
+                                    var profileImageFilename = Path.Combine(directory, fileName + ".profileimage.jpg");
+                                    downloadImage(profileImageFilename, post.PublishedByUrl);
 
-                                var textProfileFilename = Path.Combine(directory, fileName + ".profile.txt");
-                                downloadText(textProfileFilename, publishedByFirstName);
+                                    List<string> publishedByFirstName = new List<string>();
+                                    publishedByFirstName.Add(post.PublishedBy.Split(' ')[0]);
 
+                                    var textProfileFilename = Path.Combine(directory, fileName + ".profile.txt");
+                                    downloadText(textProfileFilename, publishedByFirstName);
+                                }
                             }
                             catch (Exception ex)
                             {

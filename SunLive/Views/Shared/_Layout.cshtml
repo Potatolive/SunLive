@@ -106,6 +106,8 @@
         function cropImage(id) {
             var jcrop_api;
 
+            console.log('==========================> ' + '#img_' + id);
+
             $('#img_' + id).find('.imgforapproval').Jcrop({
                 aspectRatio: 1,
                 onSelect: function (c) {
