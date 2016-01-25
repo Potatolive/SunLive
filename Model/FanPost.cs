@@ -28,6 +28,18 @@ namespace Sunlive.Entities
                 publishedOnUTC = value;
             }
         }
+
+        public DateTime PublishedOnUniversal
+        {
+            get
+            {
+                return publishedOnUTC.ToUniversalTime();
+            }
+            set
+            {
+                publishedOnUTC = value;
+            }
+        }
         public string PublishedBy { get; set; }
 
         public string PublishedById { get; set; }

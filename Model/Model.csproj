@@ -51,6 +51,7 @@
     <Compile Include="Charts\PerDayInfo.cs" />
     <Compile Include="Charts\PerTimeSlotInfo.cs" />
     <Compile Include="Charts\ChartSeries.cs" />
+    <Compile Include="DayInfo.cs" />
     <Compile Include="FanPost.cs" />
     <Compile Include="FeedConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -17,10 +17,11 @@ using System.Net;
 using Sunlive.Entities;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using Renci.SshNet;
 
 namespace SunLive.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class PostController : Controller
     {
         string connectionString = ConfigurationManager.AppSettings["connectionString"].ToString();
@@ -183,12 +184,94 @@ namespace SunLive.Controllers
             var myDB = client.GetDatabase(pageName);
             var collection = myDB.GetCollection<FanPost>("fanposts");
 
-            var filter = Builders<FanPost>.Filter.Eq("_id", id);
+            var filter = Builders<FanPost>.Filter.Eq("_id", id.Replace("/", "\\/"));
             var update = Builders<FanPost>.Update.Set("Status", status);
 
             var result = collection.FindOneAndUpdateAsync<FanPost>(filter, update);
 
             return true;
+        }
+
+        [HttpPost]
+        public string ClearWhatsApp()
+        {
+            try {
+                string keyPath = System.Web.HttpContext.Current.Server.MapPath(@"~/Resources/key/openssh.ppk");
+
+                string key = "-----BEGIN RSA PRIVATE KEY-----" + "\n" +
+"MIIEowIBAAKCAQEAkD/L00L5cIUrqoAsUg6Ifb0O4ExdXIfO6XVub0Of/DppuBtd" + "\n" +
+"/VXz138iUtP87K8ZaKNCFB9ZOtQjOyB5FWXnlL6q3uprZEKcZohczhx3jWIw+6BR" + "\n" +
+"Uen8QBRAvdVhiElEBYtx98F78DAOJlLD9wV4kCHSV/hNAasB37EtS8EQa/yn7ruf" + "\n" +
+"K30Q1J+bk5x/Vte+4kYx6wM6xGxlmu6f4rVMquJF/ejghor+AAuxw7+NjCXZ4lid" + "\n" +
+"NXA2LpCZ5hSf4mOmm2eoTJaZs3AXHZY9fCJRvnYcXbbCugKneIZg/lEj18AZsm8F" + "\n" +
+"6BXKnpfhQzm420o/0Q2dAmKvOJJHw6kKKwj5PQIDAQABAoIBAQCJwZMqtyw168eu" + "\n" +
+"tWceGij5Q6LAS81hP4U3aOFFOqS/oR0zKFeTRxFufEhQJ4jEk9fFGRxS0TlKuCrJ" + "\n" +
+"HZLk/4OwhoHyDpbukbqBJLrUT1VQ3TQAKbNfcgBnRbAqWmwhVi6yyN/XBp0Q3SO2" + "\n" +
+"L5ZcAoqHwvT48/S+ogxRDwg97yt6o7u8iecltKbKpuALf5eTkqH4F3DesUzyCs6A" + "\n" +
+"o5DVknXgN5BqfcaJSml4f4V7g7inaoFsKRTQXVFwUCS9PGOp5LhW1nN+AYaKKaBT" + "\n" +
+"n62pEQqy+ILBu1QFJVObZtg9aCEQmyetjfsXJWJMgrgV/SGoiZcLWdzt0bKrKqt2" + "\n" +
+"y9VaJ9lhAoGBAPqrrIn8nWLAsmM9rL/BEfi+KsmfnHwCIdRwYzE9lSFlaWITWrZk" + "\n" +
+"eDL97jFbWbdYzZREsJsi2wS0ZmWFjzQdf7q9o5+zYpiQ8wx8xuFts6VD+gGkp88v" + "\n" +
+"pDVyLT9EiNt5/vskdIj8x4+DTqw/zbxBpy7HPh0EdvZnW9GNRROWMlYpAoGBAJNQ" + "\n" +
+"5ui3AyH6wZoutkNN9D/66XLUo3vMmpyz/8Zit+Sc1uD8wrAm1r13M0Y9SgrawZ1F" + "\n" +
+"wOfovyC9vhXXYowkiVYjaYnOJeL1LOPUoUwojNYsy/bytPMBv0fDziLsUyNyvadZ" + "\n" +
+"EEY+V0j1/IP3NRBDe1n02imJT9BXVR7AaqmbIOT1AoGAAVewCeEneqLrkap/5VsE" + "\n" +
+"XJ+wHPpU3TkpsziS322kAdTINrVB1B4/oo5Hm04Q8fFw0G15wKr0H1dUARExDidm" + "\n" +
+"Srq/SJiuW4DTPGriqcxrnOP7T8zw9SQdLggZg/A7B2nk2rV8RkuMShF692M0F+EG" + "\n" +
+"IzL/+ynN9U3iaQHnr84rINkCgYBWDuPlvMvitMcWmAU3ijmOiriHsXqTnrIPqwNX" + "\n" +
+"VGIS9iB9LItbNkUqR5E3jiRL9QE4LACGOaw1p0J9JebW8Z0dKfDEZR4y2IFR0uwr" + "\n" +
+"PmEP2PmKGLzmXPXuKY+pTR9ATQ5Hzbq5HkAFSlYqjWZ9Sr6rjWNI8oMitXHvVf65" + "\n" +
+"d/seZQKBgHyfHdCBikac/i3ynq4nprtWwsX4kikisIEHFeBBtpJdIwgRekyrrzT7" + "\n" +
+"SQROCtLtfkCe5bcPvcGmfZmaLX0uzYpzd/EK759ayqVWffNdtrJ3DQZ4zW4zYWMk" + "\n" +
+"NsBPp+gj9ruToZH3a7/4Eq2TrhJO9vPdeeJrrTMuoY8jN9WFZpQl" + "\n" +
+"-----END RSA PRIVATE KEY-----";
+                ;
+
+
+                //var keyFile = new PrivateKeyFile(@"E:\Ganesan\connectivity\openssh.ppk");
+
+                using (Stream s = GenerateStreamFromString(key))
+                {
+                    var keyFile = new PrivateKeyFile(s);
+                    var keyFiles = new[] { keyFile };
+                    var username = "ubuntu";
+
+                    var methods = new List<AuthenticationMethod>();
+                    methods.Add(new PasswordAuthenticationMethod(username, "#infy123"));
+                    methods.Add(new PrivateKeyAuthenticationMethod(username, keyFiles));
+
+                    var con = new ConnectionInfo("52.32.74.255", 22, username, methods.ToArray());
+                    SshCommand cmd;
+                    using (var client = new SshClient(con))
+                    {
+                        client.Connect();
+
+                        cmd = client.CreateCommand("/home/ubuntu/clearwhatsapp/workaround.sh");
+                        cmd.Execute();
+
+                        client.Disconnect();
+                    }
+
+                    return cmd.ExitStatus.ToString();
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                return ex.StackTrace.ToString() + "\n" + ex.ToString();
+            }
+
+            
+        }
+
+        private Stream GenerateStreamFromString(string s)
+        {
+            MemoryStream stream = new MemoryStream();
+            StreamWriter writer = new StreamWriter(stream);
+            writer.Write(s);
+            writer.Flush();
+            stream.Position = 0;
+            return stream;
         }
 
         [HttpPost]
@@ -300,9 +383,20 @@ namespace SunLive.Controllers
                                     }
                                 }
 
+                                if (data.imageWidth <= 0 && data.imageHeight <= 0)
+                                {
+                                    data.imageWidth = OriginalImage.Width;
+                                    data.imageHeight = OriginalImage.Height;
+                                }
+
+                                if (data.imageWidth > 0 && data.imageHeight <= 0)
+                                {
+                                    data.imageHeight = (int) ((float)OriginalImage.Height / ((float)OriginalImage.Width / (float)data.imageWidth));
+                                }
+
                                 float scaledHeight = (float)OriginalImage.Height / (float)data.imageHeight;
                                 float scaledWidth = (float)OriginalImage.Width / (float)data.imageWidth;
-
+                                
                                 float Width = (float)data.W * (float)scaledWidth;
                                 float Height = (float)data.H * (float)scaledHeight;
                                 float X = (float)data.X * (float)scaledWidth;

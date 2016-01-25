@@ -1,0 +1,62 @@
+﻿<div class="a-card">
+    <div id="{{card._id}}" class="span3 item {{card.Status}} grid-item" style="background-color: white; padding: 10px; border-bottom-color: lightgray; border-bottom-style: solid; border-bottom-width: 15px">
+        <p class="number "></p>
+        <div class="picture">
+            <div style="height: 50px; margin-bottom: 5px">
+                <div style="margin-left: 5px;">
+                    <div><i class="icon-user"></i> <a href="#">{{card.PublishedBy}}</a></div>
+                    <div><i class="icon-calendar"></i>&nbsp;<span ng-bind="card.PublishedOnUniversal | date:'yyyy-MM-dd HH:mm:ss'"></span></div>
+                    <div>{{card.Source}}</div>
+                </div>
+            </div>
+
+            <div class="description">
+                <p>
+                    {{card.TextContent}}
+                </p>
+            </div>
+
+            <div style="border-color: lightgray; border-style: solid;" in-view="card.photoInView($index, $inview, $inviewpart, $event)">
+                <div ng-jcrop="card.getImageURL()" selection="card.selection" ng-jcrop-config="card.config" thumbnail="!card.isCropped()" style="width: 100%; height: auto"></div>
+            </div>
+
+            <!--<div class="one-half column">
+                <table>
+                    <tbody>
+                        <tr>
+                            <td><strong>x</strong>: <span ng-bind="card.selection[0]"></span></td>
+                            <td><strong>y</strong>: <span ng-bind="card.selection[1]"></span></td>
+                            <td><strong>x2</strong>: <span ng-bind="card.selection[2]"></span></td>
+                            <td><strong>y2</strong>: <span ng-bind="card.selection[3]"></span></td>
+                            <td><strong>w</strong>: <span ng-bind="card.selection[4]"></span></td>
+                            <td><strong>h</strong>: <span ng-bind="card.selection[5]"></span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>-->
+
+            
+
+            <div class="meta" >
+                <div class="pull-right">
+                    <button type="button" class="btn btn-success btn-xs cropButton" ng-click="card.crop()" ng-show="!card.isCropped() && !card.isApproved()">
+                        <span class="glyphicon glyphicon-retweet" aria-hidden="true"></span> Crop
+                    </button>
+                    <button type="button" class="btn btn-danger btn-xs cropButton" ng-click="card.revertCrop()" ng-show="card.isCropped() && !card.isApproved()">
+                        <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span> Revert
+                    </button>
+                    <button type="button" class="btn btn-danger btn-xs rejectButton" ng-click="card.reject()" ng-if="!card.isCropped() && !card.isApproved()">
+                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Reject
+                    </button>
+                    <button type="button" class="btn btn-success btn-xs approveButton" ng-click="card.approve()" ng-if="card.isCropped() && !card.isApproved()">
+                        <span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Approve
+                    </button>
+                    <button type="button" class="btn btn-warning btn-xs prioritizeButton" ng-click="card.prioritize()" ng-if="card.isCropped() && !card.isApproved()">
+                        <span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Prioritize
+                    </button>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+</div>

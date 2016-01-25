@@ -1,0 +1,76 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+
+    <title>PotatoLive @ViewBag.PageName</title>
+    <link rel="icon" href="https://plive.azurewebsites.net/img/pliveicon.png" sizes="50x50">
+    <meta name="viewport" content="width=device-width" />
+
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Sans:400,700">
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif">
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Boogaloo">
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Economica:700,400italic">
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-loader.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-route.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-cookies.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-resource.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-sanitize.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-animate.js"></script>-->
+
+    
+    @RenderSection("AdditionalMetaData", false)
+
+    @Scripts.Render("~/bundles/modernizr")
+    <link href="@Url.Content("~/Content/themes/base/jquery-ui.css")"
+          rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"/>
+
+    <link rel="stylesheet" href="~/Content/angular-bootstrap-datepicker.css"/>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-jcrop/0.9.12/css/jquery.Jcrop.min.css" />
+    
+    
+
+    @Styles.Render("~/Content/css")
+
+</head>
+<body ng-app="v2App">
+    <!--start: Header -->
+    
+
+
+    <div class="container">
+        <section class="mainContent">
+            @RenderBody()
+        </section>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryui")
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-jcrop/0.9.12/js/jquery.Jcrop.min.js"></script>
+    @Scripts.Render("~/bundles/angular")
+    <script src=@Url.Content("~/Scripts/ui-bootstrap-tpls-0.10.0.min.js") type="text/javascript"></script>
+    @{  //Scripts.Render("~/AngularResources");
+    }
+    <script src=@Url.Content("~/Resources/V2/app.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/Resources/V2/controllers.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/Resources/V2/directives.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/Resources/V2/filters.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/Resources/V2/services.js") type="text/javascript"></script>
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src=@Url.Content("~/Scripts/Site/jquery.isotope.min.js") type="text/javascript"></script>
+
+    <script src=@Url.Content("~/Scripts/angular-crop/ng-jcrop.js") type="text/javascript"></script>
+
+    @*//Scripts.Render("~/bundles/jqueryDependents")*@
+    <script src="~/Scripts/angular-deckcard/angular-deckgrid.js"></script>
+    <script src="~/Scripts/angular-inview/angular-inview.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.1/moment.min.js"></script>
+    <script src="~/Scripts/angular-datepicker/angular-bootstrap-datepicker.js"></script>
+    
+    
+
+</body>
+</html>

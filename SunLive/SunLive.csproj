@@ -102,6 +102,10 @@
     <Reference Include="Owin">
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
     </Reference>
+    <Reference Include="Renci.SshNet, Version=2013.4.7.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SSH.NET.2013.4.7\lib\net40\Renci.SshNet.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System">
       <Private>True</Private>
     </Reference>
@@ -276,6 +280,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\V2.cs" />
     <Compile Include="Controllers\AnalyticsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PostController.cs" />
@@ -291,6 +296,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\input.xml" />
+    <Content Include="Content\angular-bootstrap-datepicker.css" />
+    <Content Include="Content\angular-crop\ng-img-crop.css" />
+    <Content Include="Content\angular-datepicker.min.css" />
     <Content Include="Content\bootstrap-responsive.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
@@ -373,6 +381,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Content\bootstrap.css.map" />
+    <Content Include="Images\images.png" />
     <Content Include="Resources\app.js" />
     <Content Include="Resources\controllers.js" />
     <Content Include="Resources\Demo\message.controller.js" />
@@ -381,13 +390,24 @@
     <Content Include="Resources\directives.js" />
     <Content Include="Resources\filters.js" />
     <Content Include="Resources\services.js" />
+    <Content Include="Resources\V2\App.html" />
+    <Content Include="Resources\V2\app.js" />
+    <Content Include="Resources\V2\controllers.js" />
+    <Content Include="Resources\V2\directives.js" />
+    <Content Include="Resources\V2\filters.js" />
+    <Content Include="Resources\V2\Post.html" />
+    <Content Include="Resources\V2\services.js" />
     <Content Include="Scripts\angular-animate.js" />
     <Content Include="Scripts\angular-animate.min.js" />
     <Content Include="Scripts\angular-aria.js" />
     <Content Include="Scripts\angular-aria.min.js" />
     <Content Include="Scripts\angular-cookies.js" />
     <Content Include="Scripts\angular-cookies.min.js" />
+    <Content Include="Scripts\angular-crop\ng-jcrop.js" />
     <Content Include="Scripts\angular-csp.css" />
+    <Content Include="Scripts\angular-datepicker\angular-bootstrap-datepicker.js" />
+    <Content Include="Scripts\angular-datepicker\angular-datepicker.js" />
+    <Content Include="Scripts\angular-datepicker\angular-datepicker.min.js" />
     <Content Include="Scripts\angular-loader.js" />
     <Content Include="Scripts\angular-loader.min.js" />
     <Content Include="Scripts\angular-messages.js" />
@@ -406,6 +426,10 @@
     <Content Include="Scripts\angular.min.js" />
     <Content Include="Scripts\croppic\croppic.js" />
     <Content Include="Scripts\croppic\croppic.min.js" />
+    <Content Include="Scripts\angular-deckcard\angular-deckgrid.js" />
+    <Content Include="Scripts\angular-deckcard\angular-deckgrid.min.js" />
+    <Content Include="Scripts\angular-deckcard\Gruntfile.js" />
+    <Content Include="Scripts\angular-deckcard\karma.conf.js" />
     <Content Include="Scripts\errors.json" />
     <Content Include="Scripts\angular-touch.min.js.map" />
     <Content Include="Scripts\angular-sanitize.min.js.map" />
@@ -429,6 +453,17 @@
     <None Include="Properties\PublishProfiles\sunlive - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\sunlive2.pubxml" />
     <None Include="Properties\PublishProfiles\sunlivenew.pubxml" />
+    <Content Include="Scripts\angular-deckcard\.editorconfig" />
+    <Content Include="Scripts\angular-deckcard\.gitattributes" />
+    <Content Include="Scripts\angular-deckcard\.gitignore" />
+    <Content Include="Scripts\angular-deckcard\.jshintrc" />
+    <Content Include="Scripts\angular-deckcard\.travis.yml" />
+    <Content Include="Scripts\angular-deckcard\bower.json" />
+    <Content Include="Scripts\angular-deckcard\CONTRIBUTORS.md" />
+    <Content Include="Scripts\angular-deckcard\LICENSE" />
+    <Content Include="Scripts\angular-deckcard\package.json" />
+    <Content Include="Scripts\angular-deckcard\README.md" />
+    <Content Include="Resources\key\openssh.ppk" />
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
     <Content Include="Icon.png" />
     <Content Include="Scripts\angular-ui\ui-bootstrap-tpls.js" />
@@ -1183,6 +1218,7 @@
     <Content Include="Scripts\i18n\angular-locale_zh.js" />
     <Content Include="Scripts\i18n\angular-locale_zu-za.js" />
     <Content Include="Scripts\i18n\angular-locale_zu.js" />
+    <Content Include="Scripts\angular-inview\angular-inview.js" />
     <Content Include="Scripts\jcrop\jquery.Jcrop.js" />
     <Content Include="Scripts\jcrop\jquery.Jcrop.min.js" />
     <Content Include="Scripts\jquery-1.9.1.js" />
@@ -1250,9 +1286,10 @@
     <Content Include="Views\Shared\_AngularLayout.cshtml" />
     <Content Include="Views\Analytics\Index.cshtml" />
     <Content Include="Views\Analytics\Dashboard.cshtml" />
+    <Content Include="Views\Shared\_AngularLayoutV2.cshtml" />
+    <Content Include="Views\V2\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Images\" />
     <Folder Include="Output\" />
   </ItemGroup>
   <ItemGroup>
